@@ -1,5 +1,5 @@
 import React from 'react'
-import { Image, TouchableOpacity, View } from 'react-native'
+import { Text, TouchableOpacity, View } from 'react-native'
 
 const NavigationDrawerHeader = (props) => {
   const toggleDrawer = () => {
@@ -9,10 +9,7 @@ const NavigationDrawerHeader = (props) => {
   return (
     <View style={{ flexDirection: 'row' }}>
       <TouchableOpacity onPress={toggleDrawer}>
-        <Image
-          source={require('../../assets/logo-large.png')}
-          style={{ width: 25, height: 25, marginLeft: 5 }}
-        />
+        <Text>*</Text>
       </TouchableOpacity>
     </View>
   )

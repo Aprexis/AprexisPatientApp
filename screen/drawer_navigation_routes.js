@@ -48,19 +48,19 @@ const SettingsScreenStack = ({ navigation }) => {
   )
 }
 
-const DrawerNavigationRoutes = (_props) => {
+const DrawerNavigationRoutes = (props) => {
   return (
     <Drawer.Navigator
-      drawerContentOptions={
+      screenOptions={
         {
           activeTintColor: '#cee1f2',
           color: '#cee1f2',
           itemStyle: { marginVertical: 5, color: 'white' },
-          labelStyle: { color: '#d8d8d8' }
+          labelStyle: { color: '#d8d8d8' },
+          headerShown: false
         }
       }
-      screenOptions={{ headerShown: false }}
-      drawerContent={CustomSidebarMenu}>
+      drawerContent={drawerProps => <CustomSidebarMenu {...drawerProps} parentNavigation={props.navigation} />}>
       <Drawer.Screen
         name="HomeScreenStack"
         options={{ drawerLabel: 'Home Screen' }}
@@ -72,7 +72,7 @@ const DrawerNavigationRoutes = (_props) => {
         component={SettingsScreenStack}
 
       />
-    </Drawer.Navigator>
+    </Drawer.Navigator >
   )
 }
 

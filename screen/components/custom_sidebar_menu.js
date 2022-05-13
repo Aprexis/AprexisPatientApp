@@ -39,12 +39,15 @@ const CustomSidebarMenu = (props) => {
                 },
                 {
                   text: 'Confirm',
-                  onPRess: () => {
-                    authenticationApi.signOut(
-                      userCredentialsHelper.getUserCredentials(),
-                      () => {
-                        userCredentialsHelper.removeUserCredentials()
-                        props.navigation.replace('LoginScreen')
+                  onPress: () => {
+                    userCredentialsHelper.getUserCredentials(
+                      (userCredentials) => {
+                        authenticationApi.signOut(
+                          userCredentials,
+                          () => {
+                            userCredentialsHelper.removeUserCredentials(() => { props.parentNavigation.replace('LoginScreen') })
+                          }
+                        )
                       }
                     )
                   }

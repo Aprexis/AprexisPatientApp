@@ -31,7 +31,7 @@ const LoginScreen = ({ navigation }) => {
       return
     }
 
-    //setLoading(true)
+    setLoading(true)
     authenticationApi.signIn(
       userEmail,
       userPassword,
@@ -49,7 +49,7 @@ const LoginScreen = ({ navigation }) => {
 
   return (
     <View style={styles.mainBody}>
-      {/*<Loader loading={loading} />*/}
+      <Loader loading={loading} />
       <ScrollView
         keyboardShouldPersistTaps="handled"
         contentContainerStyle={
