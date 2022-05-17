@@ -12,7 +12,7 @@ import {
 } from 'react-native'
 import { authenticationApi } from '../api'
 import { Loader } from './components'
-import { alertHelper, userCredentialsHelper } from '../helpers'
+import { alertHelper, userCredentialsHelper, currentUserHelper } from '../helpers'
 
 const LoginScreen = ({ navigation }) => {
   const [userEmail, setUserEmail] = useState('')
@@ -37,10 +37,18 @@ const LoginScreen = ({ navigation }) => {
       userPassword,
       (userCredentials) => {
         setLoading(false)
-        userCredentialsHelper.storeUserCredentials(userCredentials, () => { navigation.replace('DrawerNavigationRoutes') })
+        userCredentialsHelper.storeUserCredentials(
+          userCredentials,
+          () => {
+            currentUserHelper.loadCurrentUser(userCredentials, (currentUser, currentPatient) => { gotoDrawer(navigation, currentUser, currentPatient) })
+
+            function gotoDrawer(navigation, currentUser, currentPatient) {
+              navigation.navigate('DrawerNavigationRoutes', { currentUser, currentPatient })
+            }
+          })
       },
       (message) => {
-        //setLoading(false)
+        setLoading(false)
         alertHelper.error(message)
         return
       }

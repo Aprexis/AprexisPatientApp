@@ -5,7 +5,24 @@ import {
   StyleSheet,
   View
 } from 'react-native'
-import { valueHelper, userCredentialsHelper } from '../helpers'
+import { valueHelper, userCredentialsHelper, currentUserHelper } from '../helpers'
+
+function splashTimeOut(navigation) {
+  userCredentialsHelper.getUserCredentials(loadCurrentUser)
+
+  function loadCurrentUser(userCredentials) {
+    if (!valueHelper.isValue(userCredentials)) {
+      navigation.navigate('LoginScreen')
+      return
+    }
+
+    currentUserHelper.loadCurrentUser(userCredentials, (currentUser, currentPatient) => { gotoDrawer(navigation, currentUser, currentPatient) })
+  }
+
+  function gotoDrawer(navigation, currentUser, currentPatient) {
+    navigation.navigate('DrawerNavigationRoutes', { currentUser, currentPatient })
+  }
+}
 
 const SplashScreen = ({ navigation }) => {
   const [animating, setAnimating] = useState(true)
@@ -13,9 +30,7 @@ const SplashScreen = ({ navigation }) => {
   useEffect(() => {
     setTimeout(() => {
       setAnimating(false)
-      userCredentialsHelper.getUserCredentials(
-        (userCredentials) => { navigation.navigate(valueHelper.isValue(userCredentials) ? 'DrawerNavigationRoutes' : 'LoginScreen') }
-      )
+      splashTimeOut(navigation)
     }, 5000)
   }, [])
 

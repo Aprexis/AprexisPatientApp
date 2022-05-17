@@ -1,18 +1,25 @@
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createDrawerNavigator } from '@react-navigation/drawer'
-import { HomeScreen, SettingsScreen } from './drawer_screens'
+import { HomeScreen, RequestPatientScreen, SettingsScreen } from './drawer_screens'
 import { CustomSidebarMenu, NavigationDrawerHeader } from "./components"
+import { valueHelper } from "../helpers"
 
 const Stack = createNativeStackNavigator()
 const Drawer = createDrawerNavigator()
 
-const HomeScreenStack = ({ navigation }) => {
+const HomeScreenStack = (props) => {
+  const { navigation, currentUser, currentPatient } = props
+  const initialRouteName = valueHelper.isValue(currentPatient) ? 'HomeScreen' : 'RequestPatientScreen'
   return (
-    <Stack.Navigator initialRouteName='HomeScreen'>
+    <Stack.Navigator initialRouteName={initialRouteName}>
+      <Stack.Screen
+        name="RequestPatientScreen"
+        options={{ title: 'Request Patient' }}>
+        {(props) => <RequestPatientScreen {...props} currentUser={currentUser} />}
+      </Stack.Screen>
       <Stack.Screen
         name="HomeScreen"
-        component={HomeScreen}
         options={
           {
             title: "Home",
@@ -21,13 +28,14 @@ const HomeScreenStack = ({ navigation }) => {
             headerTintColor: '#fff',
             headerTitleStyle: { fontWeight: 'bold' }
           }
-        }
-      />
+        }>
+        {(props) => <HomeScreen {...props} currentUser={currentUser} currentPatient={currentPatient} />}
+      </Stack.Screen>
     </Stack.Navigator>
   )
 }
 
-const SettingsScreenStack = ({ navigation }) => {
+const SettingsScreenStack = ({ navigation, currentUser, currentPatient }) => {
   return (
     <Stack.Navigator
       initialRouteName='SettingsScreen'
@@ -41,14 +49,15 @@ const SettingsScreenStack = ({ navigation }) => {
       }>
       <Stack.Screen
         name="SettingsScreen"
-        component={SettingsScreen}
-        options={{ title: 'Settings' }}
-      />
+        options={{ title: 'Settings' }}>
+        {(props) => <SettingsScreen {...props} currentUser={currentUser} currentPatient={currentPatient} />}
+      </Stack.Screen>
     </Stack.Navigator>
   )
 }
 
 const DrawerNavigationRoutes = (props) => {
+  const { currentUser, currentPatient } = props.route.params
   return (
     <Drawer.Navigator
       screenOptions={
@@ -63,15 +72,14 @@ const DrawerNavigationRoutes = (props) => {
       drawerContent={drawerProps => <CustomSidebarMenu {...drawerProps} parentNavigation={props.navigation} />}>
       <Drawer.Screen
         name="HomeScreenStack"
-        options={{ drawerLabel: 'Home Screen' }}
-        component={HomeScreenStack}
-      />
+        options={{ drawerLabel: 'Home Screen' }}>
+        {(props) => <HomeScreenStack {...props} currentUser={currentUser} currentPatient={currentPatient} />}
+      </Drawer.Screen>
       <Drawer.Screen
         name="SettingsScreenStack"
-        options={{ drawerLabel: 'Settings Screen' }}
-        component={SettingsScreenStack}
-
-      />
+        options={{ drawerLabel: 'Settings Screen' }}>
+        {(props) => <SettingsScreenStack {...props} currentUser={currentUser} currentPatient={currentPatient} />}
+      </Drawer.Screen>
     </Drawer.Navigator >
   )
 }
