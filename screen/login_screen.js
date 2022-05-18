@@ -14,7 +14,7 @@ import { authenticationApi } from '../api'
 import { Loader } from './components'
 import { alertHelper, userCredentialsHelper, currentUserHelper } from '../helpers'
 
-const LoginScreen = ({ navigation }) => {
+function LoginScreen({ navigation }) {
   const [userEmail, setUserEmail] = useState('')
   const [userPassword, setUserPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -40,10 +40,10 @@ const LoginScreen = ({ navigation }) => {
         userCredentialsHelper.storeUserCredentials(
           userCredentials,
           () => {
-            currentUserHelper.loadCurrentUser(userCredentials, (currentUser, currentPatient) => { gotoDrawer(navigation, currentUser, currentPatient) })
+            currentUserHelper.loadCurrentUser(userCredentials, (currentUser, currentPatient) => { gotoPatient(navigation, currentUser, currentPatient) })
 
-            function gotoDrawer(navigation, currentUser, currentPatient) {
-              navigation.navigate('DrawerNavigationRoutes', { currentUser, currentPatient })
+            function gotoPatient(navigation, currentUser, currentPatient) {
+              navigation.navigate('PatientScreen', { currentUser, currentPatient })
             }
           })
       },

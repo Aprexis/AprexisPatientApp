@@ -3,6 +3,7 @@ import { fieldHelper } from "./field.helper"
 
 export const nameHelper = {
   firstName,
+  initials,
   lastName,
   middleName,
   name
@@ -10,6 +11,24 @@ export const nameHelper = {
 
 function firstName(namedModel, prefix = "") {
   return fieldHelper.getField(namedModel, "first_name", prefix)
+}
+
+function initials(namedModel, prefix = "") {
+  const firstName = nameHelper.firstName(namedModel, prefix)
+  const lastName = nameHelper.lastName(namedModel, prefix)
+
+  if (!valueHelper.isStringValue(firstName)) {
+    if (!valueHelper.isStringValue(lastName)) {
+      return "UN"
+    }
+
+    return `${lastName.charAt(0)}`
+  }
+  if (!valueHelper.isStringValue(lastName)) {
+    return `${firstName.charAt(0)}`
+  }
+
+  return `${firstName.charAt(0)}${lastName.charAt(0)}`
 }
 
 function lastName(namedModel, prefix = "") {

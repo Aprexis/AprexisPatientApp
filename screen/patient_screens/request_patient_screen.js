@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
 import { Keyboard, KeyboardAvoidingView, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { patientApi } from '../../api'
-import { alertHelper, userCredentialsHelper, valueHelper } from '../../helpers'
+import { alertHelper, currentUserHelper, userCredentialsHelper, valueHelper } from '../../helpers'
 
-const RequestPatientScreen = ({ navigation, currentUser }) => {
+function RequestPatientScreen(props) {
+  const { navigation } = props
+  const { currentUser } = currentUserHelper.getCurrentProps(props)
   const [patientName, setPatientName] = useState('')
 
   const handleSubmitPress = () => {
@@ -32,7 +34,7 @@ const RequestPatientScreen = ({ navigation, currentUser }) => {
             }
 
             const currentPatient = patients[0]
-            navigation.replace('DrawerNavigationRoutes', { currentUser, currentPatient })
+            navigation.replace('PatientScreen', { currentUser, currentPatient })
           },
           (message) => {
             alertHelper.error(message)

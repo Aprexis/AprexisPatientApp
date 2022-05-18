@@ -10,11 +10,11 @@ import React, { useState } from 'react'
 import { View } from 'react-native'
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { DrawerNavigationRoutes, LoginScreen, SplashScreen } from './screen'
+import { LoginScreen, PatientScreen, SplashScreen } from './screen'
 
 const Stack = createNativeStackNavigator()
 
-const App = () => {
+function App() {
   const [firstTime, setFirstTime] = useState(true)
   const initialRouteName = firstTime ? 'SplashScreen' : 'LoginScreen'
   if (firstTime) {
@@ -36,8 +36,8 @@ const App = () => {
             options={{ headerShown: false }}
           />
           <Stack.Screen
-            name="DrawerNavigationRoutes"
-            component={DrawerNavigationRoutes}
+            name="PatientScreen"
+            component={PatientScreen}
             options={{ headerShown: false }}
           />
         </Stack.Navigator>

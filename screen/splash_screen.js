@@ -16,15 +16,15 @@ function splashTimeOut(navigation) {
       return
     }
 
-    currentUserHelper.loadCurrentUser(userCredentials, (currentUser, currentPatient) => { gotoDrawer(navigation, currentUser, currentPatient) })
+    currentUserHelper.loadCurrentUser(userCredentials, (currentUser, currentPatient) => { gotoPatient(navigation, currentUser, currentPatient) })
   }
 
-  function gotoDrawer(navigation, currentUser, currentPatient) {
-    navigation.navigate('DrawerNavigationRoutes', { currentUser, currentPatient })
+  function gotoPatient(navigation, currentUser, currentPatient) {
+    navigation.navigate('PatientScreen', { currentUser, currentPatient })
   }
 }
 
-const SplashScreen = ({ navigation }) => {
+function SplashScreen({ navigation }) {
   const [animating, setAnimating] = useState(true)
 
   useEffect(() => {

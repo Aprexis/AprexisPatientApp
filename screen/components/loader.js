@@ -1,7 +1,7 @@
 import React from 'react'
 import { ActivityIndicator, Modal, StyleSheet, View } from 'react-native'
 
-const Loader = (props) => {
+function Loader(props) {
   const { loading } = props
 
   return (

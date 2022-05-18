@@ -1,12 +1,9 @@
 import React from 'react'
 import { SafeAreaView, Text, View } from 'react-native'
-import { valueHelper, patientHelper, userHelper } from '../../helpers'
+import { valueHelper, patientHelper, userHelper, currentUserHelper } from '../../helpers'
 
-const HomeScreen = (props) => {
-  let { currentUser, currentPatient } = props
-  if (valueHelper.isValue(props.route) && valueHelper.isValue(props.route.params) && valueHelper.isValue(props.route.params.currentPatient)) {
-    currentPatient = props.route.params.currentPatient
-  }
+function HomeScreen(props) {
+  const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
   let homeScreenText = 'This is the Home Screen'
   if (valueHelper.isValue(currentUser)) {
     if (valueHelper.isValue(currentPatient)) {
@@ -39,29 +36,17 @@ const HomeScreen = (props) => {
             {'\n\n'}
             {homeScreenText}
           </Text>
+          <Text
+            style={
+              {
+                fontSize: 18,
+                textAlign: 'center',
+                color: 'grey'
+              }
+            }>
+            www.aprexis.com
+          </Text>
         </View>
-        <Text
-          style={
-            {
-              fontSize: 18,
-              textAlign: 'center',
-              color: 'grey'
-            }
-          }>
-          Aprexis Patient Application
-          {'\n'}
-          React Native
-        </Text>
-        <Text
-          style={
-            {
-              fontSize: 18,
-              textAlign: 'center',
-              color: 'grey'
-            }
-          }>
-          www.aprexis.com
-        </Text>
       </View>
     </SafeAreaView>
   )
