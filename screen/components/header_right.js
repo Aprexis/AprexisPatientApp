@@ -1,7 +1,6 @@
 import React from 'react'
 import { Alert, TouchableOpacity, View } from 'react-native'
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faUser } from '@fortawesome/free-solid-svg-icons'
+import Icon from 'react-native-vector-icons/FontAwesome5'
 import { authenticationApi } from '../../api'
 import { currentUserHelper, userCredentialsHelper, userHelper } from '../../helpers'
 
@@ -44,7 +43,7 @@ function LogoutButton(props,) {
         )
       }
       }>
-      < FontAwesomeIcon size={40} icon={faUser} />
+      < Icon size={40} name="user" />
     </TouchableOpacity>
   )
 }

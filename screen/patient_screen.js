@@ -1,10 +1,10 @@
 import React from "react"
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { HomeScreen, RequestPatientScreen, } from "./patient_screens"
-import { HeaderLeft, HeaderRight } from "./components";
-import { valueHelper, patientHelper, currentUserHelper } from "../helpers";
-import { BottomMenuBar } from "./components/bottom_menu_bar";
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
+import Icon from 'react-native-vector-icons/FontAwesome5'
+import { HomeScreen, MedicationsScreen, RequestPatientScreen, } from "./patient_screens"
+import { HeaderLeft, HeaderRight } from "./components"
+import { valueHelper, patientHelper, currentUserHelper } from "../helpers"
 
 const Stack = createNativeStackNavigator()
 
@@ -40,17 +40,51 @@ function HomeScreenStack(props) {
   )
 }
 
-const Tab = createBottomTabNavigator()
+function MedicationsScreenStack(props) {
+  const { navigation } = props
+  const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
+
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="MedicationsScreen"
+        options={headerOptions(navigation, currentUser, currentPatient)}>
+        {(props) => <MedicationsScreen {...props} currentUser={currentUser} currentPatient={currentPatient} />}
+      </Stack.Screen>
+    </Stack.Navigator>
+  )
+}
+
+const Tab = createMaterialBottomTabNavigator()
 
 function PatientScreen(props) {
   const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
 
   return (
-    <Tab.Navigator tabBar={(props) => <BottomMenuBar {...props} />}>
-      <Tab.Screen name="Home" options={{ headerShown: false }}>
+    <Tab.Navigator>
+      <Tab.Screen
+        name="Home"
+        options={
+          {
+            headerShown: false,
+            tabBarLabel: "HOME",
+            tabBarIcon: ({ color, size }) => (<Icon name="home" color={color} size={size} />)
+          }
+        }>
         {(props) => <HomeScreenStack {...props} currentUser={currentUser} currentPatient={currentPatient} />}
       </Tab.Screen>
-    </Tab.Navigator>
+      <Tab.Screen
+        name="Medications"
+        options={
+          {
+            headerShown: false,
+            tabBarLabel: "MEDICATIONS",
+            tabBarIcon: ({ color, size }) => (<Icon name="pills" color={color} size={size} />)
+          }
+        }>
+        {(props) => <MedicationsScreenStack {...props} currentUser={currentUser} currentPatient={currentPatient} />}
+      </Tab.Screen>
+    </Tab.Navigator >
   )
 }
 

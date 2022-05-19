@@ -1,7 +1,6 @@
 import React from 'react'
 import { Text, View } from 'react-native'
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome'
-import { faCircle } from '@fortawesome/free-regular-svg-icons'
+import Icon from 'react-native-vector-icons/FontAwesome5'
 import { currentUserHelper, patientHelper } from "../../helpers"
 
 function HeaderLeft(props) {
@@ -9,7 +8,7 @@ function HeaderLeft(props) {
 
   return (
     <View style={{ flexDirection: "row", justifyContent: 'center', alignItems: 'center' }}>
-      <FontAwesomeIcon size={40} icon={faCircle} />
+      <Icon size={40} name="circle" />
       <Text style={{ position: 'absolute', fontSize: 20, margin: 7 }}>{patientHelper.initials(currentPatient)}</Text>
     </View >
   )
