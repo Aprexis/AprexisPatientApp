@@ -2,6 +2,7 @@ import React from "react"
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
 import Icon from 'react-native-vector-icons/FontAwesome5'
+import { MedicationScreen } from "./medications_screens"
 import { HomeScreen, MedicationsScreen, RequestPatientScreen, } from "./patient_screens"
 import { HeaderLeft, HeaderRight } from "./components"
 import { valueHelper, patientHelper, currentUserHelper } from "../helpers"
@@ -50,6 +51,11 @@ function MedicationsScreenStack(props) {
         name="MedicationsScreen"
         options={headerOptions(navigation, currentUser, currentPatient)}>
         {(props) => <MedicationsScreen {...props} currentUser={currentUser} currentPatient={currentPatient} />}
+      </Stack.Screen>
+      <Stack.Screen
+        name="MedicationScreen"
+        options={{ title: 'Medications' }}>
+        {(props) => <MedicationScreen {...props} currentUser={currentUser} currentPatient={currentPatient} />}
       </Stack.Screen>
     </Stack.Navigator>
   )

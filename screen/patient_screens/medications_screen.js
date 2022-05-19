@@ -1,7 +1,7 @@
 import React from 'react'
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
-import { Allergies, CheckInteractions, PatientMedicationsList } from "../components/medications"
+import { Allergies, CheckInteractions, PatientMedicationsList } from "../medications_screens"
 import { currentUserHelper } from '../../helpers'
 
 const Tab = createMaterialTopTabNavigator()
