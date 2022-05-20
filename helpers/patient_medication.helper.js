@@ -1,4 +1,5 @@
 import { valueHelper } from "./value.helper"
+import { dateHelper } from "./date.helper"
 import { fieldHelper } from "./field.helper"
 import { apiHelper } from "./api.helper"
 import { patientHelper } from "./patient.helper"
@@ -14,6 +15,8 @@ export const patientMedicationHelper = {
   changePhysician,
   daysSupply,
   directions,
+  displayFilledAt,
+  displayFilledOn,
   filledAt,
   healthPlanId,
   id,
@@ -144,6 +147,24 @@ function daysSupply(patientMedication) {
 
 function directions(patientMedication) {
   return fieldHelper.getField(patientMedication, "directions")
+}
+
+function displayFilledAt(patientMedication) {
+  const filledAt = patientMedicationHelper.filledAt(patientMedication)
+  if (!valueHelper.isValue(filledAt)) {
+    return ""
+  }
+
+  return dateHelper.displayDateTime(filledAt)
+}
+
+function displayFilledOn(patientMedication) {
+  const filledAt = patientMedicationHelper.filledAt(patientMedication)
+  if (!valueHelper.isValue(filledAt)) {
+    return ""
+  }
+
+  return dateHelper.displayDate(filledAt)
 }
 
 function filledAt(patientMedication) {

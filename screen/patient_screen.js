@@ -1,4 +1,5 @@
 import React from "react"
+import { Text } from "react-native"
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
 import Icon from 'react-native-vector-icons/FontAwesome5'
@@ -73,8 +74,8 @@ function PatientScreen(props) {
         options={
           {
             headerShown: false,
-            tabBarLabel: "HOME",
-            tabBarIcon: ({ color, size }) => (<Icon name="home" color={color} size={size} />)
+            tabBarLabel: (<Text style={{ fontSize: 20 }}>HOME</Text>),
+            tabBarIcon: ({ color }) => (<Icon name="home" color={color} size={20} />)
           }
         }>
         {(props) => <HomeScreenStack {...props} currentUser={currentUser} currentPatient={currentPatient} />}
@@ -84,8 +85,8 @@ function PatientScreen(props) {
         options={
           {
             headerShown: false,
-            tabBarLabel: "MEDICATIONS",
-            tabBarIcon: ({ color, size }) => (<Icon name="pills" color={color} size={size} />)
+            tabBarLabel: (<Text style={{ fontSize: 20 }}>MEDICATIONS</Text>),
+            tabBarIcon: ({ color }) => (<Icon name="pills" color={color} size={30} />)
           }
         }>
         {(props) => <MedicationsScreenStack {...props} currentUser={currentUser} currentPatient={currentPatient} />}
