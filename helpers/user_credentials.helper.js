@@ -24,7 +24,6 @@ const storeMethods = {
 }
 
 function storage() {
-  console.log(`Platform: ${Platform.OS}`)
   if (Platform.OS === "web") {
     return storeMethods.unsecure
   }
