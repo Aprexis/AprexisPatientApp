@@ -40,20 +40,20 @@ function MedicationInfo(props) {
 
   return (
     <View style={styles.medicationInfo.view}>
-      <View style={styles.medicationInfo.infoArea.view}>
-        <View style={styles.medicationInfo.infoArea.profileField.view}>
-          <Text style={styles.medicationInfo.infoArea.profileField.fieldName}>Instructions</Text>
-          <Text style={styles.medicationInfo.infoArea.profileField.fieldValue}>{patientMedicationHelper.directions(patientMedication)}</Text>
+      <View style={styles.medicationInfo.infoArea}>
+        <View style={styles.medicationInfo.profileFieldView}>
+          <Text style={styles.medicationInfo.profileFieldName}>Instructions</Text>
+          <Text style={styles.medicationInfo.profileFieldValue}>{patientMedicationHelper.directions(patientMedication)}</Text>
         </View>
 
-        <View style={styles.medicationInfo.infoArea.profileField.view}>
-          <Text style={styles.medicationInfo.infoArea.profileField.fieldName}>Last Filled</Text>
-          <Text style={styles.medicationInfo.infoArea.profileField.fieldValue}>{patientMedicationHelper.displayFilledOn(patientMedication)}</Text>
+        <View style={styles.medicationInfo.profileFieldView}>
+          <Text style={styles.medicationInfo.profileFieldName}>Last Filled</Text>
+          <Text style={styles.medicationInfo.profileFieldValue}>{patientMedicationHelper.displayFilledOn(patientMedication)}</Text>
         </View>
 
-        <View style={styles.medicationInfo.infoArea.profileField.view}>
-          <Text style={styles.medicationInfo.infoArea.profileField.fieldName}>Prescribed By</Text>
-          <Text style={styles.medicationInfo.infoArea.profileField.fieldValue}>{physicianName}</Text>
+        <View style={styles.medicationInfo.profileFieldView}>
+          <Text style={styles.medicationInfo.profileFieldName}>Prescribed By</Text>
+          <Text style={styles.medicationInfo.profileFieldValue}>{physicianName}</Text>
         </View>
       </View>
     </View>
@@ -66,14 +66,10 @@ const styles = StyleSheet.create(
   {
     medicationInfo: {
       view: {},
-      infoArea: {
-        view: { flexDirection: "column" },
-        profileField: {
-          view: { flexDirection: "row", margin: 5 },
-          fieldName: { fontWeight: "bold", marginRight: 5 },
-          fieldValue: {}
-        }
-      }
+      infoArea: { flexDirection: "column" },
+      profileFieldView: { flexDirection: "row", margin: 5 },
+      profileFieldName: { fontWeight: "bold", marginRight: 5 },
+      profileFieldValue: {}
     }
   }
 )

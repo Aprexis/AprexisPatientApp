@@ -13,24 +13,20 @@ function MedicationScreen(props) {
 
   return (
     <View style={styles.medicationScreen.view}>
-      <View style={styles.medicationScreen.section.view}>
-        <View style={styles.medicationScreen.title.view}>
-          <Icon size={40} style={styles.medicationScreen.title.icon} name="pills" />
-          <Text style={styles.medicationScreen.title.text}>{patientMedicationHelper.medicationLabel(patientMedication)}</Text>
-        </View>
+
+      <View style={styles.medicationScreen.titleView}>
+        <Icon size={40} style={styles.medicationScreen.titleIcon} name="pills" />
+        <Text style={styles.medicationScreen.titleText}>{patientMedicationHelper.medicationLabel(patientMedication)}</Text>
       </View>
 
-      <View style={styles.medicationScreen.section.view}>
-        <MedicationInfo {...props} patientMedication={patientMedication} currentUser={currentUser} currentPatient={currentPatient} />
-        {/*
+      <View style={styles.medicationScreen.sectionView}>
         <Tab.Navigator>
           <Tab.Screen
-            name="Info"
-            options={{ headerShown: false }}>
+            name="MedicationInfo"
+            options={{ title: "Info", headerShown: false }}>
             {(props) => <MedicationInfo {...props} patientMedication={patientMedication} currentUser={currentUser} currentPatient={currentPatient} />}
           </Tab.Screen>
         </Tab.Navigator>
-        */}
       </View>
     </View>
   )
@@ -41,12 +37,10 @@ export { MedicationScreen }
 const styles = StyleSheet.create(
   {
     medicationScreen: {
-      section: { view: { flexDirection: "row" } },
-      title: {
-        view: { flex: 1, flexDirection: "column", justifyContent: "center", alignItems: "center" },
-        icon: { color: "grey" },
-        text: { fontSize: 30, fontWeight: "bold" }
-      },
+      sectionView: { flex: 2 },
+      titleView: { flex: 1, flexDirection: "column", justifyContent: "center", alignItems: "center" },
+      titleIcon: { color: "grey" },
+      titleText: { fontSize: 30, fontWeight: "bold" },
       view: { flex: 1 }
     }
   }

@@ -11,8 +11,8 @@ function MedicationsScreen(props) {
 
   return (
     <SafeAreaView style={styles.medicationsScreen.safeArea}>
-      <View style={styles.medicationsScreen.title.view}>
-        <Text style={styles.medicationsScreen.title.text}>MEDICATIONS</Text>
+      <View style={styles.medicationsScreen.titleView}>
+        <Text style={styles.medicationsScreen.titleText}>MEDICATIONS</Text>
       </View>
       <Tab.Navigator>
         <Tab.Screen
@@ -41,10 +41,8 @@ const styles = StyleSheet.create(
   {
     medicationsScreen: {
       safeArea: { flex: 1 },
-      title: {
-        view: { flexDirection: "row", justifyContent: "center", alignContent: "center" },
-        text: { fontSize: 30, fontWeight: "bold" }
-      }
+      titleView: { flexDirection: "row", justifyContent: "center", alignContent: "center" },
+      titleText: { fontSize: 30, fontWeight: "bold" }
     }
   }
 )

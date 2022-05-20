@@ -36,7 +36,6 @@ function PatientMedicationsList(props) {
           if (!valueHelper.isValue(userCredentials)) {
             return
           }
-
           patientMedicationApi.listForPatient(
             userCredentials,
             patientHelper.id(currentPatient),
