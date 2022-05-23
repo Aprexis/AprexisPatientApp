@@ -14,7 +14,7 @@ import { authenticationApi } from '../api'
 import { Loader } from './components'
 import { alertHelper, userCredentialsHelper, currentUserHelper } from '../helpers'
 
-function LoginScreen({ navigation }) {
+const LoginScreen = ({ navigation }) => {
   const [userEmail, setUserEmail] = useState('')
   const [userPassword, setUserPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -40,10 +40,10 @@ function LoginScreen({ navigation }) {
         userCredentialsHelper.storeUserCredentials(
           userCredentials,
           () => {
-            currentUserHelper.loadCurrentUser(userCredentials, (currentUser, currentPatient) => { gotoPatient(navigation, currentUser, currentPatient) })
+            currentUserHelper.loadCurrentUser(userCredentials, (currentUser, currentPatient) => { gotoDrawer(navigation, currentUser, currentPatient) })
 
-            function gotoPatient(navigation, currentUser, currentPatient) {
-              navigation.navigate('PatientScreen', { currentUser, currentPatient })
+            function gotoDrawer(navigation, currentUser, currentPatient) {
+              navigation.navigate('DrawerNavigationRoutes', { currentUser, currentPatient })
             }
           })
       },
@@ -71,9 +71,9 @@ function LoginScreen({ navigation }) {
           <KeyboardAvoidingView enabled>
             <View style={{ alignItems: 'center' }}>
               <Image
-                source={require('../assets/logo-large.png')}
+                source={require('../assets/logo.svg')}
                 style={{
-                  width: "50%",
+                  width: "57%",
                   height: 100,
                   resizeMode: 'contain',
                   margin: 30
@@ -84,7 +84,7 @@ function LoginScreen({ navigation }) {
               <TextInput
                 style={styles.inputStyle}
                 onChangeText={(userEmail) => setUserEmail(userEmail)}
-                placeholder="Enter Email"
+                placeholder="Enter Username"
                 placeholderTextColor="#8b9cb5"
                 autoCapitalize='none'
                 keyboardType='email-address'
@@ -132,7 +132,7 @@ const styles = StyleSheet.create(
     mainBody: {
       flex: 1,
       justifyContent: 'center',
-      backgroundColor: '#307ecc',
+      backgroundColor: '#03718D',
       alignContent: 'center'
     },
     sectionStyle: {
@@ -144,10 +144,10 @@ const styles = StyleSheet.create(
       margin: 10
     },
     buttonStyle: {
-      backgroundColor: '#7de24e',
+      backgroundColor: '#74DEFF',
       borderWidth: 0,
-      color: '#ffffff',
-      borderColor: '#7de24e',
+      color: '#003949',
+      borderColor: '#74DEFF',
       height: 40,
       alignItems: 'center',
       borderRadius: 30,
@@ -157,9 +157,10 @@ const styles = StyleSheet.create(
       marginBottom: 25
     },
     buttonTextStyle: {
-      color: '#ffffff',
+      color: '#003949',
       paddingVertical: 10,
-      fontSize: 16
+      fontSize: 16,
+      fontWeight: 500
     },
     inputStyle: {
       flex: 1,
@@ -167,8 +168,9 @@ const styles = StyleSheet.create(
       paddingLeft: 15,
       paddingRight: 15,
       borderWidth: 1,
-      borderRadius: 30,
-      borderColor: '#dadae8'
+      borderRadius: 10,
+      borderColor: '#dadae8',
+      backgroundColor:'rgba(255,255,255,.65)'
     }
   }
 )
