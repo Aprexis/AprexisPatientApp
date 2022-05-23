@@ -9,7 +9,8 @@ export const API = {
   validateId
 }
 
-const baseApiUrl = 'http://10.0.2.2:3250' /*(process.env.REACT_APP_APREXIS_API*/
+//const baseApiUrl = 'http://10.0.2.2:3250' /*(process.env.REACT_APP_APREXIS_API*/
+const baseApiUrl = 'http://localhost:3250' /*(process.env.REACT_APP_APREXIS_API*/
 const railsUrlRoot = baseApiUrl /*new URL(baseApiUrl).pathname*/
 const knownHeaders = {
   "X-Page": "lastPage.number",

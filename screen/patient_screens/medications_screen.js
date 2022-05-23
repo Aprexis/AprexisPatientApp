@@ -8,6 +8,7 @@ const Tab = createMaterialTopTabNavigator()
 
 function MedicationsScreen(props) {
   const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
+  console.log(`Styles; ${JSON.stringify(styles, null, 2)}`)
 
   return (
     <SafeAreaView style={styles.medicationsScreen.safeArea}>
