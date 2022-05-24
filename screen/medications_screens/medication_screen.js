@@ -1,8 +1,9 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
-import Icon from 'react-native-vector-icons/FontAwesome5'
+import { FontAwesome5Icon } from '../components'
 import { MedicationInfo } from "./medication_info"
+import { MedicationRemindersList } from './medication_reminders_list'
 import { currentUserHelper, patientMedicationHelper } from "../../helpers"
 
 const Tab = createMaterialTopTabNavigator()
@@ -15,7 +16,7 @@ function MedicationScreen(props) {
     <View style={styles.medicationScreen.view}>
 
       <View style={styles.medicationScreen.titleView}>
-        <Icon size={40} style={styles.medicationScreen.titleIcon} name="pills" />
+        <FontAwesome5Icon size={40} style={styles.medicationScreen.titleIcon} name="pills" />
         <Text style={styles.medicationScreen.titleText}>{patientMedicationHelper.medicationLabel(patientMedication)}</Text>
       </View>
 
@@ -25,6 +26,11 @@ function MedicationScreen(props) {
             name="MedicationInfo"
             options={{ title: "Info", headerShown: false }}>
             {(props) => <MedicationInfo {...props} patientMedication={patientMedication} currentUser={currentUser} currentPatient={currentPatient} />}
+          </Tab.Screen>
+          <Tab.Screen
+            name="MedicationRemindersList"
+            options={{ title: "Reminders", headerShown: false }}>
+            {(props) => <MedicationRemindersList {...props} patientMedication={patientMedication} currentUser={currentUser} currentPatient={currentPatient} />}
           </Tab.Screen>
         </Tab.Navigator>
       </View>

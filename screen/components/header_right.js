@@ -1,6 +1,6 @@
 import React from 'react'
 import { Alert, TouchableOpacity, View } from 'react-native'
-import Icon from 'react-native-vector-icons/FontAwesome5'
+import { FontAwesome5Icon } from './fontawesome5_icon'
 import { authenticationApi } from '../../api'
 import { currentUserHelper, userCredentialsHelper, userHelper } from '../../helpers'
 
@@ -43,7 +43,7 @@ function LogoutButton(props,) {
         )
       }
       }>
-      < Icon size={40} name="user" />
+      < FontAwesome5Icon size={40} name="user" />
     </TouchableOpacity>
   )
 }

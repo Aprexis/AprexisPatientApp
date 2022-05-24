@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import Icon from 'react-native-vector-icons/FontAwesome5'
+import { FontAwesome5Icon } from '../components'
 import { patientMedicationApi } from "../../api"
 import { valueHelper, alertHelper, patientHelper, currentUserHelper, userCredentialsHelper, patientMedicationHelper } from '../../helpers'
 
@@ -10,12 +10,12 @@ function PatientMedication(props) {
 
   return (
     <View style={styles.patientMedication.view}>
-      <Icon size={40} style={styles.patientMedication.icon} name="pills" />
+      <FontAwesome5Icon size={40} style={styles.patientMedication.icon} name="pills" />
       <Text style={styles.patientMedication.text}>{patientMedicationHelper.medicationLabel(patientMedication)}</Text>
       <TouchableOpacity
         activeOpacity={0.5}
         onPress={() => { navigation.navigate('MedicationScreen', { currentUser, currentPatient, patientMedication }) }}>
-        <Icon size={30} name="angle-right" />
+        <FontAwesome5Icon size={30} name="angle-right" />
       </TouchableOpacity>
     </View>
   )
@@ -24,11 +24,12 @@ function PatientMedication(props) {
 function PatientMedicationsList(props) {
   const { currentPatient } = currentUserHelper.getCurrentProps(props)
   const [patientMedications, setPatientMedications] = useState([])
-  const [patientMedicationHeaders, setPatientMedicationHeaders] = useState(undefined)
+  const [patientMedicationHeaders, setPatientMedicationHeaders] = useState({})
+  const [loaded, setLoaded] = useState(false)
 
   useEffect(
     () => {
-      if (valueHelper.isValue(patientMedications) && (patientMedications.length > 0)) {
+      if (valueHelper.isSet(loaded)) {
         return
       }
       userCredentialsHelper.getUserCredentials(
@@ -41,6 +42,7 @@ function PatientMedicationsList(props) {
             patientHelper.id(currentPatient),
             { sort: 'medications.label' },
             (patientMedications, patientMedicationHeaders) => {
+              setLoaded(true)
               setPatientMedications(patientMedications)
               setPatientMedicationHeaders(patientMedicationHeaders)
             },

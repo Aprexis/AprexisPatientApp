@@ -1,3 +1,5 @@
+export * from "./fontawesome5_icon"
 export * from "./header_left"
 export * from "./header_right"
 export * from "./loader"
+export * from "./material_community_icon"
