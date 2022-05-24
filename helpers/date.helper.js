@@ -24,7 +24,7 @@ const locales = {
 
 function localeFromLocaleString(localeString) {
   // For now, we'll assume the US. */
-  const result = locales[localeString]
+  const result = valueHelper.isStringValue(localeString) ? locales[localeString] : locales['en-US']
   if (valueHelper.isValue(result.default)) {
     return result.default
   }
@@ -70,7 +70,7 @@ function displayDate(dateValue, format = "P") {
   }
 
   // TODO: force en-US for now.
-  return dateHelper.formatDate(dateHelper.makeDate(dateValue), format, 'en-US')
+  return dateHelper.formatDate(dateHelper.makeDate(dateValue), format)
 }
 
 function displayDateTime(dateTime, format = "Ppp") {
@@ -79,7 +79,7 @@ function displayDateTime(dateTime, format = "Ppp") {
   }
 
   // TODO: force en-US for now.
-  return dateHelper.formatDate(dateHelper.makeDate(dateTime), format, 'en-US')
+  return dateHelper.formatDate(dateHelper.makeDate(dateTime), format)
 }
 
 function formatDate(date, format, localeString) {

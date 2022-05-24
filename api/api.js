@@ -100,6 +100,7 @@ function handleError(method, path, error, onFailure, optional = {}) {
       return `Download Error: ${method} ${path}: ${error.message}`
     }
 
+
     const parsedJSON = JSON.parse(error.message)
     return Object.keys(parsedJSON)
       .filter((key) => typeof parsedJSON[key] === "string" || Array.isArray(parsedJSON[key]))
