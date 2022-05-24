@@ -14,10 +14,10 @@ function headerOptions(navigation, currentUser, currentPatient) {
   return {
     headerLeft: () => (<HeaderLeft currentUser={currentUser} currentPatient={currentPatient} />),
     headerRight: () => (<HeaderRight navigation={navigation} currentUser={currentUser} currentPatient={currentPatient} />),
-    headerTitle: `Hi ${patientHelper.firstName(currentPatient)}`,
-    headerStyle: { backgroundColor: "#307ecc" },
+    headerTitle: `Hi ${patientHelper.firstName(currentPatient)}!`,
+    headerStyle: { backgroundColor: "#03718D" },
     headerTintColor: '#fff',
-    headerTitleStyle: { fontWeight: 'bold' }
+    headerTitleStyle: { fontWeight:'600', position:'relative', left:'-10px'  }
   }
 }
 

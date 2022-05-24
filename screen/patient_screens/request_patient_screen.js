@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Keyboard, KeyboardAvoidingView, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { patientApi } from '../../api'
 import { alertHelper, currentUserHelper, userCredentialsHelper, valueHelper } from '../../helpers'
+import styles from '../../assets/styles.js'
 
 function RequestPatientScreen(props) {
   const { navigation } = props
@@ -48,20 +49,11 @@ function RequestPatientScreen(props) {
 
   return (
     <SafeAreaView style={styles.mainBody}>
-      <ScrollView
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={
-          {
-            flex: 1,
-            justifyContent: 'center',
-            alignContent: 'center'
-          }
-        }>
         <View>
           <KeyboardAvoidingView enabled>
             <View style={styles.sectionStyle}>
               <TextInput
-                style={styles.inputStyle}
+                style={styles.inputField}
                 onChangeText={(patientName) => setPatientName(patientName)}
                 placeholder='Enter Patient Name'
                 placeholderTextColor="#8b9cb5"
@@ -79,55 +71,8 @@ function RequestPatientScreen(props) {
             </TouchableOpacity>
           </KeyboardAvoidingView>
         </View>
-      </ScrollView>
     </SafeAreaView>
   )
 }
 
 export { RequestPatientScreen }
-
-const styles = StyleSheet.create(
-  {
-    mainBody: {
-      flex: 1,
-      justifyContent: 'center',
-      backgroundColor: '#307ecc',
-      alignContent: 'center'
-    },
-    sectionStyle: {
-      flexDirection: 'row',
-      height: 40,
-      marginTop: 20,
-      marginLeft: 35,
-      marginRight: 35,
-      margin: 10
-    },
-    buttonStyle: {
-      backgroundColor: '#7de24e',
-      borderWidth: 0,
-      color: '#ffffff',
-      borderColor: '#7de24e',
-      height: 40,
-      alignItems: 'center',
-      borderRadius: 30,
-      marginLeft: 35,
-      marginRight: 35,
-      marginTop: 20,
-      marginBottom: 25
-    },
-    buttonTextStyle: {
-      color: '#ffffff',
-      paddingVertical: 10,
-      fontSize: 16
-    },
-    inputStyle: {
-      flex: 1,
-      color: 'white',
-      paddingLeft: 15,
-      paddingRight: 15,
-      borderWidth: 1,
-      borderRadius: 30,
-      borderColor: '#dadae8'
-    }
-  }
-)

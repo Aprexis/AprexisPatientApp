@@ -37,7 +37,7 @@ function SplashScreen({ navigation }) {
   return (
     <View style={styles.container}>
       <Image
-        source={require('../assets/logo-large.png')}
+        source={require('../assets/logo.svg')}
         style={{ width: '90%', resizeMode: 'contain', margin: 30 }}
       />
       <ActivityIndicator

@@ -13,6 +13,7 @@ import {
 import { authenticationApi } from '../api'
 import { Loader } from './components'
 import { alertHelper, userCredentialsHelper, currentUserHelper } from '../helpers'
+import styles from '../assets/styles.js';
 
 function LoginScreen({ navigation }) {
   const [userEmail, setUserEmail] = useState('')
@@ -56,7 +57,7 @@ function LoginScreen({ navigation }) {
   }
 
   return (
-    <View style={styles.mainBody}>
+    <View style={styles.body}>
       <Loader loading={loading} />
       <ScrollView
         keyboardShouldPersistTaps="handled"
@@ -76,13 +77,13 @@ function LoginScreen({ navigation }) {
                   width: "57%",
                   height: 100,
                   resizeMode: 'contain',
-                  margin: 30
+                  margin: 30,
                 }}
               />
             </View>
             <View style={styles.sectionStyle}>
               <TextInput
-              style={styles.inputStyle}
+              style={styles.inputField}
               onChangeText={(userEmail) => setUserEmail(userEmail)}
               placeholder="Enter Username"
               placeholderTextColor="#8b9cb5"
@@ -99,7 +100,7 @@ function LoginScreen({ navigation }) {
             </View>
             <View style={styles.sectionStyle}>
               <TextInput
-                style={styles.inputStyle}
+                style={styles.inputField}
                 onChangeText={(userPassword) => setUserPassword(userPassword)}
                 placeholder='Enter Password'
                 placeholderTextColor="#8b9cb5"
@@ -126,51 +127,3 @@ function LoginScreen({ navigation }) {
 }
 
 export { LoginScreen }
-
-const styles = StyleSheet.create(
-  {
-    mainBody: {
-      flex: 1,
-      justifyContent: 'center',
-      backgroundColor: '#03718D',
-      alignContent: 'center'
-    },
-    sectionStyle: {
-      flexDirection: 'row',
-      height: 40,
-      marginTop: 20,
-      marginLeft: 35,
-      marginRight: 35,
-      margin: 10
-    },
-    buttonStyle: {
-      backgroundColor: '#74DEFF',
-      borderWidth: 0,
-      color: '#003949',
-      borderColor: '#74DEFF',
-      height: 40,
-      alignItems: 'center',
-      borderRadius: 30,
-      marginLeft: 35,
-      marginRight: 35,
-      marginTop: 20,
-      marginBottom: 25
-    },
-    buttonTextStyle: {
-      color: '#003949',
-      paddingVertical: 10,
-      fontSize: 16,
-      fontWeight: 500
-    },
-    inputStyle: {
-      flex: 1,
-      color: 'white',
-      paddingLeft: 15,
-      paddingRight: 15,
-      borderWidth: 1,
-      borderRadius: 10,
-      borderColor: '#dadae8',
-      backgroundColor:'rgba(255,255,255,.65)'
-    }
-  }
-)

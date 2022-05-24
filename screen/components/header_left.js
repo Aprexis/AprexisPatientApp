@@ -7,9 +7,9 @@ function HeaderLeft(props) {
   const { currentPatient } = currentUserHelper.getCurrentProps(props)
 
   return (
-    <View style={{ flexDirection: "row", justifyContent: 'center', alignItems: 'center' }}>
-      <FontAwesome5Icon size={40} name="circle" />
-      <Text style={{ position: 'absolute', fontSize: 20, margin: 7 }}>{patientHelper.initials(currentPatient)}</Text>
+    <View style={{ flexDirection: "row", justifyContent: 'center', alignItems: 'center', paddingLeft:10,  }}>
+      <FontAwesome5Icon size={43} name="circle" style={{color:'#fff'}} />
+      <Text style={{ position: 'absolute', fontSize: 21, fontWeight:700, color:'#fff' }}>{patientHelper.initials(currentPatient)}</Text>
     </View >
   )
 }
