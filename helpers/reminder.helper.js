@@ -149,7 +149,6 @@ function displayRemindAt(reminder) {
   }
 
   remindAt = dateHelper.makeDate(remindAt)
-
   return formatInTimeZone(remindAt, remindAtTimeZone, "p")
 }
 

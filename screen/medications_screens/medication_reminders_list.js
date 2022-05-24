@@ -93,7 +93,7 @@ function MedicationRemindersList(props) {
           reminderApi.listForPatient(
             userCredentials,
             patientHelper.id(currentPatient),
-            { /*for_active: true, for_medication: patientMedicationHelper.medicationId(patientMedication),*/ sort: 'recur_from,recur_to,action' },
+            { for_active: true, for_medication: patientMedicationHelper.medicationId(patientMedication), sort: 'recur_from,recur_to,action' },
             (medicationReminders, medicationReminderHeaders) => {
               setLoaded(true)
               setMedicationReminders(medicationReminders)
