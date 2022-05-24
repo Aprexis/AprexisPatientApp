@@ -14,7 +14,7 @@ import { authenticationApi } from '../api'
 import { Loader } from './components'
 import { alertHelper, userCredentialsHelper, currentUserHelper } from '../helpers'
 
-const LoginScreen = ({ navigation }) => {
+function LoginScreen({ navigation }) {
   const [userEmail, setUserEmail] = useState('')
   const [userPassword, setUserPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -40,10 +40,10 @@ const LoginScreen = ({ navigation }) => {
         userCredentialsHelper.storeUserCredentials(
           userCredentials,
           () => {
-            currentUserHelper.loadCurrentUser(userCredentials, (currentUser, currentPatient) => { gotoDrawer(navigation, currentUser, currentPatient) })
+            currentUserHelper.loadCurrentUser(userCredentials, (currentUser, currentPatient) => { gotoPatient(navigation, currentUser, currentPatient) })
 
-            function gotoDrawer(navigation, currentUser, currentPatient) {
-              navigation.navigate('DrawerNavigationRoutes', { currentUser, currentPatient })
+            function gotoPatient(navigation, currentUser, currentPatient) {
+              navigation.navigate('PatientScreen', { currentUser, currentPatient })
             }
           })
       },
@@ -82,19 +82,19 @@ const LoginScreen = ({ navigation }) => {
             </View>
             <View style={styles.sectionStyle}>
               <TextInput
-                style={styles.inputStyle}
-                onChangeText={(userEmail) => setUserEmail(userEmail)}
-                placeholder="Enter Username"
-                placeholderTextColor="#8b9cb5"
-                autoCapitalize='none'
-                keyboardType='email-address'
-                returnKeyType='next'
-                onSubmitEditing={() =>
-                  passwordInputRef.current &&
-                  passwordInputRef.current.focus()
-                }
-                underlineColorAndroid="#f000"
-                blurOnSubmit={false}
+              style={styles.inputStyle}
+              onChangeText={(userEmail) => setUserEmail(userEmail)}
+              placeholder="Enter Username"
+              placeholderTextColor="#8b9cb5"
+              autoCapitalize='none'
+              keyboardType='email-address'
+              returnKeyType='next'
+              onSubmitEditing={() =>
+                passwordInputRef.current &&
+                passwordInputRef.current.focus()
+              }
+              underlineColorAndroid="#f000"
+              blurOnSubmit={false}
               />
             </View>
             <View style={styles.sectionStyle}>
