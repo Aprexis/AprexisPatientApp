@@ -10,8 +10,6 @@ function HeaderLeft(props) {
     <View style={{ flexDirection: "row", justifyContent: 'center', alignItems: 'center', paddingLeft:10 }}>
     <TouchableOpacity
         style={{
-          borderWidth: 1,
-          borderColor: 'rgba(0,0,0,0.2)',
           alignItems: 'center',
           justifyContent: 'center',
           width: 40,
