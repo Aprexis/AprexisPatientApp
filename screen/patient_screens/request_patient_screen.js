@@ -49,6 +49,15 @@ function RequestPatientScreen(props) {
 
   return (
     <SafeAreaView style={styles.mainBody}>
+      <ScrollView
+        keyboardShouldPersistTaps="handled"
+        contentContainerStyle={
+          {
+            flex: 1,
+            justifyContent: 'center',
+            alignContent: 'center'
+          }
+        }>
         <View>
           <KeyboardAvoidingView enabled>
             <View style={styles.sectionStyle}>
@@ -71,6 +80,7 @@ function RequestPatientScreen(props) {
             </TouchableOpacity>
           </KeyboardAvoidingView>
         </View>
+      </ScrollView>
     </SafeAreaView>
   )
 }

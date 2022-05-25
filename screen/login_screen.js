@@ -57,7 +57,7 @@ function LoginScreen({ navigation }) {
   }
 
   return (
-    <View style={styles.body}>
+    <View style={styles.mainFullScreen}>
       <Loader loading={loading} />
       <ScrollView
         keyboardShouldPersistTaps="handled"
@@ -77,7 +77,6 @@ function LoginScreen({ navigation }) {
                   width: "57%",
                   height: 100,
                   resizeMode: 'contain',
-                  margin: 30,
                 }}
               />
             </View>

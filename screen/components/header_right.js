@@ -43,7 +43,7 @@ function LogoutButton(props,) {
         )
       }
       }>
-      <FontAwesome5Icon size={30} name="cog" color="#fff" />
+      <FontAwesome5Icon size={25} name="cog" color="#fff" />
     </TouchableOpacity>
   )
 }

@@ -4,6 +4,12 @@ export default StyleSheet.create(
     mainApp: {
       backgroundColor: '#03718D'
     },
+    mainFullScreen: {
+      flex: 1,
+      backgroundColor: '#03718D',
+      justifyContent: 'center',
+      alignContent: 'center'
+    },
     mainBody: {
       flex: 1,
       justifyContent: 'center',
