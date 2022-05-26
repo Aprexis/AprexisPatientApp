@@ -1,6 +1,6 @@
 import React from 'react'
 import { Text, View } from 'react-native'
-import { FontAwesome5Icon } from './fontawesome5_icon'
+import { FontAwesome5Icon } from './font_awesome5_icon'
 import { currentUserHelper, patientHelper } from "../../helpers"
 
 function HeaderLeft(props) {

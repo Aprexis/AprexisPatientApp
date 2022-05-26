@@ -1,5 +1,6 @@
 export * from "./value.helper"
 export * from "./api.helper"
+export * from "./page.helper"
 export * from "./field.helper"
 export * from "./alert.helper"
 export * from "./address.helper"
