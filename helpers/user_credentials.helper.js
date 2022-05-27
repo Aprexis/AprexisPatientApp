@@ -44,8 +44,6 @@ async function getUserCredentials(handler) {
   } catch (error) {
     alertHelper.error(error)
   }
-
-  handler()
 }
 
 async function removeUserCredentials(handler) {

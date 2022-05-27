@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { FontAwesome5Icon, MaterialCommunityIcon } from '../components'
+import React from 'react'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FontAwesome5Icon, ListView, MaterialCommunityIcon } from '../components'
 import { reminderApi } from "../../api"
 import { valueHelper, alertHelper, currentUserHelper, patientHelper, patientMedicationHelper, reminderHelper, userCredentialsHelper } from "../../helpers"
 
@@ -76,61 +76,52 @@ function MedicationReminder(props) {
 function MedicationRemindersList(props) {
   const { currentPatient } = currentUserHelper.getCurrentProps(props)
   const { patientMedication } = props
-  const [medicationReminders, setMedicationReminders] = useState([])
-  const [medicationReminderHeaders, setMedicationReminderHeaders] = useState({})
-  const [loaded, setLoaded] = useState(false)
-
-  useEffect(
-    () => {
-      if (valueHelper.isSet(loaded)) {
-        return
-      }
-      userCredentialsHelper.getUserCredentials(
-        (userCredentials) => {
-          if (!valueHelper.isValue(userCredentials)) {
-            return
-          }
-          reminderApi.listForPatient(
-            userCredentials,
-            patientHelper.id(currentPatient),
-            { for_active: true, for_medication: patientMedicationHelper.medicationId(patientMedication), sort: 'recur_from,recur_to,action' },
-            (medicationReminders, medicationReminderHeaders) => {
-              setLoaded(true)
-              setMedicationReminders(medicationReminders)
-              setMedicationReminderHeaders(medicationReminderHeaders)
-            },
-            (message) => {
-              alertHelper.error(message)
-              return
-            }
-          )
-        }
-      )
-    }
-  )
 
   return (
-    <ScrollView
-      keyboardShouldPersistTaps="handled"
-      contentContainerStyle={styles.medicationRemindersList.scrollContext}>
-      {
-        medicationReminders.map(
-          (medicationReminder) => {
-            return (<MedicationReminder key={`patient-medication-${reminderHelper.id(medicationReminder)}`} {...props} medicationReminder={medicationReminder} />)
+    <ListView
+      label='Medication Reminders'
+      onLoadPage={loadPage}
+      onPresentItem={presentItem}
+      pageSize={20}
+      pluralLabel='Medication Reminders'
+    />
+  )
+
+  function loadPage(number, size, onSuccess) {
+    userCredentialsHelper.getUserCredentials(
+      (userCredentials) => {
+        if (!valueHelper.isValue(userCredentials)) {
+          return
+        }
+        reminderApi.listForPatient(
+          userCredentials,
+          patientHelper.id(currentPatient),
+          { for_active: true, for_medication: patientMedicationHelper.medicationId(patientMedication), page: { number, size, total: 0 }, sort: 'recur_from,recur_to,action' },
+          onSuccess,
+          (error) => {
+            alertHelper.error(error)
+            return
           }
         )
       }
-    </ScrollView>
-  )
+    )
+  }
+
+  function presentItem(medicationReminder, medicationReminderIdx) {
+    return (
+      <MedicationReminder
+        key={`medication-reminder-${reminderHelper.id(medicationReminder)}-${medicationReminderIdx}`}
+        medicationReminder={medicationReminder}
+        {...props}
+      />
+    )
+  }
 }
 
 export { MedicationRemindersList }
 
 const styles = StyleSheet.create(
   {
-    medicationRemindersList: {
-      scrollContext: { flexDirection: "column" }
-    },
     medicationReminder: {
       view: { flex: 1, flexDirection: "row", alignContent: 'center', height: 20, backgroundColor: "#c8c8c8" },
       icon: { color: "grey" },

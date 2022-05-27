@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { FontAwesome5Icon } from '../components'
+import React from 'react'
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { FontAwesome5Icon, ListView } from '../components'
 import { patientMedicationApi } from "../../api"
-import { valueHelper, alertHelper, patientHelper, currentUserHelper, userCredentialsHelper, patientMedicationHelper } from '../../helpers'
+import { alertHelper, patientHelper, currentUserHelper, userCredentialsHelper, patientMedicationHelper, valueHelper } from '../../helpers'
 
 function PatientMedication(props) {
   const { navigation, patientMedication } = props
@@ -23,61 +23,52 @@ function PatientMedication(props) {
 
 function PatientMedicationsList(props) {
   const { currentPatient } = currentUserHelper.getCurrentProps(props)
-  const [patientMedications, setPatientMedications] = useState([])
-  const [patientMedicationHeaders, setPatientMedicationHeaders] = useState({})
-  const [loaded, setLoaded] = useState(false)
-
-  useEffect(
-    () => {
-      if (valueHelper.isSet(loaded)) {
-        return
-      }
-      userCredentialsHelper.getUserCredentials(
-        (userCredentials) => {
-          if (!valueHelper.isValue(userCredentials)) {
-            return
-          }
-          patientMedicationApi.listForPatient(
-            userCredentials,
-            patientHelper.id(currentPatient),
-            { sort: 'medications.label' },
-            (patientMedications, patientMedicationHeaders) => {
-              setLoaded(true)
-              setPatientMedications(patientMedications)
-              setPatientMedicationHeaders(patientMedicationHeaders)
-            },
-            (message) => {
-              alertHelper.error(message)
-              return
-            }
-          )
-        }
-      )
-    }
-  )
 
   return (
-    <ScrollView
-      keyboardShouldPersistTaps="handled"
-      contentContainerStyle={styles.patientMedicationsList.scrollContext}>
-      {
-        patientMedications.map(
-          (patientMedication) => {
-            return (<PatientMedication key={`patient-medication-${patientMedicationHelper.id(patientMedication)}`} {...props} patientMedication={patientMedication} />)
+    <ListView
+      label='Patient Medication'
+      onLoadPage={loadPage}
+      onPresentItem={presentItem}
+      pageSize={20}
+      pluralLabel='Patient Medications'
+    />
+  )
+
+  function loadPage(number, size, onSuccess) {
+    userCredentialsHelper.getUserCredentials(
+      (userCredentials) => {
+        if (!valueHelper.isValue(userCredentials)) {
+          return
+        }
+        patientMedicationApi.listForPatient(
+          userCredentials,
+          patientHelper.id(currentPatient),
+          { page: { number, size, total: 0 }, sort: 'created_at-,medication.label' },
+          onSuccess,
+          (error) => {
+            alertHelper.error(error)
+            return
           }
         )
       }
-    </ScrollView>
-  )
+    )
+  }
+
+  function presentItem(patientMedication, patientMedicationIdx) {
+    return (
+      <PatientMedication
+        key={`patient-medication-${patientMedicationHelper.id(patientMedication)}-${patientMedicationIdx}`}
+        patientMedication={patientMedication}
+        {...props}
+      />
+    )
+  }
 }
 
 export { PatientMedicationsList }
 
 const styles = StyleSheet.create(
   {
-    patientMedicationsList: {
-      scrollContext: { flexDirection: "column" }
-    },
     patientMedication: {
       view: { flex: 1, flexDirection: "row", height: 50, margin: 5, backgroundColor: "#c8c8c8" },
       icon: { color: "grey" },
