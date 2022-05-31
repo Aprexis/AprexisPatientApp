@@ -55,7 +55,7 @@ function RequestPatientScreen(props) {
           {
             flex: 1,
             justifyContent: 'center',
-            alignContent: 'center'
+            alignContent: 'center',
           }
         }>
         <View>

@@ -1,6 +1,5 @@
 import React from 'react'
 import { Text, View, TouchableOpacity } from 'react-native'
-import { FontAwesome5Icon } from './fontawesome5_icon'
 import { currentUserHelper, patientHelper } from "../../helpers"
 
 function HeaderLeft(props) {

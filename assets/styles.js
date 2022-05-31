@@ -13,8 +13,8 @@ export default StyleSheet.create(
     mainBody: {
       flex: 1,
       justifyContent: 'center',
-      backgroundColor: '#E7F0FF',
-      alignContent: 'center'
+      backgroundColor: '#F3F6F9',
+      alignContent: 'center',
     },
     sectionStyle: {
       flexDirection: 'row',
@@ -25,10 +25,10 @@ export default StyleSheet.create(
       margin: 10
     },
     buttonStyle: {
-      backgroundColor: '#74DEFF',
+      backgroundColor: '#6DD6F0',
       borderWidth: 0,
       color: '#003949',
-      borderColor: '#74DEFF',
+      borderColor: '#6DD6F0',
       height: 40,
       alignItems: 'center',
       borderRadius: 30,
@@ -54,7 +54,15 @@ export default StyleSheet.create(
       borderColor: '#dadae8',
       backgroundColor:'rgba(255,255,255,.65)',
       outlineColor: '#fff',
-      outlineWidth: '1px'
+      outlineWidth: '1px',
+      shadowColor: "#86B9C7",
+      shadowOffset: {
+        width: 0,
+        height: 5,
+      },
+      shadowOpacity: 0.53,
+      shadowRadius: 13.97,
+      elevation: 21,
     }
   }
 );

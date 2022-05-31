@@ -13,7 +13,7 @@ import {
 import { authenticationApi } from '../api'
 import { Loader } from './components'
 import { alertHelper, userCredentialsHelper, currentUserHelper } from '../helpers'
-import styles from '../assets/styles.js';
+import styles from '../assets/styles.js'
 
 function LoginScreen({ navigation }) {
   const [userEmail, setUserEmail] = useState('')

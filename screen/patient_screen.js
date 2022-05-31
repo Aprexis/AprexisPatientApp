@@ -27,7 +27,16 @@ function HomeScreenStack(props) {
   const initialRouteName = valueHelper.isValue(currentPatient) ? 'HomeScreen' : 'RequestPatientScreen'
 
   return (
-    <Stack.Navigator initialRouteName={initialRouteName}>
+    <Stack.Navigator
+      initialRouteName={initialRouteName} 
+      screenOptions={
+        { 
+          headerStyle: { backgroundColor: '#E0EBF1' }, 
+          headerTitleStyle:{color:'#003949'},
+          headerShadowVisible: false
+        }
+      }
+    >
       <Stack.Screen
         name="RequestPatientScreen"
         options={{ title: 'Request Patient' }}>
@@ -68,14 +77,16 @@ function PatientScreen(props) {
   const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
 
   return (
-    <Tab.Navigator>
+    <Tab.Navigator
+      barStyle={{ backgroundColor: '#03718D' }}
+    >
       <Tab.Screen
         name="Home"
         options={
           {
             headerShown: false,
-            tabBarLabel: (<Text style={{ fontSize: 20 }}>HOME</Text>),
-            tabBarIcon: ({ color }) => (<FontAwesome5Icon name="home" color={color} size={20} />)
+            tabBarLabel: (<Text style={{ fontSize: 15 }}>HOME</Text>),
+            tabBarIcon: ({ color }) => (<FontAwesome5Icon name="home" color={color} size={27} style={{ marginTop:'-4px' }}/>)
           }
         }>
         {(props) => <HomeScreenStack {...props} currentUser={currentUser} currentPatient={currentPatient} />}
@@ -85,8 +96,8 @@ function PatientScreen(props) {
         options={
           {
             headerShown: false,
-            tabBarLabel: (<Text style={{ fontSize: 20 }}>MEDICATIONS</Text>),
-            tabBarIcon: ({ color }) => (<FontAwesome5Icon name="pills" color={color} size={30} />)
+            tabBarLabel: (<Text style={{ fontSize: 15 }}>MEDICATIONS</Text>),
+            tabBarIcon: ({ color }) => (<FontAwesome5Icon name="pills" color={color} size={28} style={{ marginTop:'-4px' }}/>)
           }
         }>
         {(props) => <MedicationsScreenStack {...props} currentUser={currentUser} currentPatient={currentPatient} />}
