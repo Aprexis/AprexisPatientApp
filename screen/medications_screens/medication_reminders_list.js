@@ -43,7 +43,6 @@ function MedicationReminder(props) {
     }
 
     function selectedDaysOfWeek(medicationReminder) {
-      console.log(`MR: ${JSON.stringify(medicationReminder, null, 2)}`)
       let daysOfWeek = ""
       let prefix = ''
       if (valueHelper.isSet(reminderHelper.sunday(medicationReminder))) {
