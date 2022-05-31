@@ -1,6 +1,6 @@
 import React from 'react'
 import { Alert, TouchableOpacity, View } from 'react-native'
-import { FontAwesome5Icon } from './fontawesome5_icon'
+import { FontAwesome5Icon } from './font_awesome5_icon'
 import { authenticationApi } from '../../api'
 import { currentUserHelper, userCredentialsHelper, userHelper } from '../../helpers'
 

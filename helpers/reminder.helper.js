@@ -3,6 +3,7 @@ import { apiHelper } from "./api.helper"
 import { dateHelper } from "./date.helper"
 import { fieldHelper } from './field.helper'
 import { patientHelper } from "./patient.helper"
+import { patientMedicationHelper } from "./patient_medication.helper"
 import { patientSupplementHelper } from "./patient_supplement.helper"
 import { valueHelper } from "./value.helper"
 import { medicationHelper } from "./admin"
@@ -10,6 +11,7 @@ import { reminderActions, reminderTypes, timeZones } from "../types"
 
 export const reminderHelper = {
   action,
+  addPatientMedication,
   buildChanged,
   buildNewChanged,
   dayOfMonth,
@@ -22,6 +24,7 @@ export const reminderHelper = {
   displayType,
   emailAddress,
   friday,
+  hasMedication,
   id,
   isReminderActionValue,
   isReminderTypeValue,
@@ -74,6 +77,14 @@ const reminderKeys = [
 
 function action(reminder) {
   return fieldHelper.getField(reminder, "action")
+}
+
+function addPatientMedication(reminder, changedReminder, patientMedication) {
+  if (reminderHelper.hasMedication(reminder, patientMedicationHelper.medicationId(patientMedication))) {
+    return { reminder, changedReminder }
+  }
+
+
 }
 
 function buildChanged(reminder, changedReminder) {
@@ -164,6 +175,17 @@ function emailAddress(reminder) {
 
 function friday(reminder) {
   return fieldHelper.getField(reminder, "friday")
+}
+
+function hasMedication(reminder, medicationId) {
+  const reminderMedications = reminderHelper.reminderMedications(reminder)
+  if (Array.isArray(reminderMedications)) {
+    return false
+  }
+
+  return valueHelper.isValue(
+    reminderMedications.find((reminderMedication) => reminderMedicationHelper.medicationId(reminderMedication) == medicationId)
+  )
 }
 
 function id(reminder) {
