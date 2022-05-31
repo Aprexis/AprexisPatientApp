@@ -16,6 +16,7 @@ export const patientHelper = {
   coverageEndDate,
   dateOfBirth,
   displayPreferredContactMethod,
+  email,
   firstName,
   fullAddress,
   gender,
@@ -30,6 +31,7 @@ export const patientHelper = {
   longitude,
   memberNumber,
   middleName,
+  mobilePhone,
   name,
   noKnownAllergies,
   medicationCount,
@@ -56,6 +58,7 @@ const patientKeys = [
   "coverage_effective_date",
   "coverage_end_date",
   "date_of_birth",
+  "email",
   "first_name",
   "gender",
   "health_plan_patient_pharmacy_claim_identifier",
@@ -65,8 +68,10 @@ const patientKeys = [
   "medication_count",
   "member_number",
   "middle_name",
+  "mobile_phone",
   "no_known_allergies",
   "person_number",
+  "phone",
   "preferred_contact_method",
   "primary_care_provider_npi",
   "race",
@@ -139,6 +144,10 @@ function displayPreferredContactMethod(patient) {
   return contactMethod.label
 }
 
+function email(patient, prefix = "") {
+  return nameHelper.phone(patient, prefix)
+}
+
 function firstName(patient, prefix = "") {
   return nameHelper.firstName(patient, prefix)
 }
@@ -202,6 +211,10 @@ function latitude(patient) {
 
 function longitude(patient) {
   return fieldHelper.getField(patient, "longitude")
+}
+
+function mobilePhone(patient) {
+  return fieldHelper.getField(patient, "mobile_phone")
 }
 
 function medicationCount(patient) {

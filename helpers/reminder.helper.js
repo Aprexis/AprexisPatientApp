@@ -14,6 +14,7 @@ export const reminderHelper = {
   addPatientMedication,
   buildChanged,
   buildNewChanged,
+  changeField,
   dayOfMonth,
   displayAction,
   displayMedications,
@@ -84,7 +85,16 @@ function addPatientMedication(reminder, changedReminder, patientMedication) {
     return { reminder, changedReminder }
   }
 
-
+  return fieldHelper.addEntry(
+    'reminder',
+    reminder,
+    reminderHelper.buildChanged(reminder, changedReminder),
+    'reminder_medications',
+    'medication_id',
+    {
+      medication_id: patientMedicationHelper.medicationId(patientMedication)
+    }
+  )
 }
 
 function buildChanged(reminder, changedReminder) {
@@ -111,6 +121,10 @@ function buildNewChanged(reminder) {
   return {
     ...reminder
   }
+}
+
+function changeField(reminder, changedReminder, name, value) {
+  return fieldHelper.changeField('reminder', reminder, changedReminder, name, value, reminderHelper.buildChanged)
 }
 
 function dayOfMonth(reminder) {

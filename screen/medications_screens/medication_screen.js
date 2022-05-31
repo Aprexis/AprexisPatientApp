@@ -1,12 +1,36 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { FontAwesome5Icon } from '../components'
 import { MedicationAdherence } from './medication_adherence'
 import { MedicationInfo } from "./medication_info"
 import { MedicationInteractions } from './medication_interactions'
 import { MedicationRemindersList } from './medication_reminders_list'
+import { ReminderInfo } from '../reminders'
 import { currentUserHelper, patientMedicationHelper } from "../../helpers"
+
+const Stack = createNativeStackNavigator()
+
+function MedicationRemindersScreenStack(props) {
+  const { navigation, patientMedication } = props
+  const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
+
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="MedicationRemindersList"
+        options={{ title: "Reminders", headerShown: false }}>
+        {(props) => <MedicationRemindersList {...props} patientMedication={patientMedication} currentUser={currentUser} currentPatient={currentPatient} />}
+      </Stack.Screen>
+      <Stack.Screen
+        name="ReminderInfo"
+        options={{ title: 'Reminders', headerShown: false }}>
+        {(props) => <ReminderInfo {...props} currentUser={currentUser} currentPatient={currentPatient} />}
+      </Stack.Screen>
+    </Stack.Navigator>
+  )
+}
 
 const Tab = createMaterialTopTabNavigator()
 
@@ -41,9 +65,9 @@ function MedicationScreen(props) {
             {(props) => <MedicationAdherence {...props} patientMedication={patientMedication} currentUser={currentUser} currentPatient={currentPatient} />}
           </Tab.Screen>
           <Tab.Screen
-            name="MedicationRemindersList"
+            name="MedicationReminders"
             options={{ title: "Reminders", headerShown: false }}>
-            {(props) => <MedicationRemindersList {...props} patientMedication={patientMedication} currentUser={currentUser} currentPatient={currentPatient} />}
+            {(props) => <MedicationRemindersScreenStack {...props} patientMedication={patientMedication} currentUser={currentUser} currentPatient={currentPatient} />}
           </Tab.Screen>
         </Tab.Navigator>
       </View>
