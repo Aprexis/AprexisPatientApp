@@ -43,7 +43,7 @@ function PatientMedicationsList(props) {
         patientMedicationApi.listForPatient(
           userCredentials,
           patientHelper.id(currentPatient),
-          { page: { number, size, total: 0 }, sort: 'created_at-,medication.label' },
+          { for_active: true, page: { number, size, total: 0 }, sort: 'created_at-,medication.label' },
           onSuccess,
           (error) => {
             alertHelper.error(error)
