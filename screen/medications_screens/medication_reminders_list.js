@@ -10,17 +10,23 @@ function MedicationReminder(props) {
 
   return (
     <View style={styles.medicationReminder.view}>
-      <MaterialCommunityIcon size={17} style={styles.medicationReminder.icon} name="reminder" />
-      <Text style={styles.medicationReminder.text}>{reminderHelper.displayAction(medicationReminder)}</Text>
-      <Text style={styles.medicationReminder.text}>{reminderHelper.displayRecurFrom(medicationReminder)}</Text>
-      <Text style={styles.medicationReminder.text}>{reminderHelper.displayRecurTo(medicationReminder)}</Text>
-      <Text style={styles.medicationReminder.text}>{reminderDates(medicationReminder)}</Text>
-      <Text style={styles.medicationReminder.text}>{reminderHelper.displayRemindAt(medicationReminder)}</Text>
-      <TouchableOpacity
-        activeOpacity={0.5}
-        onPress={() => { navigation.navigate('ReminderInfo', { currentUser, currentPatient, medicationReminder }) }}>
-        <FontAwesome5Icon size={17} name="angle-right" />
-      </TouchableOpacity>
+      <View style={{ flexGrow: 1, flexDirection: "row" }}>
+        <MaterialCommunityIcon size={17} style={styles.medicationReminder.icon} name="reminder" />
+        <Text style={styles.medicationReminder.text}>{reminderHelper.displayAction(medicationReminder)}</Text>
+        <TouchableOpacity
+          activeOpacity={0.5}
+          onPress={() => { navigation.navigate('ReminderInfo', { currentUser, currentPatient, medicationReminder }) }}>
+          <FontAwesome5Icon size={17} name="angle-right" />
+        </TouchableOpacity>
+      </View>
+      <View style={{ flexGrow: 1, flexDirection: "row" }}>
+        <Text style={styles.medicationReminder.text}>{reminderHelper.displayRecurFrom(medicationReminder)}</Text>
+        <Text style={styles.medicationReminder.text}>{reminderHelper.displayRecurTo(medicationReminder)}</Text>
+        <Text style={styles.medicationReminder.text}>{reminderHelper.displayRemindAt(medicationReminder)}</Text>
+      </View>
+      <View style={{ flexGrow: 1, flexDirection: "row" }}>
+        <Text style={styles.medicationReminder.text}>{reminderDates(medicationReminder)}</Text>
+      </View>
     </View>
   )
 
@@ -31,12 +37,13 @@ function MedicationReminder(props) {
       case 'WeeklyReminder':
         return selectedDaysOfWeek(medicationReminder)
       case 'MonthlyReminder':
-        return reminderHelper.dayOfMonth(medicationReminder)
+        return `Day of Month: ${reminderHelper.dayOfMonth(medicationReminder)}`
       default:
         return ""
     }
 
     function selectedDaysOfWeek(medicationReminder) {
+      console.log(`MR: ${JSON.stringify(medicationReminder, null, 2)}`)
       let daysOfWeek = ""
       let prefix = ''
       if (valueHelper.isSet(reminderHelper.sunday(medicationReminder))) {
@@ -96,7 +103,7 @@ function MedicationRemindersList(props) {
         reminderApi.listForPatient(
           userCredentials,
           patientHelper.id(currentPatient),
-          { for_active: true, for_medication: patientMedicationHelper.medicationId(patientMedication), page: { number, size, total: 0 }, sort: 'recur_from,recur_to,action' },
+          { for_active: true, for_medication_label: patientMedicationHelper.medicationLabel(patientMedication), page: { number, size, total: 0 }, sort: 'recur_from,recur_to,action' },
           onSuccess,
           (error) => {
             alertHelper.error(error)
@@ -123,7 +130,7 @@ export { MedicationRemindersList }
 const styles = StyleSheet.create(
   {
     medicationReminder: {
-      view: { flex: 1, flexDirection: "row", alignContent: 'center', height: 20, backgroundColor: "#c8c8c8" },
+      view: { flex: 1, flexDirection: "column", alignContent: 'center', backgroundColor: "#c8c8c8" },
       icon: { color: "grey" },
       text: { fontSize: 12, fontWeight: "bold", margin: 2 }
     }
