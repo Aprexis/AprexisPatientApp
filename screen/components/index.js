@@ -1,6 +1,7 @@
 export * from "./font_awesome5_icon"
 export * from "./header_left"
 export * from "./header_right"
+export * from "./number_input"
 export * from "./list_count"
 export * from "./list_view"
 export * from "./loader"

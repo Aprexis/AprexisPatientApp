@@ -38,8 +38,11 @@ async function getUserCredentials(handler) {
       const userCredentials = JSON.parse(stringCredentials)
       if (valueHelper.isSet(userCredentials.success)) {
         handler(userCredentials)
+        return
       }
     }
+
+    handler()
 
   } catch (error) {
     alertHelper.error(error)
