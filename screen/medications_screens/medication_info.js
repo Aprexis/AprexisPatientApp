@@ -5,12 +5,12 @@ import { valueHelper, alertHelper, patientMedicationHelper, userCredentialsHelpe
 
 function MedicationInfo(props) {
   const [patientMedication, setPatientMedication] = useState(props.patientMedication)
-  const [loaded, setLoaded] = useState(false)
+  const [needLoad, setNeedLoad] = useState(true)
   const physicianName = valueHelper.isValue(patientMedicationHelper.physician(patientMedication)) ? patientMedicationHelper.physicianName(patientMedication) : ""
 
   useEffect(
     () => {
-      if (!loaded) {
+      if (!needLoad) {
         return
       }
 
@@ -28,7 +28,7 @@ function MedicationInfo(props) {
               setPatientMedication(patientMedicationProfile)
             },
             (message) => {
-              setLoaded(true)
+              setNeedLoad(false)
               alertHelper.error(message)
               return
             }

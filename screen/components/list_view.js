@@ -1,5 +1,5 @@
-import React, { useEffect, useReducer, useState } from 'react'
-import { ScrollView, View } from 'react-native'
+import React, { useEffect, useReducer } from 'react'
+import { ScrollView } from 'react-native'
 import { ListCount } from './list_count'
 import { RefreshView } from '../containers/refresh_view'
 import { valueHelper, pageHelper } from '../../helpers'
