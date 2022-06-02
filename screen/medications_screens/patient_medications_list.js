@@ -22,11 +22,13 @@ function PatientMedication(props) {
 }
 
 function PatientMedicationsList(props) {
+  const { navigation } = props
   const { currentPatient } = currentUserHelper.getCurrentProps(props)
 
   return (
     <ListView
       label='Patient Medication'
+      navigation={navigation}
       onLoadPage={loadPage}
       onPresentItem={presentItem}
       pageSize={20}

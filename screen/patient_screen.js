@@ -91,7 +91,7 @@ function PatientScreen(props) {
         }>
         {(props) => <MedicationsScreenStack {...props} currentUser={currentUser} currentPatient={currentPatient} />}
       </Tab.Screen>
-    </Tab.Navigator >
+    </Tab.Navigator>
   )
 }
 

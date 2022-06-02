@@ -4,12 +4,20 @@ import { ListCount } from './list_count'
 import { RefreshView } from '../containers/refresh_view'
 import { valueHelper, pageHelper } from '../../helpers'
 
-function ListView({ label, onLoadPage, onPresentItem, pageSize, pluralLabel, timeout }) {
+function ListView({ label, onLoadPage, onPresentItem, pageSize, pluralLabel, timeout, navigation }) {
   const workingPageSize = valueHelper.isNumberValue(pageSize) ? pageSize : 20
   const [state, dispatch] = useReducer(updateState, initialState())
   const { contentOffset, lastPage } = state
 
   useEffect(loadData)
+  useEffect(
+    () => {
+      const unsubscribe = navigation.addListener('focus', (_event) => { dispatch({ type: 'NEED-LOAD' }) })
+
+      return unsubscribe;
+    },
+    [navigation]
+  )
 
   return (
     <RefreshView onIdle={() => { dispatch({ type: 'NEED-LOAD' }) }} timeout={timeout}>
@@ -86,7 +94,7 @@ function ListView({ label, onLoadPage, onPresentItem, pageSize, pluralLabel, tim
       updateListState(data)
       return
     }
-    if (valueHelper.isValue(lastPage) && (lastPage.total >= 0) && (number * workingPageSize > lastPage.total)) {
+    if (valueHelper.isValue(lastPage) && (lastPage.total >= 0) && ((number - 1) * workingPageSize >= lastPage.total)) {
       updateListState(data)
       return
     }

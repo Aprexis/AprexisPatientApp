@@ -1,10 +1,11 @@
 import React, { useEffect, useReducer } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { Button, StyleSheet, Text, View } from 'react-native'
 import Checkbox from 'expo-checkbox'
 import { Picker } from '@react-native-picker/picker'
+import DateTimePicker from '@react-native-community/datetimepicker'
 import { reminderApi } from '../../api'
 import { NumberInput } from '../components'
-import { valueHelper, alertHelper, reminderHelper, userCredentialsHelper, patientHelper } from "../../helpers"
+import { valueHelper, alertHelper, dateHelper, reminderHelper, userCredentialsHelper, patientHelper } from "../../helpers"
 import { reminderActions, reminderTypes } from '../../types'
 
 const daysOfWeek = {
@@ -15,6 +16,19 @@ const daysOfWeek = {
   thursday: 'Th',
   friday: 'F',
   saturday: 'Sa'
+}
+
+const reminderDateRanges = {
+  'start': {
+    field: 'recur_from',
+    method: 'recurFrom',
+    label: 'Start Date'
+  },
+  'end': {
+    field: 'recur_to',
+    method: 'recurTo',
+    label: 'End Date'
+  }
 }
 
 function DayOfWeekPicker({ reminder, changedReminder, dayOfWeek, onValueChange }) {
@@ -61,9 +75,43 @@ function DayOfMonthPicker({ reminder, onDayOfMonthChange }) {
 
   return (
     <View style={{ flexDirection: 'row' }}>
-      <Text style={{ margin: 8 }}>Day of Month</Text>
+      <Text style={{ marginLeft: 2, marginRight: 8 }}>Day of Month</Text>
       <NumberInput value={`${reminderHelper.dayOfMonth(reminder)}`} onChangeText={onDayOfMonthChange} />
     </View>
+  )
+}
+
+function ReminderDatePicker({ reminder, rangeLimit, minimumDate, showPicker, disabled, onPress, onChange }) {
+  const actionType = `SHOW-${rangeLimit.toUpperCase()}-PICKER`
+  const flag = `show${valueHelper.capitalizeWords(rangeLimit)}Picker`
+  const reminderDateRange = reminderDateRanges[rangeLimit]
+  const date = reminderHelper[reminderDateRange.method](reminder)
+  const dateValue = dateHelper.makeDate(date)
+
+  return (
+    <View style={{ flexDirection: 'row' }}>
+      <Text style={{ margin: 2 }}>{reminderDateRange.label}</Text>
+      <Text
+        style={{ margin: 2 }}
+        onPress={
+          () => {
+            if (!valueHelper.isSet(disabled)) {
+              onPress(actionType, flag)
+            }
+          }
+        }>
+        {date}
+      </Text>
+      {
+        valueHelper.isSet(showPicker) &&
+        <DateTimePicker
+          mode='date'
+          minimumDate={minimumDate}
+          onChange={(event, date) => { onChange(reminderDateRange.field, date) }}
+          value={dateValue}
+        />
+      }
+    </View >
   )
 }
 
@@ -207,8 +255,46 @@ function ReminderInfo(props) {
         <DaysOfWeekPicker reminder={reminder} changedReminder={changedReminder} onValueChange={changeDayOfWeek} />
         <DayOfMonthPicker reminder={reminder} onDayOfMonthChange={changeDayOfMonth} />
       </View>
+
+      <View>
+        <ReminderDatePicker
+          reminder={reminder}
+          rangeLimit='start'
+          minimumDate={isNewReminder ? new Date() : dateHelper.makeDate(reminderHelper.recurFrom(reminder))}
+          showPicker={state.showStartPicker}
+          disabled={!isNewReminder}
+          onPress={pressReminderDate}
+          onChange={changeReminderDate} />
+      </View>
+
+      <View>
+        <ReminderDatePicker
+          reminder={reminder}
+          rangeLimit='end'
+          minimumDate={dateHelper.makeDate(reminderHelper.recurFrom(reminder))}
+          showPicker={state.showEndPicker}
+          onPress={pressReminderDate}
+          onChange={changeReminderDate} />
+      </View>
+
+      <View style={{ flexDirection: 'row' }}>
+        <Button
+          onPress={cancel}
+          title='Cancel'
+          style={{ marginRight: 10 }}
+        />
+        <Button
+          onPress={ok}
+          title='OK' />
+      </View>
     </View >
   )
+
+  function cancel() {
+    const { navigation } = props
+
+    navigation.pop()
+  }
 
   function changeDayOfWeek(reminder, changedReminder, dayOfWeek, newValue) {
     const updated = reminderHelper.changeField(reminder, changedReminder, dayOfWeek, newValue)
@@ -221,9 +307,62 @@ function ReminderInfo(props) {
     dispatch({ type: 'UPDATE-DATA', reminder: updated.reminder, changedReminder: updated.changedReminder })
   }
 
+  function changeReminderDate(field, newDate) {
+    const { reminder, changedReminder } = state
+    const updated = reminderHelper.changeField(reminder, changedReminder, field, dateHelper.formatDate(newDate, 'yyyy-MM-dd'))
+    dispatch({ type: 'UPDATE-DATA', reminder: updated.reminder, changedReminder: updated.changedReminder })
+  }
+
   function initialState() {
     const { reminder } = props.route.params
-    return { needLoad: true, reminder }
+    return { needLoad: true, reminder, showStartPicker: false, showEndPicker: false }
+  }
+
+  function ok() {
+    const { navigation } = props
+
+    userCredentialsHelper.getUserCredentials(
+      (userCredentials) => {
+        const { reminder, changedReminder } = state
+        if (!valueHelper.isValue(userCredentials)) {
+          return
+        }
+
+        if (!valueHelper.isNumberValue(reminderHelper.id(reminder))) {
+          reminderApi.create(
+            userCredentials,
+            changedReminder,
+            (_newReminder) => { navigation.pop() },
+            (message) => {
+              dispatch({ type: 'ERROR' })
+              alertHelper.error(message)
+              return
+            }
+          )
+          return
+        }
+
+        if (!valueHelper.isValue(changedReminder)) {
+          navigation.pop()
+          return
+        }
+
+        reminderApi.update(
+          userCredentials,
+          changedReminder,
+          (_updatedReminder) => { navigation.pop() },
+          (message) => {
+            dispatch({ type: 'ERROR' })
+            alertHelper.error(message)
+            return
+          }
+        )
+      }
+    )
+  }
+
+  function pressReminderDate(actionType, flag) {
+    dispatch({ type: actionType, [flag]: true })
   }
 
   function updateState(oldState, action) {
@@ -234,8 +373,14 @@ function ReminderInfo(props) {
       case 'LOAD-DATA':
         return { ...oldState, needLoad: false, reminder: action.reminder }
 
+      case 'SHOW-START-PICKER':
+        return { ...oldState, showStartPicker: action.showStartPicker }
+
+      case 'SHOW-END-PICKER':
+        return { ...oldState, showEndPicker: action.showEndPicker }
+
       case 'UPDATE-DATA':
-        return { ...oldState, needLoad: false, reminder: action.reminder, changedReminder: action.changedReminder }
+        return { ...oldState, needLoad: false, reminder: action.reminder, changedReminder: action.changedReminder, showStartPicker: false, showEndPicker: false }
 
       default:
         return oldState
