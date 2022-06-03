@@ -2,9 +2,8 @@ import React, { useEffect, useReducer } from 'react'
 import { Button, StyleSheet, Text, View } from 'react-native'
 import Checkbox from 'expo-checkbox'
 import { Picker } from '@react-native-picker/picker'
-import DateTimePicker from '@react-native-community/datetimepicker'
 import { reminderApi } from '../../api'
-import { NumberInput } from '../components'
+import { DateInput, NumberInput } from '../components'
 import { valueHelper, alertHelper, dateHelper, reminderHelper, userCredentialsHelper, patientHelper } from "../../helpers"
 import { reminderActions, reminderTypes } from '../../types'
 
@@ -16,19 +15,6 @@ const daysOfWeek = {
   thursday: 'Th',
   friday: 'F',
   saturday: 'Sa'
-}
-
-const reminderDateRanges = {
-  'start': {
-    field: 'recur_from',
-    method: 'recurFrom',
-    label: 'Start Date'
-  },
-  'end': {
-    field: 'recur_to',
-    method: 'recurTo',
-    label: 'End Date'
-  }
 }
 
 function DayOfWeekPicker({ reminder, changedReminder, dayOfWeek, onValueChange }) {
@@ -78,40 +64,6 @@ function DayOfMonthPicker({ reminder, onDayOfMonthChange }) {
       <Text style={{ marginLeft: 2, marginRight: 8 }}>Day of Month</Text>
       <NumberInput value={`${reminderHelper.dayOfMonth(reminder)}`} onChangeText={onDayOfMonthChange} />
     </View>
-  )
-}
-
-function ReminderDatePicker({ reminder, rangeLimit, minimumDate, showPicker, disabled, onPress, onChange }) {
-  const actionType = `SHOW-${rangeLimit.toUpperCase()}-PICKER`
-  const flag = `show${valueHelper.capitalizeWords(rangeLimit)}Picker`
-  const reminderDateRange = reminderDateRanges[rangeLimit]
-  const date = reminderHelper[reminderDateRange.method](reminder)
-  const dateValue = dateHelper.makeDate(date)
-
-  return (
-    <View style={{ flexDirection: 'row' }}>
-      <Text style={{ margin: 2 }}>{reminderDateRange.label}</Text>
-      <Text
-        style={{ margin: 2 }}
-        onPress={
-          () => {
-            if (!valueHelper.isSet(disabled)) {
-              onPress(actionType, flag)
-            }
-          }
-        }>
-        {date}
-      </Text>
-      {
-        valueHelper.isSet(showPicker) &&
-        <DateTimePicker
-          mode='date'
-          minimumDate={minimumDate}
-          onChange={(event, date) => { onChange(reminderDateRange.field, date) }}
-          value={dateValue}
-        />
-      }
-    </View >
   )
 }
 
@@ -257,24 +209,27 @@ function ReminderInfo(props) {
       </View>
 
       <View>
-        <ReminderDatePicker
-          reminder={reminder}
-          rangeLimit='start'
-          minimumDate={isNewReminder ? new Date() : dateHelper.makeDate(reminderHelper.recurFrom(reminder))}
-          showPicker={state.showStartPicker}
+        <DateInput
           disabled={!isNewReminder}
+          field='recur_from'
+          label='Start Date'
+          onChange={changeReminderDate}
           onPress={pressReminderDate}
-          onChange={changeReminderDate} />
+          showPiucker={state.showStartPicker}
+          value={dateHelper.makeDate(reminderHelper.recurFrom(reminder))}
+        />
       </View>
 
       <View>
-        <ReminderDatePicker
-          reminder={reminder}
-          rangeLimit='end'
-          minimumDate={dateHelper.makeDate(reminderHelper.recurFrom(reminder))}
-          showPicker={state.showEndPicker}
+        <DateInput
+          field='recur_to'
+          label='End Date'
+          pickerProps={{ minimumDate: dateHelper.makeDate(reminderHelper.recurFrom(reminder)) }}
+          onChange={changeReminderDate}
           onPress={pressReminderDate}
-          onChange={changeReminderDate} />
+          showPicker={state.showEndPicker}
+          value={dateHelper.makeDate(reminderHelper.recurTo(reminder))}
+        />
       </View>
 
       <View style={{ flexDirection: 'row' }}>
@@ -361,8 +316,15 @@ function ReminderInfo(props) {
     )
   }
 
-  function pressReminderDate(actionType, flag) {
-    dispatch({ type: actionType, [flag]: true })
+  function pressReminderDate(field) {
+    switch (field) {
+      case 'recur_from':
+        dispatch({ type: 'SHOW-START-PICKER', showStartPicker: true })
+      case 'recur_to':
+        dispatch({ type: 'SHOW-END-PICKER', showEndPicker: true })
+      default:
+        break
+    }
   }
 
   function updateState(oldState, action) {
