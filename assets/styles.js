@@ -1,20 +1,38 @@
 import { StyleSheet } from 'react-native';
+
+export const $color: ColorTheme = {
+  lightBlue: '#03718D',
+  midBlue: '#003949',
+  brightBlue: '#6DD6F0',
+  darkBlue: '#112B37',
+  red: '#D52700',
+  primary: '#03a9f4',
+  darkBg: '#03718D',
+  lightBg: '#F3F6F9',
+  icon: '#112B37',
+};
+
 export default StyleSheet.create(
   {
     mainApp: {
-      backgroundColor: '#03718D'
+      backgroundColor: $color.darkBg,
     },
     mainFullScreen: {
       flex: 1,
-      backgroundColor: '#03718D',
+      backgroundColor: $color.darkBg,
       justifyContent: 'center',
-      alignContent: 'center'
+      alignContent: 'center',
     },
     mainBody: {
       flex: 1,
       justifyContent: 'center',
-      backgroundColor: '#F3F6F9',
+      backgroundColor: $color.lightBg,
       alignContent: 'center',
+    },
+    row:{
+      display: 'flex',
+      flexDirection: 'row',
+      alignItems: 'center',
     },
     sectionStyle: {
       flexDirection: 'row',
@@ -25,10 +43,10 @@ export default StyleSheet.create(
       margin: 10
     },
     buttonStyle: {
-      backgroundColor: '#6DD6F0',
+      backgroundColor: $color.brightBlue,
       borderWidth: 0,
-      color: '#003949',
-      borderColor: '#6DD6F0',
+      color: $color.darkBlue,
+      borderColor: $color.brightBlue,
       height: 40,
       alignItems: 'center',
       borderRadius: 30,
@@ -38,14 +56,14 @@ export default StyleSheet.create(
       marginBottom: 25
     },
     buttonTextStyle: {
-      color: '#003949',
+      color: $color.darkBlue,
       paddingVertical: 10,
       fontSize: 16,
       fontWeight: 500
     },
     inputField: {
       flex: 1,
-      color: '#003949',
+      color: $color.darkBlue,
       fontWeight: 500,
       paddingLeft: 15,
       paddingRight: 15,
@@ -63,6 +81,10 @@ export default StyleSheet.create(
       shadowOpacity: 0.53,
       shadowRadius: 13.97,
       elevation: 21,
+    },
+    icon: {
+      color: $color.darkBlue,
+      display:'inline-block'
     }
   }
 );

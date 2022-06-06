@@ -90,7 +90,6 @@ function medicationSuperset(medication) {
   return fieldHelper.getField(medication, "medication_superset")
 }
 
-
 function name(medication) {
   return fieldHelper.getField(medication, "name")
 }

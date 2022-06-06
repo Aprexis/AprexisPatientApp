@@ -22,6 +22,7 @@ export const patientMedicationHelper = {
   id,
   indication,
   medication,
+  medicationIcon,
   medicationId,
   medicationLabel,
   patient,
@@ -189,6 +190,34 @@ function medication(patientMedication) {
 
 function medicationId(patientMedication) {
   return fieldHelper.getField(patientMedication, "medication_id")
+}
+
+function medicationIcon(patientMedication) {
+  const icon = patientMedication.medication.label
+  if (icon.includes('Capsule')){
+    return "capsules"
+  }
+  else if (icon.includes('Tablet')){
+    return "tablets"
+  }
+  else if (icon.includes('Syringe' || 'Needle')){
+    return "syringe"
+  }
+  else if (icon.includes('Topical spray')){
+    return "spray-can"
+  }
+  else if (icon.includes('drops')){
+    return "eye-dropper"
+  }
+  else if (icon.includes('Pressurized inhalation')){
+    return "inhaler"
+  }
+  else if (icon.includes('for Compounding')){
+    return "mortar-pestle"
+  }
+  else {
+    return "prescription"
+  }
 }
 
 function medicationLabel(patientMedication) {
