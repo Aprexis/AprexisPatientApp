@@ -4,7 +4,7 @@ import Checkbox from 'expo-checkbox'
 import { Picker } from '@react-native-picker/picker'
 import { reminderApi } from '../../api'
 import { DateInput, NumberInput } from '../components'
-import { valueHelper, alertHelper, dateHelper, reminderHelper, userCredentialsHelper, patientHelper } from "../../helpers"
+import { valueHelper, alertHelper, dateHelper, patientMedicationHelper, reminderHelper, userCredentialsHelper, patientHelper, currentUserHelper } from "../../helpers"
 import { reminderActions, reminderTypes } from '../../types'
 
 const daysOfWeek = {
@@ -59,16 +59,20 @@ function DayOfMonthPicker({ reminder, onDayOfMonthChange }) {
     return null
   }
 
+  const value = reminderHelper.dayOfMonth(reminder)
+  const dayOfMonth = valueHelper.isNumberValue(value) ? value : 1
+
   return (
-    <View style={{ flexDirection: 'row' }}>
+    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
       <Text style={{ marginLeft: 2, marginRight: 8 }}>Day of Month</Text>
-      <NumberInput value={`${reminderHelper.dayOfMonth(reminder)}`} onChangeText={onDayOfMonthChange} />
+      <NumberInput value={`${dayOfMonth}`} onChangeText={onDayOfMonthChange} />
     </View>
   )
 }
 
 function ReminderInfo(props) {
   const [state, dispatch] = useReducer(updateState, initialState())
+  const { currentPatient } = currentUserHelper.getCurrentProps(props)
 
   useEffect(
     () => {
@@ -76,7 +80,7 @@ function ReminderInfo(props) {
         return
       }
 
-      const { reminder } = state
+      const { patientMedication, reminder } = state
 
       userCredentialsHelper.getUserCredentials(
         (userCredentials) => {
@@ -89,7 +93,11 @@ function ReminderInfo(props) {
               userCredentials,
               currentPatient.id,
               (newReminder) => {
-                dispatch({ type: 'LOAD-DATA', reminder: newReminder })
+                let updated = { reminder: newReminder }
+                if (valueHelper.isValue(patientMedication)) {
+                  updated = reminderHelper.addPatientMedication(updated.reminder, updated.changedReminder, patientMedication)
+                }
+                dispatch({ type: 'LOAD-DATA', reminder: updated.reminder, changedReminder: updated.changedReminder })
               },
               (message) => {
                 dispatch({ type: 'ERROR' })
@@ -119,6 +127,9 @@ function ReminderInfo(props) {
 
   const { reminder, changedReminder } = state
   const isNewReminder = !valueHelper.isNumberValue(reminderHelper.id(reminder))
+  const hasPhone = valueHelper.isStringValue(patientHelper.phone(currentPatient))
+  const hasEmail = valueHelper.isStringValue(patientHelper.email(currentPatient))
+  const hasMobilePhone = valueHelper.isStringValue(patientHelper.mobilePhone(currentPatient))
 
   return (
     <View style={styles.reminderInfo.view}>
@@ -146,6 +157,7 @@ function ReminderInfo(props) {
         <View style={{ flexDirection: "row" }}>
           <View style={{ flexDirection: 'row', margin: 2 }}>
             <Checkbox
+              disable={!hasMobilePhone}
               value={valueHelper.isStringValue(reminderHelper.txtNumber(reminder))}
               onValueChange={
                 (newValue) => {
@@ -159,10 +171,11 @@ function ReminderInfo(props) {
           </View>
           <View style={{ flexDirection: 'row', margin: 2 }}>
             <Checkbox
+              disabled={!hasEmail}
               value={valueHelper.isStringValue(reminderHelper.emailAddress(reminder))}
               onValueChange={
                 (newValue) => {
-                  const emailAddress = valueHelper.isValue(newValue) ? patientHelper.email(currentPatient) : ''
+                  const emailAddress = valueHelper.isSet(newValue) ? patientHelper.email(currentPatient) : ''
                   const updated = reminderHelper.changeField(reminder, changedReminder, 'email_address', emailAddress)
                   dispatch({ type: 'UPDATE-DATA', reminder: updated.reminder, changedReminder: updated.changedReminder })
                 }
@@ -172,10 +185,11 @@ function ReminderInfo(props) {
           </View>
           <View style={{ flexDirection: 'row', margin: 2 }}>
             <Checkbox
+              disabled={!hasPhone}
               value={valueHelper.isStringValue(reminderHelper.voiceNumber(reminder))}
               onValueChange={
                 (newValue) => {
-                  const voiceNumber = valueHelper.isValue(newValue) ? patientHelper.phone(currentPatient) : ''
+                  const voiceNumber = valueHelper.isSet(newValue) ? patientHelper.phone(currentPatient) : ''
                   const updated = reminderHelper.changeField(reminder, changedReminder, 'voice_number', voiceNumber)
                   dispatch({ type: 'UPDATE-DATA', reminder: updated.reminder, changedReminder: updated.changedReminder })
                 }
@@ -269,8 +283,8 @@ function ReminderInfo(props) {
   }
 
   function initialState() {
-    const { reminder } = props.route.params
-    return { needLoad: true, reminder, showStartPicker: false, showEndPicker: false }
+    const { patientMedication, reminder } = props.route.params
+    return { needLoad: true, patientMedication, reminder, showStartPicker: false, showEndPicker: false }
   }
 
   function ok() {

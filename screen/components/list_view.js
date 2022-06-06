@@ -6,7 +6,7 @@ import { valueHelper, pageHelper } from '../../helpers'
 
 function ListView({ label, onLoadPage, onPresentItem, pageSize, pluralLabel, timeout, navigation }) {
   const workingPageSize = valueHelper.isNumberValue(pageSize) ? pageSize : 20
-  const [state, dispatch] = useReducer(updateState, initialState())
+  const [state, dispatch] = useReducer(updateState, workingPageSize, initialState)
   const { contentOffset, lastPage } = state
 
   useEffect(loadData)
@@ -65,7 +65,7 @@ function ListView({ label, onLoadPage, onPresentItem, pageSize, pluralLabel, tim
     }
   }
 
-  function initialState() {
+  function initialState(workingPageSize) {
     return { needLoad: true, scrolling: false, pageNumber: 1, lastPage: { number: 1, pageSize: workingPageSize, total: -1 } }
   }
 
@@ -171,7 +171,7 @@ function ListView({ label, onLoadPage, onPresentItem, pageSize, pluralLabel, tim
         return { ...oldState, ...action.data, needLoad: false, scrolling: false }
 
       case 'NEED-LOAD':
-        return { ...oldState, needLoad: true }
+        return { ...oldState, needLoad: true, lastPage: { number: 1, pageSize: workingPageSize, total: -1 } }
 
       case 'SCROLL-START':
         return { ...oldState, needLoad: false, scrolling: true }
