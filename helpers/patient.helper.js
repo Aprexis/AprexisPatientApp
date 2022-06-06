@@ -145,7 +145,7 @@ function displayPreferredContactMethod(patient) {
 }
 
 function email(patient, prefix = "") {
-  return nameHelper.phone(patient, prefix)
+  return contactHelper.email(patient, prefix)
 }
 
 function firstName(patient, prefix = "") {

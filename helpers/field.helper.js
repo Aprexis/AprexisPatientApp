@@ -1,12 +1,22 @@
 import { valueHelper } from "./value.helper.js"
 
 export const fieldHelper = {
+  addEntryToList,
   addEntry,
   changeField,
   changeValue,
   fieldName,
   getField,
   removeEntry
+}
+
+function addEntryToList(model, field, newEntry) {
+  const entries = model[field]
+  if (!valueHelper.isValue(entries)) {
+    return [newEntry]
+  }
+
+  return [...entries, newEntry]
 }
 
 function addEntry(modelName, model, changedModel, field, matchField, newEntry) {

@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { FontAwesome5Icon, ListView, MaterialCommunityIcon } from '../components'
+import { AddButton, FontAwesome5Icon, ListView, MaterialCommunityIcon } from '../components'
 import { reminderApi } from "../../api"
 import { valueHelper, alertHelper, currentUserHelper, patientHelper, patientMedicationHelper, reminderHelper, userCredentialsHelper } from "../../helpers"
 
@@ -81,19 +81,26 @@ function MedicationReminder(props) {
 
 function MedicationRemindersList(props) {
   const { navigation } = props
-  const { currentPatient } = currentUserHelper.getCurrentProps(props)
+  const { currentPatient, currentUser } = currentUserHelper.getCurrentProps(props)
   const { patientMedication } = props
 
   return (
-    <ListView
-      label='Medication Reminders'
-      navigation={navigation}
-      onLoadPage={loadPage}
-      onPresentItem={presentItem}
-      pageSize={20}
-      pluralLabel='Medication Reminders'
-    />
+    <View style={{ flex: 1 }}>
+      <AddButton onPress={addReminder} />
+      <ListView
+        label='Medication Reminders'
+        navigation={navigation}
+        onLoadPage={loadPage}
+        onPresentItem={presentItem}
+        pageSize={20}
+        pluralLabel='Medication Reminders'
+      />
+    </View>
   )
+
+  function addReminder() {
+    navigation.navigate('ReminderScreen', { currentUser, currentPatient, patientMedication: patientMedication })
+  }
 
   function loadPage(number, size, onSuccess) {
     userCredentialsHelper.getUserCredentials(
