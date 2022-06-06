@@ -15,7 +15,7 @@ function MedicationReminder(props) {
         <Text style={styles.medicationReminder.text}>{reminderHelper.displayAction(medicationReminder)}</Text>
         <TouchableOpacity
           activeOpacity={0.5}
-          onPress={() => { navigation.navigate('ReminderInfo', { currentUser, currentPatient, reminder: medicationReminder }) }}>
+          onPress={() => { navigation.navigate('ReminderScreen', { currentUser, currentPatient, reminder: medicationReminder }) }}>
           <FontAwesome5Icon size={17} name="angle-right" />
         </TouchableOpacity>
       </View>
@@ -80,12 +80,14 @@ function MedicationReminder(props) {
 }
 
 function MedicationRemindersList(props) {
+  const { navigation } = props
   const { currentPatient } = currentUserHelper.getCurrentProps(props)
   const { patientMedication } = props
 
   return (
     <ListView
       label='Medication Reminders'
+      navigation={navigation}
       onLoadPage={loadPage}
       onPresentItem={presentItem}
       pageSize={20}

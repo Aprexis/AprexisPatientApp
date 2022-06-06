@@ -24,8 +24,8 @@ function MedicationRemindersScreenStack(props) {
         {(props) => <MedicationRemindersList {...props} patientMedication={patientMedication} currentUser={currentUser} currentPatient={currentPatient} />}
       </Stack.Screen>
       <Stack.Screen
-        name="ReminderInfo"
-        options={{ title: 'Reminders', headerShown: false }}>
+        name="ReminderScreen"
+        options={{ title: 'Reminder' }}>
         {(props) => <ReminderInfo {...props} currentUser={currentUser} currentPatient={currentPatient} />}
       </Stack.Screen>
     </Stack.Navigator>
@@ -42,7 +42,7 @@ function MedicationScreen(props) {
     <View style={styles.medicationScreen.view}>
 
       <View style={styles.medicationScreen.titleView}>
-        <FontAwesome5Icon size={40} style={styles.medicationScreen.titleIcon} name="pills" />
+        <FontAwesome5Icon size={30} style={styles.medicationScreen.titleIcon} name="pills" />
         <Text style={styles.medicationScreen.titleText}>{patientMedicationHelper.medicationLabel(patientMedication)}</Text>
       </View>
 
@@ -80,10 +80,10 @@ export { MedicationScreen }
 const styles = StyleSheet.create(
   {
     medicationScreen: {
-      sectionView: { flex: 2 },
+      sectionView: { flex: 4 },
       titleView: { flex: 1, flexDirection: "column", justifyContent: "center", alignItems: "center" },
       titleIcon: { color: "grey" },
-      titleText: { fontSize: 30, fontWeight: "bold" },
+      titleText: { fontSize: 20, fontWeight: "bold" },
       view: { flex: 1 }
     }
   }

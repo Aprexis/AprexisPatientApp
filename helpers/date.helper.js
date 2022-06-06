@@ -147,7 +147,6 @@ function makeDate(value) {
   if (!valueHelper.isValue(value)) {
     return
   }
-
   if (typeof value === "object") {
     if (valueHelper.isFunction(value.getMonth)) {
       return value
@@ -155,18 +154,16 @@ function makeDate(value) {
 
     return
   }
-
   if (!valueHelper.isStringValue(value)) {
     return
+  }
+  if (value.length === 10) {
+    return dateHelper.parseDate(value, "yyyy-MM-dd")
   }
 
   const dateMoment = moment(value)
   if (!dateMoment.isValid()) {
     return
-  }
-
-  if (value.length === 10) {
-    return dateHelper.parseDate(value, "yyyy-MM-dd")
   }
 
   return dateMoment.toDate()
