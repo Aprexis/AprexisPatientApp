@@ -37,6 +37,7 @@ function PatientMedicationsList(props) {
       onPresentItem={presentItem}
       pageSize={20}
       pluralLabel='Patient Medications'
+      style={{border:'solid red 1px' }}
     />
   )
 

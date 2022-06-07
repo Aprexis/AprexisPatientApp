@@ -14,6 +14,9 @@ export const $color: ColorTheme = {
 
 export default StyleSheet.create(
   {
+    lightBackground: {
+      backgroundColor: $color.lightBg
+    },
     mainApp: {
       backgroundColor: $color.darkBg,
     },
@@ -25,7 +28,6 @@ export default StyleSheet.create(
     },
     mainBody: {
       flex: 1,
-      justifyContent: 'center',
       backgroundColor: $color.lightBg,
       alignContent: 'center',
     },
@@ -41,6 +43,10 @@ export default StyleSheet.create(
       marginLeft: 35,
       marginRight: 35,
       margin: 10
+    },
+    btnPrimary: {
+      backgroundColor: $color.brightBlue,
+      color: $color.darkBlue,
     },
     buttonStyle: {
       backgroundColor: $color.brightBlue,
