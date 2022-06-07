@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { ScrollView, StyleSheet, Text } from 'react-native'
 
-function CheckInteractions(props) {
+function CheckInteractions(_props) {
   return (
     <ScrollView
       keyboardShouldPersistTaps="handled"
