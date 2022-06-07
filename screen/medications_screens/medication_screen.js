@@ -13,7 +13,7 @@ import { currentUserHelper, patientMedicationHelper } from "../../helpers"
 const Stack = createNativeStackNavigator()
 
 function MedicationRemindersScreenStack(props) {
-  const { navigation, patientMedication } = props
+  const { patientMedication } = props
   const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
 
   return (

@@ -28,7 +28,7 @@ function MedicationsScreen(props) {
         <Tab.Screen
           name="Allergies"
           options={{ headerShown: false }}>
-          {(props) => <Allergies {...props} currentUser={currentUser} currentPatient={currentPatient} />}
+          {(props) => <Allergies {...props} allergyType='Medicine' currentUser={currentUser} currentPatient={currentPatient} />}
         </Tab.Screen>
       </Tab.Navigator>
     </SafeAreaView>
