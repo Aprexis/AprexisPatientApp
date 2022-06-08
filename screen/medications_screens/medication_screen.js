@@ -48,9 +48,12 @@ function MedicationScreen(props) {
 
       <View style={styles.medicationScreen.sectionView}>
         <Tab.Navigator
-          screenOptions={{ tabBarLabelStyle: { fontSize: 9 } }}>
+          barStyle={{ backgroundColor: '#03718D' }}
+          screenOptions={{ tabBarLabelStyle: { fontSize: 15, fontWeight: '600' } }}
+          >
           <Tab.Screen
             name="MedicationInfo"
+            style={{border:'solid red 1px'}}
             options={{ title: "Info", headerShown: false }}>
             {(props) => <MedicationInfo {...props} patientMedication={patientMedication} currentUser={currentUser} currentPatient={currentPatient} />}
           </Tab.Screen>

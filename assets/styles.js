@@ -65,12 +65,12 @@ export default StyleSheet.create(
       color: $color.darkBlue,
       paddingVertical: 10,
       fontSize: 16,
-      fontWeight: 500
+      fontWeight: '500'
     },
     inputField: {
       flex: 1,
       color: $color.darkBlue,
-      fontWeight: 500,
+      fontWeight: '500',
       paddingLeft: 15,
       paddingRight: 15,
       borderWidth: 1,

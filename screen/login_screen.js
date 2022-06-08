@@ -3,6 +3,8 @@ import {
   Image,
   Keyboard,
   KeyboardAvoidingView,
+  Platform,
+  TouchableWithoutFeedback,
   ScrollView,
   StyleSheet,
   Text,
@@ -14,6 +16,8 @@ import { authenticationApi } from '../api'
 import { Loader } from './components'
 import { alertHelper, userCredentialsHelper, currentUserHelper } from '../helpers'
 import styles from '../assets/styles.js'
+
+
 
 function LoginScreen({ navigation }) {
   const [userEmail, setUserEmail] = useState('')
@@ -57,71 +61,76 @@ function LoginScreen({ navigation }) {
   }
 
   return (
-    <View style={styles.mainFullScreen}>
-      <Loader loading={loading} />
-      <ScrollView
-        keyboardShouldPersistTaps="handled"
-        contentContainerStyle={
-          {
-            flex: 1,
-            justifyContent: 'center',
-            alignContent: 'center'
-          }
-        }>
-        <View>
-          <KeyboardAvoidingView enabled>
-            <View style={{ alignItems: 'center' }}>
-              <Image
-                source={require('../assets/logo.svg')}
-                style={{
-                  width: "57%",
-                  height: 100,
-                  resizeMode: 'contain',
-                }}
-              />
-            </View>
-            <View style={styles.sectionStyle}>
-              <TextInput
-              style={styles.inputField}
-              onChangeText={(userEmail) => setUserEmail(userEmail)}
-              placeholder="Enter Username"
-              placeholderTextColor="#8b9cb5"
-              autoCapitalize='none'
-              keyboardType='email-address'
-              returnKeyType='next'
-              onSubmitEditing={() =>
-                passwordInputRef.current &&
-                passwordInputRef.current.focus()
+    <KeyboardAvoidingView
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      style={{flex:1}}
+    >
+        <View style={styles.mainFullScreen}>
+          <Loader loading={loading} />
+          <ScrollView
+            keyboardShouldPersistTaps="handled"
+            contentContainerStyle={
+              {
+                flex: 1,
+                justifyContent: 'center',
+                alignContent: 'center'
               }
-              underlineColorAndroid="#f000"
-              blurOnSubmit={false}
-              />
+            }>
+            <View>
+              <KeyboardAvoidingView enabled>
+                <View style={{ alignItems: 'center' }}>
+                  <Image
+                    source={require('../assets/logo.svg')}
+                    style={{
+                      width: "57%",
+                      height: 100,
+                      resizeMode: 'contain',
+                    }}
+                  />
+                </View>
+                <View style={styles.sectionStyle}>
+                  <TextInput
+                  style={styles.inputField}
+                  onChangeText={(userEmail) => setUserEmail(userEmail)}
+                  placeholder="Enter Username"
+                  placeholderTextColor="#8b9cb5"
+                  autoCapitalize='none'
+                  keyboardType='email-address'
+                  returnKeyType='next'
+                  onSubmitEditing={() =>
+                    passwordInputRef.current &&
+                    passwordInputRef.current.focus()
+                  }
+                  underlineColorAndroid="#f000"
+                  blurOnSubmit={false}
+                  />
+                </View>
+                <View style={styles.sectionStyle}>
+                  <TextInput
+                    style={styles.inputField}
+                    onChangeText={(userPassword) => setUserPassword(userPassword)}
+                    placeholder='Enter Password'
+                    placeholderTextColor="#8b9cb5"
+                    keyboardType="default"
+                    ref={passwordInputRef}
+                    onSubmitEditing={Keyboard.dismiss}
+                    blurOnSubmit={false}
+                    secureTextEntry={true}
+                    underlineColorAndroid="#f000"
+                    returnKeyType="next"
+                  />
+                </View>
+                <TouchableOpacity
+                  style={styles.buttonStyle}
+                  activeOpacity={0.5}
+                  onPress={handleSubmitPress}>
+                  <Text style={styles.buttonTextStyle}>Login</Text>
+                </TouchableOpacity>
+              </KeyboardAvoidingView>
             </View>
-            <View style={styles.sectionStyle}>
-              <TextInput
-                style={styles.inputField}
-                onChangeText={(userPassword) => setUserPassword(userPassword)}
-                placeholder='Enter Password'
-                placeholderTextColor="#8b9cb5"
-                keyboardType="default"
-                ref={passwordInputRef}
-                onSubmitEditing={Keyboard.dismiss}
-                blurOnSubmit={false}
-                secureTextEntry={true}
-                underlineColorAndroid="#f000"
-                returnKeyType="next"
-              />
-            </View>
-            <TouchableOpacity
-              style={styles.buttonStyle}
-              activeOpacity={0.5}
-              onPress={handleSubmitPress}>
-              <Text style={styles.buttonTextStyle}>Login</Text>
-            </TouchableOpacity>
-          </KeyboardAvoidingView>
+          </ScrollView>
         </View>
-      </ScrollView>
-    </View>
+    </KeyboardAvoidingView>
   )
 }
 

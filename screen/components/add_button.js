@@ -13,15 +13,15 @@ function AddButton({ buttonProps, buttonTitle, iconName, iconProps, onPress, vie
     <View {...viewProps} style={{ flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
       <Button
         icon={({ size, color }) => (
-          <FontAwesome5Icon {...iconProps} name='plus' size={14} color="#fff" style={{ marginLeft:'-8px' }}  />
+          <FontAwesome5Icon {...iconProps} name='plus' size={14} color="#03718D" style={{ marginLeft:'-8px' }}  />
         )}
-        mode="contained" 
+        mode="outlined" 
         onPress={onPress}
         title={button} 
-        contentStyle={[styles.btnPrimary, { height:30 }]}
-        style={{backgroundColor:'transparent'}}
+        contentStyle={{ height:30 }}
+        style={{ borderColor:'#03718D' }}
         compact='true'
-        labelStyle={{backgroundColor:'transparent'}}
+        labelStyle={{ color:'#03718D' }}
       >
         Add
       </Button>

@@ -16,7 +16,7 @@ function HeaderLeft(props) {
           backgroundColor: '#fff',
           borderRadius: 50,
         }}>
-        <Text style={{ fontSize:'18px', fontWeight: 600, marginLeft:'-5px', color:'#003949' }}> {patientHelper.initials(currentPatient)}</Text>
+        <Text style={{ fontSize:'18px', fontWeight: '600', marginLeft:'-5px', color:'#003949' }}> {patientHelper.initials(currentPatient)}</Text>
       </TouchableOpacity>
     </View >
   )

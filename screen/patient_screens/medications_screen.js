@@ -23,12 +23,13 @@ function MedicationsScreen(props) {
             <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
               <Button
                 icon={({ size, color }) => (
-                  <FontAwesome5Icon name="plus" size={14} color="#fff" style={{ marginLeft:'-8px' }}  />
+                  <FontAwesome5Icon name="plus" size={14} color="#03718D" style={{ marginLeft:'-8px' }}  />
                 )}
-                mode="contained" 
-                onPress={() => console.log('Pressed')}
+                mode="outlined" 
+                onPress={() => console.log('Add Medication Pressed')}
                 contentStyle={{ height:30 }}
-                style={ styles.headerButton}
+                style={ {borderColor:'#03718D'}}
+                color="#03718D"
                 compact='true'
               >
                 Add
@@ -39,14 +40,14 @@ function MedicationsScreen(props) {
       <Tab.Navigator
         style={{ padding:8, marginBottom:12, textAlign:'center' }}
         screenOptions={{
-          tabBarLabelStyle: { fontSize: 14, fontWeight:600 },
+          tabBarLabelStyle: { fontSize: 14, fontWeight: '600' },
           tabBarStyle: { backgroundColor: '#E1EBF1', marginBottom:12 },
           tabBarIndicatorStyle: { border:'none' },
         }}
       >
         <Tab.Screen
           name="List"
-          style={{ padding:8, fontWeight:700 }}
+          style={{ padding: 8, fontWeight: '700' }}
           options={{ headerShown: false }}>
           {(props) => <PatientMedicationsList {...props} currentUser={currentUser} currentPatient={currentPatient} />}
         </Tab.Screen>
