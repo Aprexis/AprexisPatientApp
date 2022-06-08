@@ -1,5 +1,5 @@
 import React from 'react'
-import { Button, View } from 'react-native'
+import { Button, TouchableOpacity } from 'react-native'
 import { FontAwesome5Icon } from './font_awesome5_icon'
 import { valueHelper } from '../../helpers'
 
@@ -8,10 +8,10 @@ function AddButton({ buttonProps, buttonTitle, iconName, iconProps, onPress, vie
   const icon = valueHelper.isStringValue(iconName) ? iconName : 'plus'
 
   return (
-    <View {...viewProps} style={{ flexDirection: 'row', alignItems: 'center' }}>
+    <TouchableOpacity {...viewProps} style={{ flexDirection: 'row', alignItems: 'center' }} onPress={onPress}>
       <FontAwesome5Icon {...iconProps} size={20} name={icon} />
-      <Button onPress={onPress} title={button} />
-    </View>
+      <Button {...buttonProps} onPress={onPress} title={button} />
+    </TouchableOpacity>
   )
 }
 

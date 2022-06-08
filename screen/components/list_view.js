@@ -4,10 +4,11 @@ import { ListCount } from './list_count'
 import { RefreshView } from '../containers/refresh_view'
 import { valueHelper, pageHelper } from '../../helpers'
 
-function ListView({ label, onLoadPage, onPresentItem, pageSize, pluralLabel, timeout, navigation }) {
+function ListView({ forceUpdate, label, onLoadPage, onPresentItem, pageSize, pluralLabel, timeout, navigation }) {
   const workingPageSize = valueHelper.isNumberValue(pageSize) ? pageSize : 20
   const [state, dispatch] = useReducer(updateState, workingPageSize, initialState)
   const { contentOffset, lastPage } = state
+
 
   useEffect(loadData)
   useEffect(
@@ -71,7 +72,7 @@ function ListView({ label, onLoadPage, onPresentItem, pageSize, pluralLabel, tim
 
   function loadData() {
     const { lastPage, needLoad, scrolling } = state
-    if (!needLoad || scrolling) {
+    if (!forceUpdate && (!needLoad || scrolling)) {
       return
     }
 

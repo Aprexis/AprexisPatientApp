@@ -1,5 +1,6 @@
 export * from './add_button'
 export * from "./date_input"
+export * from "./delete_button"
 export * from "./font_awesome5_icon"
 export * from "./header_left"
 export * from "./header_right"
