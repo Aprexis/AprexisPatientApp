@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { FontAwesome5Icon, MaterialCommunityIcon, ListView } from '../components'
+import { AddButton, FontAwesome5Icon, MaterialCommunityIcon, ListView } from '../components'
 import { patientAllergyApi } from "../../api"
 import { alertHelper, patientHelper, currentUserHelper, userCredentialsHelper, patientAllergyHelper, valueHelper } from '../../helpers'
 
@@ -23,17 +23,21 @@ function PatientAllergy(props) {
 
 function PatientAllergiesList(props) {
   const { navigation, allergyType } = props
-  const { currentPatient } = currentUserHelper.getCurrentProps(props)
+  const { currentPatient, currentUser } = currentUserHelper.getCurrentProps(props)
 
   return (
-    <ListView
-      label='Patient Allergy'
-      navigation={navigation}
-      onLoadPage={loadPage}
-      onPresentItem={presentItem}
-      pageSize={20}
-      pluralLabel='Patient Allergies'
-    />
+    <View style={{ flex: 1 }}>
+      <AddButton onPress={addPatientAllergy} />
+
+      <ListView
+        label='Patient Allergy'
+        navigation={navigation}
+        onLoadPage={loadPage}
+        onPresentItem={presentItem}
+        pageSize={20}
+        pluralLabel='Patient Allergies'
+      />
+    </View>
   )
 
   function loadPage(number, size, onSuccess) {
@@ -59,6 +63,10 @@ function PatientAllergiesList(props) {
         )
       }
     )
+  }
+
+  function addPatientAllergy() {
+    navigation.navigate('PatientAllergyScreen', { allergyType, currentUser, currentPatient })
   }
 
   function presentItem(patientAllergy, patientAllergyIdx) {

@@ -4,7 +4,7 @@ import Checkbox from 'expo-checkbox'
 import { Picker } from '@react-native-picker/picker'
 import { reminderApi } from '../../api'
 import { DateInput, NumberInput } from '../components'
-import { valueHelper, alertHelper, dateHelper, patientMedicationHelper, reminderHelper, userCredentialsHelper, patientHelper, currentUserHelper } from "../../helpers"
+import { valueHelper, alertHelper, dateHelper, reminderHelper, userCredentialsHelper, patientHelper, currentUserHelper } from "../../helpers"
 import { reminderActions, reminderTypes } from '../../types'
 
 const daysOfWeek = {

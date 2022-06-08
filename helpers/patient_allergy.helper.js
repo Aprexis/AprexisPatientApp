@@ -9,6 +9,7 @@ export const patientAllergyHelper = {
   allergyType,
   buildChanged,
   buildNewChanged,
+  changeField,
   changeGoldStandardAllergy,
   goldStandardAllergy,
   goldStandardAllergyDescription,
@@ -66,6 +67,10 @@ function buildNewChanged(patientAllergy) {
   return {
     ...patientAllergy
   }
+}
+
+function changeField(patientAllergy, changedPatientAllergy, name, value) {
+  return fieldHelper.changeField('patientAllergy', patientAllergy, changedPatientAllergy, name, value, patientAllergyHelper.buildChanged)
 }
 
 function changeGoldStandardAllergy(modelName, model, changedModel, goldStandardAllergy) {
