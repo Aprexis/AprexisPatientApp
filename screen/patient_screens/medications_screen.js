@@ -42,7 +42,7 @@ function MedicationsScreen(props) {
         screenOptions={{
           tabBarLabelStyle: { fontSize: 14, fontWeight: '600' },
           tabBarStyle: { backgroundColor: '#E1EBF1', marginBottom:12 },
-          tabBarIndicatorStyle: { border:'none' },
+          tabBarIndicatorStyle: { backgroundColor:'#03718D' },
         }}
       >
         <Tab.Screen

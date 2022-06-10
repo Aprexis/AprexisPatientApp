@@ -52,9 +52,9 @@ function MedicationScreen(props) {
           screenOptions={{
             tabBarIndicatorStyle: { backgroundColor:'#03718D', marginLeft:'-1px' },
             tabBarItemStyle: { width:'auto', margin:5, padding:0 },
-            tabBarStyle: { width:'auto', alignItems:'center', justifyContent:'space-between' },
-            //tabBarActiveTintColor: 'tomato',
-            //tabBarInactiveTintColor: 'gray',
+            tabBarStyle: { width:'auto', alignItems:'center', justifyContent:'space-between', backgroundColor:'#E2EBF1' },
+            tabBarActiveTintColor: '#003949',
+            tabBarInactiveTintColor: '#03718D',
             tabBarLabelStyle: { fontSize: 14, fontWeight: '600' },            
           }}
           >
