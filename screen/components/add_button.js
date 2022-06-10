@@ -5,12 +5,13 @@ import { FontAwesome5Icon } from './font_awesome5_icon'
 import { valueHelper } from '../../helpers'
 import styles from '../../assets/styles.js'
 
-function AddButton({ buttonProps, buttonTitle, iconName, iconProps, onPress, viewProps }) {
+const AddButton = (props, { buttonProps, buttonTitle, iconName, iconProps, onPress, viewProps }) => {
   const button = valueHelper.isStringValue(buttonTitle) ? buttonTitle : 'Add'
   const icon = valueHelper.isStringValue(iconName) ? iconName : 'plus'
+  const style = props.style
 
   return (
-      <TouchableOpacity {...viewProps} style={{ flexDirection: 'row', alignItems: 'center' }} onPress={onPress}>
+      <TouchableOpacity {...viewProps} onPress={onPress}>
         <Button
           icon={({ size, color }) => (
             <FontAwesome5Icon {...iconProps} name='plus' size={14} color="#03718D" style={{ marginLeft:'-8px' }}  />
@@ -20,7 +21,7 @@ function AddButton({ buttonProps, buttonTitle, iconName, iconProps, onPress, vie
           onPress={onPress}
           title={button} 
           contentStyle={{ height:30 }}
-          style={{ borderColor:'#03718D', width:'fit-content', marginLeft:'auto' }}
+          style={[{ borderColor:'#03718D', width:'fit-content'}, style]}
           compact='true'
           labelStyle={{ color:'#03718D' }}
         >
