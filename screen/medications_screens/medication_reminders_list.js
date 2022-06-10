@@ -15,6 +15,7 @@ function MedicationReminder(props) {
         <Text style={styles.medicationReminder.text}>{reminderHelper.displayAction(medicationReminder)}</Text>
         <TouchableOpacity
           activeOpacity={0.5}
+          style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
           onPress={() => { navigation.navigate('ReminderScreen', { currentUser, currentPatient, reminder: medicationReminder }) }}>
           <FontAwesome5Icon size={17} name="angle-right" />
         </TouchableOpacity>

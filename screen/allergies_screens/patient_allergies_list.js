@@ -15,6 +15,7 @@ function PatientAllergy(props) {
       <DeleteButton itemName='Patient Allergy' onPress={onDelete} />
       <TouchableOpacity
         activeOpacity={0.5}
+        style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
         onPress={() => { navigation.navigate('PatientAllergyScreen', { currentUser, currentPatient, patientAllergy }) }}>
         <FontAwesome5Icon size={30} name="angle-right" />
       </TouchableOpacity>
@@ -115,7 +116,7 @@ const styles = StyleSheet.create(
     patientAllergy: {
       view: { flex: 1, flexDirection: "row", height: 50, margin: 5, backgroundColor: "#c8c8c8" },
       icon: { color: "grey" },
-      text: { fontSize: 20, fontWeight: "bold", width: "80%" }
+      text: { fontSize: 20, fontWeight: "bold" }
     }
   }
 )

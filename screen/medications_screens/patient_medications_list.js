@@ -14,6 +14,7 @@ function PatientMedication(props) {
       <Text style={styles.patientMedication.text}>{patientMedicationHelper.medicationLabel(patientMedication)}</Text>
       <TouchableOpacity
         activeOpacity={0.5}
+        style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
         onPress={() => { navigation.navigate('MedicationScreen', { currentUser, currentPatient, patientMedication }) }}>
         <FontAwesome5Icon size={30} name="angle-right" />
       </TouchableOpacity>

@@ -5,11 +5,12 @@ import { valueHelper } from '../../helpers'
 
 function DeleteButton({ itemName, iconName, iconProps, onPress, viewProps }) {
   const icon = valueHelper.isStringValue(iconName) ? iconName : 'delete'
+  const iconSize = valueHelper.isValue(iconProps) && valueHelper.isNumberValue(iconProps.size) ? iconProps.size : 20
 
   return (
     <TouchableOpacity
       {...viewProps}
-      style={{ flexDirection: 'row', alignItems: 'center' }}
+      style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
       onPress={
         () => {
           Alert.alert(
@@ -29,7 +30,7 @@ function DeleteButton({ itemName, iconName, iconProps, onPress, viewProps }) {
           )
         }
       }>
-      <MaterialCommunityIcon {...iconProps} size={20} name={icon} />
+      <MaterialCommunityIcon {...iconProps} size={iconSize} name={icon} />
     </TouchableOpacity>
   )
 }
