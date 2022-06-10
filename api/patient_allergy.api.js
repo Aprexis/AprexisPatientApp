@@ -4,6 +4,7 @@ import { patientAllergyHelper } from "../helpers"
 export const patientAllergyApi = {
   buildNew,
   create,
+  destroy,
   edit,
   listForPatient,
   profile,
@@ -25,6 +26,16 @@ function buildNew(userCredentials, patient_id, onSuccess, onFailure) {
   const method = "GET"
   const path = `/patients/${patient_id}/patient_allergies/new`
   API.perform(method, path, "", userCredentials, undefined, onSuccess, onFailure)
+}
+
+function destroy(userCredentials, patient_allergy_id, onSuccess, onFailure) {
+  if (!API.validateId("patient allergy ID", patient_allergy_id, onFailure)) {
+    return
+  }
+
+  const method = "DELETE"
+  const path = `/patient_allergies/${patient_allergy_id}`
+  API.perform(method, path, '', userCredentials, undefined, onSuccess, onFailure)
 }
 
 function create(userCredentials, patientAllergy, onSuccess, onFailure) {

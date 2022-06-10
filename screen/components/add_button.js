@@ -1,5 +1,5 @@
 import React from 'react'
-import { View } from 'react-native'
+import { View, TouchableOpacity  } from 'react-native'
 import { Button } from 'react-native-paper'
 import { FontAwesome5Icon } from './font_awesome5_icon'
 import { valueHelper } from '../../helpers'
@@ -10,20 +10,23 @@ function AddButton({ buttonProps, buttonTitle, iconName, iconProps, onPress, vie
   const icon = valueHelper.isStringValue(iconName) ? iconName : 'plus'
 
   return (
-      <Button
-        icon={({ size, color }) => (
-          <FontAwesome5Icon {...iconProps} name='plus' size={14} color="#03718D" style={{ marginLeft:'-8px' }}  />
-        )}
-        mode="outlined" 
-        onPress={onPress}
-        title={button} 
-        contentStyle={{ height:30 }}
-        style={{ borderColor:'#03718D', width:'fit-content', marginLeft:'auto' }}
-        compact='true'
-        labelStyle={{ color:'#03718D' }}
-      >
-        Add
-      </Button>
+      <TouchableOpacity {...viewProps} style={{ flexDirection: 'row', alignItems: 'center' }} onPress={onPress}>
+        <Button
+          icon={({ size, color }) => (
+            <FontAwesome5Icon {...iconProps} name='plus' size={14} color="#03718D" style={{ marginLeft:'-8px' }}  />
+          )}
+          mode="outlined"
+          {...buttonProps}
+          onPress={onPress}
+          title={button} 
+          contentStyle={{ height:30 }}
+          style={{ borderColor:'#03718D', width:'fit-content', marginLeft:'auto' }}
+          compact='true'
+          labelStyle={{ color:'#03718D' }}
+        >
+          Add
+        </Button>
+      </TouchableOpacity>
   )
 }
 

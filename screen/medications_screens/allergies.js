@@ -1,7 +1,7 @@
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { currentUserHelper } from '../../helpers'
-import { PatientAllergiesList, PatientAllergyScreen } from '../allergies'
+import { PatientAllergiesList, PatientAllergyScreen } from '../allergies_screens'
 
 const Stack = createNativeStackNavigator()
 

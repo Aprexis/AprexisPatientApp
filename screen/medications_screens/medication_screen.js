@@ -7,7 +7,7 @@ import { MedicationAdherence } from './medication_adherence'
 import { MedicationInfo } from "./medication_info"
 import { MedicationInteractions } from './medication_interactions'
 import { MedicationRemindersList } from './medication_reminders_list'
-import { ReminderInfo } from '../reminders'
+import { ReminderInfo } from '../reminders_screens'
 import { currentUserHelper, patientMedicationHelper } from "../../helpers"
 
 const Stack = createNativeStackNavigator()
