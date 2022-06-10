@@ -39,22 +39,28 @@ function MedicationScreen(props) {
   const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
 
   return (
-    <View style={styles.medicationScreen.view}>
+    <View style={styles.view}>
 
-      <View style={styles.medicationScreen.titleView}>
-        <FontAwesome5Icon size={30} style={styles.medicationScreen.titleIcon} name="pills" />
-        <Text style={styles.medicationScreen.titleText}>{patientMedicationHelper.medicationLabel(patientMedication)}</Text>
+      <View style={styles.titleView}>
+        <FontAwesome5Icon size={30} style={styles.titleIcon} name="pills" />
+        <Text style={styles.titleText}>{patientMedicationHelper.medicationLabel(patientMedication)}</Text>
       </View>
 
-      <View style={styles.medicationScreen.sectionView}>
+      <View style={styles.sectionView}>
         <Tab.Navigator
-          barStyle={{ backgroundColor: '#03718D' }}
-          screenOptions={{ tabBarLabelStyle: { fontSize: 15, fontWeight: '600' } }}
+          sceneContainerStyle={{ backgroundColor:'#F3F6F9', padding:12, flex:'1' }}
+          screenOptions={{
+            tabBarIndicatorStyle: { backgroundColor:'#03718D', marginLeft:'-1px' },
+            tabBarItemStyle: { width:'auto', margin:5, padding:0 },
+            tabBarStyle: { width:'auto', alignItems:'center', justifyContent:'space-between' },
+            //tabBarActiveTintColor: 'tomato',
+            //tabBarInactiveTintColor: 'gray',
+            tabBarLabelStyle: { fontSize: 14, fontWeight: '600' },            
+          }}
           >
           <Tab.Screen
             name="MedicationInfo"
-            style={{border:'solid red 1px'}}
-            options={{ title: "Info", headerShown: false }}>
+            options={{ title: "Info", headerShown: false, }}>
             {(props) => <MedicationInfo {...props} patientMedication={patientMedication} currentUser={currentUser} currentPatient={currentPatient} />}
           </Tab.Screen>
           <Tab.Screen
@@ -82,12 +88,10 @@ export { MedicationScreen }
 
 const styles = StyleSheet.create(
   {
-    medicationScreen: {
       sectionView: { flex: 4 },
-      titleView: { flex: 1, flexDirection: "column", justifyContent: "center", alignItems: "center" },
-      titleIcon: { color: "grey" },
-      titleText: { fontSize: 20, fontWeight: "bold" },
+      titleView: { flex: 1, flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor:'#03718D', color:'#fff' },
+      titleIcon: { color: "#fff" },
+      titleText: { fontSize: 20, fontWeight: "bold", color:'#fff' },
       view: { flex: 1 }
-    }
   }
 )

@@ -86,7 +86,9 @@ function MedicationRemindersList(props) {
 
   return (
     <View style={{ flex: 1 }}>
-      <AddButton onPress={addReminder} />
+      <View style={{ backgroundColor:"#F3F6F9"}}>
+        <AddButton onPress={addReminder}/>
+      </View>
       <ListView
         label='Medication Reminders'
         navigation={navigation}
@@ -138,7 +140,7 @@ export { MedicationRemindersList }
 const styles = StyleSheet.create(
   {
     medicationReminder: {
-      view: { flex: 1, flexDirection: "column", alignContent: 'center', backgroundColor: "#c8c8c8" },
+      view: { flex: 1, flexDirection: "column", alignContent: 'center', backgroundColor: "red", border:'solid' },
       icon: { color: "grey" },
       text: { fontSize: 12, fontWeight: "bold", margin: 2 }
     }
