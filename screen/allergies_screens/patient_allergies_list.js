@@ -9,9 +9,9 @@ function PatientAllergy(props) {
   const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
 
   return (
-    <View style={styles.patientAllergy.view}>
-      <MaterialCommunityIcon size={40} style={styles.patientAllergy.icon} name="allergy" />
-      <Text style={styles.patientAllergy.text}>{valueHelper.capitalizeWords(patientAllergyHelper.allergyName(patientAllergy))}</Text>
+    <View style={styles.view}>
+      <MaterialCommunityIcon size={40} style={styles.icon} name="allergy" />
+      <Text style={styles.text}>{valueHelper.capitalizeWords(patientAllergyHelper.allergyName(patientAllergy))}</Text>
       <DeleteButton itemName='Patient Allergy' onPress={onDelete} />
       <TouchableOpacity
         activeOpacity={0.5}
@@ -112,10 +112,8 @@ export { PatientAllergiesList }
 
 const styles = StyleSheet.create(
   {
-    patientAllergy: {
-      view: { flex: 1, flexDirection: "row", height: 50, margin: 5, backgroundColor: "#c8c8c8" },
-      icon: { color: "grey" },
-      text: { fontSize: 20, fontWeight: "bold", width: "80%" }
-    }
+    view: { flexDirection: "row", height: 50, margin: 5, backgroundColor: "#c8c8c8" },
+    icon: { color: "grey" },
+    text: { fontSize: 20, fontWeight: "bold", width: "80%" }
   }
 )
