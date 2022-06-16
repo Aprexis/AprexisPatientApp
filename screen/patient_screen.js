@@ -131,8 +131,8 @@ function PatientScreen(props) {
         options={
           {
             headerSHown: false,
-            tabBarLabel: (<Text style={{ fontSize: 20 }}>CARE TEAM</Text>),
-            tabBarIcon: ({ color }) => (<FontAwesome5Icon name="hand-holding-medical" color={color} size={30} />)
+            tabBarLabel: (<Text style={{ fontSize: 15 }}>CARE TEAM</Text>),
+            tabBarIcon: ({ color }) => (<FontAwesome5Icon name="hand-holding-medical" color={color} size={28}  style={{ marginTop:'-4px' }}/>)
           }
         }>
         {(props) => <CareTeamScreenStack {...props} currentUser={currentUser} currentPatient={currentPatient} />}
