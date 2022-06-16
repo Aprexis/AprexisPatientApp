@@ -15,6 +15,7 @@ function PatientAllergy(props) {
       <DeleteButton itemName='Patient Allergy' onPress={onDelete} />
       <TouchableOpacity
         activeOpacity={0.5}
+        style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
         onPress={() => { navigation.navigate('PatientAllergyScreen', { currentUser, currentPatient, patientAllergy }) }}>
         <FontAwesome5Icon size={30} name="angle-right" />
       </TouchableOpacity>

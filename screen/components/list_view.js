@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer } from 'react'
+import React, { useEffect, useState, useReducer } from 'react'
 import { ScrollView } from 'react-native'
 import { ListCount } from './list_count'
 import { RefreshView } from '../containers/refresh_view'
@@ -8,9 +8,15 @@ import styles from '../../assets/styles.js'
 function ListView({ forceUpdate, label, onLoadPage, onPresentItem, pageSize, pluralLabel, timeout, navigation }) {
   const workingPageSize = valueHelper.isNumberValue(pageSize) ? pageSize : 20
   const [state, dispatch] = useReducer(updateState, workingPageSize, initialState)
+  const [isMounted, setIsMounted] = useState(false)
   const { contentOffset, lastPage } = state
 
-
+  useEffect(
+    () => {
+      setIsMounted(true)
+      return () => setIsMounted(false)
+    }
+  )
   useEffect(loadData)
   useEffect(
     () => {
@@ -20,6 +26,10 @@ function ListView({ forceUpdate, label, onLoadPage, onPresentItem, pageSize, plu
     },
     [navigation]
   )
+
+  if (!isMounted) {
+    return null
+  }
 
   return (
     <RefreshView onIdle={() => { dispatch({ type: 'NEED-LOAD' }) }} timeout={timeout}>
@@ -73,7 +83,7 @@ function ListView({ forceUpdate, label, onLoadPage, onPresentItem, pageSize, plu
 
   function loadData() {
     const { lastPage, needLoad, scrolling } = state
-    if (!forceUpdate && (!needLoad || scrolling)) {
+    if (!isMounted || (!forceUpdate && (!needLoad || scrolling))) {
       return
     }
 

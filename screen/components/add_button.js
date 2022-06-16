@@ -5,10 +5,9 @@ import { FontAwesome5Icon } from './font_awesome5_icon'
 import { valueHelper } from '../../helpers'
 import styles from '../../assets/styles.js'
 
-const AddButton = (props, { buttonProps, buttonTitle, iconName, iconProps, onPress, viewProps }) => {
+function AddButton({ buttonProps, buttonTitle, iconName, iconProps, onPress, viewProps }) {
   const button = valueHelper.isStringValue(buttonTitle) ? buttonTitle : 'Add'
   const icon = valueHelper.isStringValue(iconName) ? iconName : 'plus'
-  const style = props.style
 
   return (
       <TouchableOpacity {...viewProps} onPress={onPress}>
@@ -21,7 +20,7 @@ const AddButton = (props, { buttonProps, buttonTitle, iconName, iconProps, onPre
           onPress={onPress}
           title={button} 
           contentStyle={{ height:30 }}
-          style={[{ borderColor:'#03718D', width:'fit-content'}, style]}
+          style={{ borderColor:'#03718D', width:'fit-content'}}
           compact='true'
           labelStyle={{ color:'#03718D' }}
         >

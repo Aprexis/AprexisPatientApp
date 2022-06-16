@@ -82,6 +82,9 @@ function PatientAllergyInfo(props) {
         <View style={styles.allergyInfo.profileFieldView}>
           <Text style={styles.allergyInfo.profileFieldName}>Type</Text>
           <Text style={styles.allergyInfo.profileFieldValue}>{patientAllergyHelper.allergyType(patientAllergy)}</Text>
+        </View>
+
+        <View>
           <Picker
             enabled={!valueHelper.isStringValue(allergyType)}
             selectedValue={patientAllergyHelper.allergyType(patientAllergy)}

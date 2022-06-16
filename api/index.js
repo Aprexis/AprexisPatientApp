@@ -1,5 +1,6 @@
 export * from "./api"
 export * from "./authentication.api"
+export * from "./caregiver.api"
 export * from "./patient_allergy.api"
 export * from "./patient_medication.api"
 export * from "./patient.api"

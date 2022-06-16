@@ -2,9 +2,10 @@ import React from "react"
 import { Text } from "react-native"
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
+import { CareTeamScreen } from './care_team_screens'
 import { FontAwesome5Icon } from './components'
 import { MedicationScreen } from "./medications_screens"
-import { HomeScreen, MedicationsScreen, RequestPatientScreen, } from "./patient_screens"
+import { HomeScreen, MedicationsScreen, RequestPatientScreen } from "./patient_screens"
 import { HeaderLeft, HeaderRight } from "./components"
 import { valueHelper, patientHelper, currentUserHelper } from "../helpers"
 
@@ -19,6 +20,21 @@ function headerOptions(navigation, currentUser, currentPatient) {
     headerTintColor: '#fff',
     headerTitleStyle: { fontWeight:'600', position:'relative', left:'-10px'  }
   }
+}
+
+function CareTeamScreenStack(props) {
+  const { navigation } = props
+  const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
+
+  return (
+    <Stack.Navigator>
+      <Stack.Screen
+        name="CareTeamScreen"
+        options={headerOptions(navigation, currentUser, currentPatient)}>
+        {(props) => <CareTeamScreen {...props} currentUser={currentUser} currentPatient={currentPatient} />}
+      </Stack.Screen>
+    </Stack.Navigator>
+  )
 }
 
 function HomeScreenStack(props) {
@@ -110,7 +126,18 @@ function PatientScreen(props) {
         }>
         {(props) => <MedicationsScreenStack {...props} currentUser={currentUser} currentPatient={currentPatient} />}
       </Tab.Screen>
-    </Tab.Navigator>
+      <Tab.Screen
+        name="Care Team"
+        options={
+          {
+            headerSHown: false,
+            tabBarLabel: (<Text style={{ fontSize: 20 }}>CARE TEAM</Text>),
+            tabBarIcon: ({ color }) => (<FontAwesome5Icon name="hand-holding-medical" color={color} size={30} />)
+          }
+        }>
+        {(props) => <CareTeamScreenStack {...props} currentUser={currentUser} currentPatient={currentPatient} />}
+      </Tab.Screen>
+    </Tab.Navigator >
   )
 }
 
