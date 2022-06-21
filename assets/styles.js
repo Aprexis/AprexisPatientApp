@@ -29,12 +29,14 @@ export default StyleSheet.create(
     mainBody: {
       flex: 1,
       backgroundColor: $color.lightBg,
-      alignContent: 'center',
+      textAlign:'center'
     },
     row:{
       display: 'flex',
       flexDirection: 'row',
       alignItems: 'center',
+      marginTop:6, 
+      marginBottom:6,
     },
     sectionStyle: {
       flexDirection: 'row',
@@ -66,6 +68,16 @@ export default StyleSheet.create(
       paddingVertical: 10,
       fontSize: 16,
       fontWeight: '500'
+    },
+    listButton: {
+      borderRadius:5,
+      padding:10,
+      backgroundColor:'#E0EBF1',
+      flexDirection: "row",
+      alignItems:'center',
+      marginTop:5,
+      width:'100%',
+      alignSelf: 'center',
     },
     inputField: {
       flex: 1,

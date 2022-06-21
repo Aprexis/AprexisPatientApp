@@ -12,7 +12,7 @@ function PatientMedication(props) {
   return (
     <TouchableOpacity
       activeOpacity={0.5}
-      style={{ width:'96%', borderRadius:5, padding:10, backgroundColor:'#E0EBF1', flexDirection: "row", alignItems:'center', justifyContent:'space-between', marginTop:5 }}
+      style={styles.listButton}
       onPress={() => { navigation.navigate('MedicationScreen', { currentUser, currentPatient, patientMedication }) }}>
       <View style={{ flexDirection: "row", alignItems:'center', width:'95%'}}>
         <FontAwesome5Icon size={35} style={ styles.icon } name={patientMedicationHelper.medicationIcon(patientMedication)} />
@@ -75,9 +75,7 @@ export { PatientMedicationsList }
 
 const inlineStyles = StyleSheet.create(
   {
-    view: { flex: 1, flexDirection: "row", height: 50, margin: 5, backgroundColor: "#F3F6F9" },
     text: { color: "#112B37", fontSize: 18, fontWeight: "500", marginLeft:5 },
-    item: { whiteSpace: 'wrap' },
     medIcon: { marginRight: 5 }
   }
 )

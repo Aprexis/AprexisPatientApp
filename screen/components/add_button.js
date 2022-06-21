@@ -10,7 +10,7 @@ function AddButton({ buttonProps, buttonTitle, iconName, iconProps, onPress, vie
   const icon = valueHelper.isStringValue(iconName) ? iconName : 'plus'
 
   return (
-      <TouchableOpacity {...viewProps} onPress={onPress}>
+      <TouchableOpacity {...viewProps} onPress={onPress} style={{ display:'block', width:'fit-content' }}>
         <Button
           icon={({ size, color }) => (
             <FontAwesome5Icon {...iconProps} name='plus' size={14} color="#03718D" style={{ marginLeft:'-8px' }}  />

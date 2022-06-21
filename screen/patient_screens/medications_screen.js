@@ -15,7 +15,7 @@ function MedicationsScreen(props) {
 
   return (
     <SafeAreaView style={ styles.mainBody }>
-      <View style={ [styles.row, { justifyContent:'flex-end', marginTop:6 }] }>
+      <View style={ [styles.row, { justifyContent:'flex-end' }] }>
           <View style={{ flex:.6, textAlign:'center' }}>
             <Text style={inlineStyles.titleText}>MEDICATIONS</Text>
           </View>
@@ -37,31 +37,33 @@ function MedicationsScreen(props) {
             </View>
           </View>
       </View>
-      <Tab.Navigator
-        style={{ padding:8, marginBottom:12, textAlign:'center' }}
-        screenOptions={{
-          tabBarLabelStyle: { fontSize: 14, fontWeight: '600' },
-          tabBarStyle: { backgroundColor: '#E1EBF1', marginBottom:12 },
-          tabBarIndicatorStyle: { backgroundColor:'#03718D' },
-        }}
-      >
-        <Tab.Screen
-          name="List"
-          style={{ padding: 8, fontWeight: '700' }}
-          options={{ headerShown: false }}>
-          {(props) => <PatientMedicationsList {...props} currentUser={currentUser} currentPatient={currentPatient} />}
-        </Tab.Screen>
-        <Tab.Screen
-          name="Check Interactions"
-          options={{ headerShown: false }}>
-          {(props) => <CheckInteractions {...props} currentUser={currentUser} currentPatient={currentPatient} />}
-        </Tab.Screen>
-        <Tab.Screen
-          name="Allergies"
-          options={{ headerShown: false }}>
-          {(props) => <Allergies {...props} allergyType='Medicine' currentUser={currentUser} currentPatient={currentPatient} />}
-        </Tab.Screen>
-      </Tab.Navigator>
+      <View style={{ flex: 1, padding:8 }}>
+        <Tab.Navigator
+          style={{ marginBottom:12, textAlign:'center' }}
+          screenOptions={{
+            tabBarLabelStyle: { fontSize: 14, fontWeight: '600' },
+            tabBarStyle: { backgroundColor: '#E1EBF1' },
+            tabBarIndicatorStyle: { backgroundColor:'#03718D' },
+          }}
+        >
+          <Tab.Screen
+            name="List"
+            style={{ padding: 8, fontWeight: '700' }}
+            options={{ headerShown: false }}>
+            {(props) => <PatientMedicationsList {...props} currentUser={currentUser} currentPatient={currentPatient} />}
+          </Tab.Screen>
+          <Tab.Screen
+            name="Check Interactions"
+            options={{ headerShown: false }}>
+            {(props) => <CheckInteractions {...props} currentUser={currentUser} currentPatient={currentPatient} />}
+          </Tab.Screen>
+          <Tab.Screen
+            name="Allergies"
+            options={{ headerShown: false }}>
+            {(props) => <Allergies {...props} allergyType='Medicine' currentUser={currentUser} currentPatient={currentPatient} />}
+          </Tab.Screen>
+        </Tab.Navigator>
+      </View>
     </SafeAreaView>
   )
 }
@@ -72,6 +74,5 @@ const inlineStyles = StyleSheet.create(
   {
     titleView: { flexDirection: "row", justifyContent: "center", alignContent: "center", marginTop:10 },
     titleText: { fontSize: 18, fontWeight: "bold", color: "#112B37", margin:'0 auto'}
-    
   }
 )

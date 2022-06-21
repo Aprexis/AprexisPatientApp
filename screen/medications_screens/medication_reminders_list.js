@@ -3,32 +3,25 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { AddButton, FontAwesome5Icon, ListView, MaterialCommunityIcon } from '../components'
 import { reminderApi } from "../../api"
 import { valueHelper, alertHelper, currentUserHelper, patientHelper, patientMedicationHelper, reminderHelper, userCredentialsHelper } from "../../helpers"
+import styles from '../../assets/styles.js'
 
 function MedicationReminder(props) {
   const { navigation, medicationReminder } = props
   const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
 
-  return (
-    <View style={styles.medicationReminder.view}>
-      <View style={{ flexGrow: 1, flexDirection: "row" }}>
-        <MaterialCommunityIcon size={17} style={styles.medicationReminder.icon} name="reminder" />
-        <Text style={styles.medicationReminder.text}>{reminderHelper.displayAction(medicationReminder)}</Text>
-        <TouchableOpacity
-          activeOpacity={0.5}
-          style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
-          onPress={() => { navigation.navigate('ReminderScreen', { currentUser, currentPatient, reminder: medicationReminder }) }}>
-          <FontAwesome5Icon size={17} name="angle-right" />
-        </TouchableOpacity>
+  return ( 
+    <TouchableOpacity
+      activeOpacity={0.5}
+      style={styles.listButton}
+      onPress={() => { navigation.navigate('ReminderScreen', { currentUser, currentPatient, reminder: medicationReminder }) }}>
+      <View style={{ flexDirection: "row", alignItems:'center', width:'95%'}}>
+        <FontAwesome5Icon size={27} name="clock" style={[styles.icon, inlineStyles.medIcon]} />
+        <Text style={inlineStyles.text}>{reminderHelper.displayAction(medicationReminder)}</Text>
       </View>
-      <View style={{ flexGrow: 1, flexDirection: "row" }}>
-        <Text style={styles.medicationReminder.text}>{reminderHelper.displayRecurFrom(medicationReminder)}</Text>
-        <Text style={styles.medicationReminder.text}>{reminderHelper.displayRecurTo(medicationReminder)}</Text>
-        <Text style={styles.medicationReminder.text}>{reminderHelper.displayRemindAt(medicationReminder)}</Text>
+      <View>
+        <FontAwesome5Icon size={30} name="angle-right" style={[styles.icon, inlineStyles.medIcon]} />
       </View>
-      <View style={{ flexGrow: 1, flexDirection: "row" }}>
-        <Text style={styles.medicationReminder.text}>{reminderDates(medicationReminder)}</Text>
-      </View>
-    </View>
+    </TouchableOpacity> 
   )
 
   function reminderDates(medicationReminder) {
@@ -86,9 +79,9 @@ function MedicationRemindersList(props) {
   const { patientMedication } = props
 
   return (
-    <View style={{ flex: 1 }}>
-      <View style={{ backgroundColor:"#F3F6F9"}}>
-        <AddButton onPress={addReminder} style={{marginLeft:'auto'}}/>
+    <View style={styles.mainBody}>
+      <View style={{ display:'flex', justifyContent:'flex-end'}}>
+        <AddButton onPress={addReminder} buttonProps={{style: {backgroundColor:'orange'}} }/>
       </View>
       <ListView
         label='Medication Reminders'
@@ -138,12 +131,11 @@ function MedicationRemindersList(props) {
 
 export { MedicationRemindersList }
 
-const styles = StyleSheet.create(
+const inlineStyles = StyleSheet.create(
   {
-    medicationReminder: {
-      view: { flex: 1, flexDirection: "column", alignContent: 'center', backgroundColor: "red", border:'solid' },
-      icon: { color: "grey" },
-      text: { fontSize: 12, fontWeight: "bold", margin: 2 }
-    }
+    view: { flex: 1, flexDirection: "row", height: 50, margin: 5, backgroundColor: "#F3F6F9" },
+    text: { color: "#112B37", fontSize: 18, fontWeight: "500", marginLeft:5 },
+    item: { whiteSpace: 'wrap' },
+    medIcon: { marginRight: 5 }
   }
 )

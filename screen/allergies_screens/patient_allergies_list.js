@@ -3,23 +3,25 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { AddButton, DeleteButton, FontAwesome5Icon, MaterialCommunityIcon, ListView } from '../components'
 import { patientAllergyApi } from "../../api"
 import { alertHelper, patientHelper, currentUserHelper, userCredentialsHelper, patientAllergyHelper, valueHelper } from '../../helpers'
+import styles from '../../assets/styles.js'
 
 function PatientAllergy(props) {
   const { navigation, patientAllergy, onDelete } = props
   const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
 
   return (
-    <View style={styles.view}>
-      <MaterialCommunityIcon size={40} style={styles.icon} name="allergy" />
-      <Text style={styles.text}>{valueHelper.capitalizeWords(patientAllergyHelper.allergyName(patientAllergy))}</Text>
-      <DeleteButton itemName='Patient Allergy' onPress={onDelete} />
-      <TouchableOpacity
+     <TouchableOpacity
         activeOpacity={0.5}
-        style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
+        style={styles.listButton}
         onPress={() => { navigation.navigate('PatientAllergyScreen', { currentUser, currentPatient, patientAllergy }) }}>
-        <FontAwesome5Icon size={30} name="angle-right" />
-      </TouchableOpacity>
-    </View>
+      <View style={{ flexDirection: "row", alignItems:'center', width:'95%'}}>
+        <MaterialCommunityIcon size={40} style={ styles.icon } name="allergy" />
+        <Text style={inlineStyles.text}>{valueHelper.capitalizeWords(patientAllergyHelper.allergyName(patientAllergy))}</Text>
+      </View>
+      <View>
+        <FontAwesome5Icon size={30} name="angle-right" style={[styles.icon, inlineStyles.medIcon]} />
+      </View>
+    </TouchableOpacity>
   )
 }
 
@@ -32,8 +34,6 @@ function PatientAllergiesList(props) {
 
   return (
     <View style={{ flex: 1 }}>
-      <AddButton onPress={addPatientAllergy} />
-
       <ListView
         forceUpdate={forceUpdate}
         label='Patient Allergy'
@@ -111,10 +111,9 @@ function PatientAllergiesList(props) {
 
 export { PatientAllergiesList }
 
-const styles = StyleSheet.create(
+const inlineStyles = StyleSheet.create(
   {
-    view: { flexDirection: "row", height: 50, margin: 5, backgroundColor: "#c8c8c8" },
-    icon: { color: "grey" },
-    text: { fontSize: 20, fontWeight: "bold", width: "80%" }
+    text: { color: "#112B37", fontSize: 18, fontWeight: "500", marginLeft:5 },
+    medIcon: { marginRight: 5 }
   }
 )

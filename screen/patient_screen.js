@@ -75,7 +75,7 @@ function MedicationsScreenStack(props) {
     <Stack.Navigator
       screenOptions={
         { 
-          headerStyle: { backgroundColor: '#E0EBF1', height:35, border:'solid red 1px' }, 
+          headerStyle: { backgroundColor: '#E0EBF1', height:35 }, 
           headerTitleStyle:{ color:'#003949' },
           headerShadowVisible: false
         }
