@@ -80,8 +80,8 @@ function MedicationRemindersList(props) {
 
   return (
     <View style={styles.mainBody}>
-      <View style={{ display:'flex', justifyContent:'flex-end'}}>
-        <AddButton onPress={addReminder} buttonProps={{style: {backgroundColor:'orange'}} }/>
+      <View style={{ display:'flex', justifyContent:'flex-end', textAlign:'right'}}>
+        <AddButton onPress={addReminder} />
       </View>
       <ListView
         label='Medication Reminders'

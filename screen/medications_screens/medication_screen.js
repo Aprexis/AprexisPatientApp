@@ -17,7 +17,15 @@ function MedicationRemindersScreenStack(props) {
   const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
 
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={
+        { 
+          headerStyle: { backgroundColor: '#E0EBF1', height:35 }, 
+          headerTitleStyle:{ color:'#003949'},
+          headerShadowVisible: false,
+        }
+      }
+    >
       <Stack.Screen
         name="MedicationRemindersList"
         options={{ title: "Reminders", headerShown: false }}>
@@ -25,7 +33,8 @@ function MedicationRemindersScreenStack(props) {
       </Stack.Screen>
       <Stack.Screen
         name="ReminderScreen"
-        options={{ title: 'Reminder' }}>
+        options={{ title: 'Reminder' }}
+        >
         {(props) => <ReminderInfo {...props} currentUser={currentUser} currentPatient={currentPatient} />}
       </Stack.Screen>
     </Stack.Navigator>
@@ -40,12 +49,10 @@ function MedicationScreen(props) {
 
   return (
     <View style={styles.view}>
-
       <View style={styles.titleView}>
         <FontAwesome5Icon size={30} style={styles.titleIcon} name="pills" />
         <Text style={styles.titleText}>{patientMedicationHelper.medicationLabel(patientMedication)}</Text>
       </View>
-
       <View style={styles.sectionView}>
         <Tab.Navigator
           sceneContainerStyle={{ backgroundColor:'#F3F6F9', padding:12, flex:'1' }}

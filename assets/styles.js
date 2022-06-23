@@ -1,6 +1,6 @@
 import { StyleSheet } from 'react-native';
 
-export const $color: ColorTheme = {
+export const themeColor = {
   lightBlue: '#03718D',
   midBlue: '#003949',
   brightBlue: '#6DD6F0',
@@ -15,20 +15,20 @@ export const $color: ColorTheme = {
 export default StyleSheet.create(
   {
     lightBackground: {
-      backgroundColor: $color.lightBg
+      backgroundColor: themeColor.lightBg
     },
     mainApp: {
-      backgroundColor: $color.darkBg,
+      backgroundColor: themeColor.darkBg,
     },
     mainFullScreen: {
       flex: 1,
-      backgroundColor: $color.darkBg,
+      backgroundColor: themeColor.darkBg,
       justifyContent: 'center',
       alignContent: 'center',
     },
     mainBody: {
       flex: 1,
-      backgroundColor: $color.lightBg,
+      backgroundColor: themeColor.lightBg,
       textAlign:'center'
     },
     row:{
@@ -47,14 +47,14 @@ export default StyleSheet.create(
       margin: 10
     },
     btnPrimary: {
-      backgroundColor: $color.brightBlue,
-      color: $color.darkBlue,
+      backgroundColor: themeColor.brightBlue,
+      color: themeColor.darkBlue,
     },
     buttonStyle: {
-      backgroundColor: $color.brightBlue,
+      backgroundColor: themeColor.brightBlue,
       borderWidth: 0,
-      color: $color.darkBlue,
-      borderColor: $color.brightBlue,
+      color: themeColor.darkBlue,
+      borderColor: themeColor.brightBlue,
       height: 40,
       alignItems: 'center',
       borderRadius: 30,
@@ -64,7 +64,7 @@ export default StyleSheet.create(
       marginBottom: 25
     },
     buttonTextStyle: {
-      color: $color.darkBlue,
+      color: themeColor.darkBlue,
       paddingVertical: 10,
       fontSize: 16,
       fontWeight: '500'
@@ -81,7 +81,7 @@ export default StyleSheet.create(
     },
     inputField: {
       flex: 1,
-      color: $color.darkBlue,
+      color: themeColor.darkBlue,
       fontWeight: '500',
       paddingLeft: 15,
       paddingRight: 15,
@@ -101,8 +101,32 @@ export default StyleSheet.create(
       elevation: 21,
     },
     icon: {
-      color: $color.darkBlue,
-      display:'inline-block'
+      color: themeColor.darkBlue,
+      display:'inline-block',
+    },
+    formRow: {
+      marginTop:10,
+      marginBottom:10,
+    },
+    fieldLabel: {
+      fontWeight:500,
+      fontSize:17,
+      marginBottom:8
+    },
+    inlineLabel: {
+      fontWeight:500,
+      marginLeft:3,
+      fontSize:15
+    },
+    picker: { 
+      padding: 6, 
+      fontSize:15, 
+      fontWeight:600, 
+      color:themeColor.midBlue, 
+      borderColor:themeColor.lightBlue, 
+      borderWidth:1,
+      borderRadius:3,
+      backgroundColor:'#fff'
     }
   }
 );

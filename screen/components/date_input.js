@@ -2,16 +2,17 @@ import React from 'react'
 import { Text, View } from 'react-native'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { dateHelper, valueHelper } from '../../helpers'
+import styles from '../../assets/styles.js'
 
 function DateInput({ disabled, field, fieldProps, label, labelProps, onChange, onPress, pickerProps, showPicker, value, viewProps }) {
   const formattedDate = dateValue()
 
   return (
-    <View {...viewProps} style={{ flexDirection: 'row' }}>
-      <Text {...labelProps} style={{ margin: 2 }}>{label}</Text>
+    <View {...viewProps} style={{ flexDirection: 'row', alignItems:'center', display:'flex' }}>
+      <Text {...labelProps} style={[styles.inlineLabel, { margin:2 }]}>{label}</Text>
       <Text
         {...fieldProps}
-        style={{ margin: 2 }}
+        style={styles.picker}
         onPress={
           () => {
             if (!valueHelper.isSet(disabled)) {
