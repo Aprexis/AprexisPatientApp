@@ -3,6 +3,7 @@ import { ScrollView } from 'react-native'
 import { ListCount } from './list_count'
 import { RefreshView } from '../containers/refresh_view'
 import { valueHelper, pageHelper } from '../../helpers'
+import { styles } from '../../assets/styles'
 
 function ListView({ forceUpdate, label, onLoadPage, onPresentItem, pageSize, pluralLabel, timeout, navigation }) {
   const workingPageSize = valueHelper.isNumberValue(pageSize) ? pageSize : 20
@@ -33,7 +34,7 @@ function ListView({ forceUpdate, label, onLoadPage, onPresentItem, pageSize, plu
   return (
     <RefreshView onIdle={() => { dispatch({ type: 'NEED-LOAD' }) }} timeout={timeout}>
       <ScrollView
-        ontentContainerStyle={{ flex: 1 }}
+        contentContainerStyle={styles.mainBody}
         contentOffset={contentOffset}
         keyboardShouldPersistTaps="handled"
         onScroll={onScroll}>

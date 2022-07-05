@@ -22,6 +22,7 @@ export const patientMedicationHelper = {
   id,
   indication,
   medication,
+  medicationIcon,
   medicationId,
   medicationLabel,
   patient,
@@ -58,6 +59,17 @@ const patientMedicationKeys = [
   "strength_units",
   "type"
 ]
+
+const iconMap = {
+  'Capsule': 'capsules',
+  'Tablet': 'tablets',
+  'Syringe': 'syringe',
+  'Needle': 'syringe',
+  'Topical spray': 'spray-can',
+  'drops': 'eye-dropper',
+  'Pressurized inhalation': 'inhaler',
+  'for Compounding': 'mortar-pestle'
+}
 
 function additionalInformation(patientMedication) {
   return fieldHelper.getField(patientMedication, "additional_information")
@@ -189,6 +201,15 @@ function medication(patientMedication) {
 
 function medicationId(patientMedication) {
   return fieldHelper.getField(patientMedication, "medication_id")
+}
+
+function medicationIcon(patientMedication) {
+  const icon = patientMedicationHelper.medicationLabel(patientMedication)
+  const iconKey = Object.keys(iconMap).find((key) => icon.includes(key))
+  if (valueHelper.isStringValue(iconKey)) {
+    return iconMap[iconKey]
+  }
+  return 'prescription'
 }
 
 function medicationLabel(patientMedication) {

@@ -25,7 +25,6 @@ function CaregiversScreenStack(props) {
         name="CaregiverScreen">
         {(props) => <CaregiverInfo {...props} caregiver={caregiver} currentUser={currentUser} currentPatient={currentPatient} />}
       </Stack.Screen>
-
     </Stack.Navigator>
   )
 }

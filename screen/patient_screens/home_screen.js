@@ -1,6 +1,7 @@
 import React from 'react'
 import { SafeAreaView, Text, View } from 'react-native'
 import { valueHelper, patientHelper, userHelper, currentUserHelper } from '../../helpers'
+import { themeColor, styles } from '../../assets/styles'
 
 function HomeScreen(props) {
   const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
@@ -15,7 +16,7 @@ function HomeScreen(props) {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <View style={{ flex: 1, padding: 16 }}>
+      <View style={styles.mainBody}>
         <View
           style={
             {

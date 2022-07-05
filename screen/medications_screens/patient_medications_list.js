@@ -3,22 +3,25 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { FontAwesome5Icon, ListView } from '../components'
 import { patientMedicationApi } from "../../api"
 import { alertHelper, patientHelper, currentUserHelper, userCredentialsHelper, patientMedicationHelper, valueHelper } from '../../helpers'
+import { styles } from '../../assets/styles'
 
 function PatientMedication(props) {
   const { navigation, patientMedication } = props
   const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
 
   return (
-    <View style={styles.patientMedication.view}>
-      <FontAwesome5Icon size={40} style={styles.patientMedication.icon} name="pills" />
-      <Text style={styles.patientMedication.text}>{patientMedicationHelper.medicationLabel(patientMedication)}</Text>
-      <TouchableOpacity
-        activeOpacity={0.5}
-        style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
-        onPress={() => { navigation.navigate('MedicationScreen', { currentUser, currentPatient, patientMedication }) }}>
-        <FontAwesome5Icon size={30} name="angle-right" />
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity
+      activeOpacity={0.5}
+      style={styles.listButton}
+      onPress={() => { navigation.navigate('MedicationScreen', { currentUser, currentPatient, patientMedication }) }}>
+      <View style={{ flexDirection: "row", alignItems:'center', width:'95%'}}>
+        <FontAwesome5Icon size={35} style={ styles.icon } name={patientMedicationHelper.medicationIcon(patientMedication)} />
+        <Text style={inlineStyles.text}>{patientMedicationHelper.medicationLabel(patientMedication)}</Text>
+      </View>
+      <View>
+        <FontAwesome5Icon size={30} name="angle-right" style={[styles.icon, inlineStyles.medIcon]} />
+      </View>
+    </TouchableOpacity>
   )
 }
 
@@ -70,12 +73,9 @@ function PatientMedicationsList(props) {
 
 export { PatientMedicationsList }
 
-const styles = StyleSheet.create(
+const inlineStyles = StyleSheet.create(
   {
-    patientMedication: {
-      view: { flex: 1, flexDirection: "row", height: 50, margin: 5, backgroundColor: "#c8c8c8" },
-      icon: { color: "grey" },
-      text: { fontSize: 20, fontWeight: "bold", width: "80%" }
-    }
+    text: { color: "#112B37", fontSize: 18, fontWeight: "500", marginLeft:5 },
+    medIcon: { marginRight: 5 }
   }
 )

@@ -1,5 +1,6 @@
 import { alertHelper } from "../helpers/alert.helper"
 import { valueHelper } from "../helpers/value.helper"
+import { Platform } from 'react-native'
 //const FileSaver = require('file-saver')
 
 export const API = {
@@ -9,7 +10,15 @@ export const API = {
   validateId
 }
 
-const baseApiUrl = 'http://10.0.2.2:3250' /*(process.env.REACT_APP_APREXIS_API*/
+let baseApiUrl
+
+if (Platform.OS === 'android') {
+  /*(process.env.REACT_APP_APREXIS_API*/
+  baseApiUrl = 'http://10.0.2.2:3250'
+} else {
+  baseApiUrl = 'http://localhost:3250'
+}
+
 const railsUrlRoot = baseApiUrl /*new URL(baseApiUrl).pathname*/
 const knownHeaders = {
   "X-Page": "lastPage.number",

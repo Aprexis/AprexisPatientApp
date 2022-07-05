@@ -1,11 +1,13 @@
 import React, { useEffect, useReducer } from 'react'
-import { Button, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
+import { Button } from 'react-native-paper'
 import Checkbox from 'expo-checkbox'
 import { Picker } from '@react-native-picker/picker'
 import { reminderApi } from '../../api'
 import { DateInput, NumberInput } from '../components'
 import { valueHelper, alertHelper, dateHelper, reminderHelper, userCredentialsHelper, patientHelper, currentUserHelper } from "../../helpers"
 import { reminderActions, reminderTypes } from '../../types'
+import { themeColor, styles } from '../../assets/styles'
 
 const daysOfWeek = {
   sunday: 'S',
@@ -21,12 +23,14 @@ function DayOfWeekPicker({ reminder, changedReminder, dayOfWeek, onValueChange }
   const label = daysOfWeek[dayOfWeek]
 
   return (
-    <View style={{ flexDirection: 'row', margin: 2 }}>
+    <View style={{ flexDirection: 'row', margin:3 }}>
       <Checkbox
+        color={themeColor.lightBlue}
+        style={{height:20, width:20}}
         value={valueHelper.isSet(reminder[dayOfWeek])}
         onValueChange={(newValue) => onValueChange(reminder, changedReminder, dayOfWeek, newValue)}
       />
-      <Text>{label}</Text>
+      <Text style={styles.inlineLabel}>{label}</Text>
     </View>
   )
 }
@@ -37,7 +41,7 @@ function DaysOfWeekPicker({ reminder, changedReminder, onValueChange }) {
   }
 
   return (
-    <View style={{ flexDirection: 'row' }}>
+    <View style={[styles.formRow, { flexDirection: 'row' }]}>
       {
         Object.keys(daysOfWeek).map(
           (dayOfWeek) => (
@@ -63,9 +67,9 @@ function DayOfMonthPicker({ reminder, onDayOfMonthChange }) {
   const dayOfMonth = valueHelper.isNumberValue(value) ? value : 1
 
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-      <Text style={{ marginLeft: 2, marginRight: 8 }}>Day of Month</Text>
-      <NumberInput value={`${dayOfMonth}`} onChangeText={onDayOfMonthChange} />
+    <View style={{ flexDirection: 'row', alignItems: 'center', marginTop:6 }}>
+      <Text style={[styles.inlineLabel, { marginLeft: 2, marginRight: 8 }]}>Day of Month</Text>
+      <NumberInput style={styles.inlineLabel} value={`${dayOfMonth}`} onChangeText={onDayOfMonthChange} />
     </View>
   )
 }
@@ -132,31 +136,31 @@ function ReminderInfo(props) {
   const hasMobilePhone = valueHelper.isStringValue(patientHelper.mobilePhone(currentPatient))
 
   return (
-    <View style={styles.reminderInfo.view}>
-      <View>
-        <Picker
-          enabled={isNewReminder}
-          selectedValue={reminderHelper.action(reminder)}
-          onValueChange={(action) => {
-            const updated = reminderHelper.changeField(reminder, changedReminder, 'action', action)
-            dispatch({ type: 'UPDATE-DATA', reminder: updated.reminder, changedReminder: updated.changedReminder })
-          }}>
-          {
-            Object.keys(reminderActions).map(
-              (action) => {
-                const label = reminderActions[action]
-                return (<Picker.Item key={`reminder-action-${action}`} label={label} value={action} />)
-              }
-            )
-          }
-        </Picker>
-      </View>
-
-      <View>
-        <Text>Delivery Method</Text>
-        <View style={{ flexDirection: "row" }}>
-          <View style={{ flexDirection: 'row', margin: 2 }}>
+    <View style={inlineStyles.view}>
+      <Picker
+        style={styles.picker}
+        enabled={isNewReminder}
+        selectedValue={reminderHelper.action(reminder)}
+        onValueChange={(action) => {
+          const updated = reminderHelper.changeField(reminder, changedReminder, 'action', action)
+          dispatch({ type: 'UPDATE-DATA', reminder: updated.reminder, changedReminder: updated.changedReminder })
+        }}>
+        {
+          Object.keys(reminderActions).map(
+            (action) => {
+              const label = reminderActions[action]
+              return (<Picker.Item key={`reminder-action-${action}`} label={label} value={action} />)
+            }
+          )
+        }
+      </Picker>
+      <View style={styles.formRow}>
+        <Text style={styles.fieldLabel}>Delivery Method</Text>
+        <View style={{ flexDirection: "row", marginLeft:6 }}>
+          <View style={{ flexDirection: 'row', margin:5, alignItems:'center' }}>
             <Checkbox
+              color={themeColor.lightBlue}
+              style={{height:20, width:20}}
               disable={!hasMobilePhone}
               value={valueHelper.isStringValue(reminderHelper.txtNumber(reminder))}
               onValueChange={
@@ -167,10 +171,12 @@ function ReminderInfo(props) {
                 }
               }
             />
-            <Text>Text Message</Text>
+            <Text style={styles.inlineLabel}>Text Message</Text>
           </View>
-          <View style={{ flexDirection: 'row', margin: 2 }}>
+          <View style={{ flexDirection: 'row', margin:5, alignItems:'center' }}>
             <Checkbox
+              color={themeColor.lightBlue}
+              style={{height:20, width:20}}
               disabled={!hasEmail}
               value={valueHelper.isStringValue(reminderHelper.emailAddress(reminder))}
               onValueChange={
@@ -181,10 +187,12 @@ function ReminderInfo(props) {
                 }
               }
             />
-            <Text>Email</Text>
+            <Text style={styles.inlineLabel}>Email</Text>
           </View>
-          <View style={{ flexDirection: 'row', margin: 2 }}>
+          <View style={{ flexDirection: 'row', margin:5, alignItems:'center' }}>
             <Checkbox
+              color={themeColor.lightBlue}
+              style={{height:20, width:20}}
               disabled={!hasPhone}
               value={valueHelper.isStringValue(reminderHelper.voiceNumber(reminder))}
               onValueChange={
@@ -195,13 +203,14 @@ function ReminderInfo(props) {
                 }
               }
             />
-            <Text>Telephone</Text>
+            <Text style={styles.inlineLabel}>Telephone</Text>
           </View>
         </View>
       </View>
 
       <View>
         <Picker
+          style={styles.picker}
           enabled={isNewReminder}
           selectedValue={reminderHelper.type(reminder)}
           onValueChange={(type) => {
@@ -217,12 +226,11 @@ function ReminderInfo(props) {
             )
           }
         </Picker>
-
         <DaysOfWeekPicker reminder={reminder} changedReminder={changedReminder} onValueChange={changeDayOfWeek} />
         <DayOfMonthPicker reminder={reminder} onDayOfMonthChange={changeDayOfMonth} />
       </View>
 
-      <View>
+      <View style={styles.formRow}>
         <DateInput
           disabled={!isNewReminder}
           field='recur_from'
@@ -234,7 +242,7 @@ function ReminderInfo(props) {
         />
       </View>
 
-      <View>
+      <View style={styles.formRow}>
         <DateInput
           field='recur_to'
           label='End Date'
@@ -246,15 +254,16 @@ function ReminderInfo(props) {
         />
       </View>
 
-      <View style={{ flexDirection: 'row' }}>
+      <View style={{ flexDirection: 'row', justifyContent:'flex-end' }}>
         <Button
-          onPress={cancel}
-          title='Cancel'
-          style={{ marginRight: 10 }}
-        />
-        <Button
-          onPress={ok}
-          title='OK' />
+          mode="contained" 
+          onPress={ok} 
+          contentStyle={{ height:30 }}
+          labelStyle={{ color: themeColor.darkBlue }}
+          color={themeColor.brightBlue}
+          compact='true'>
+          Save
+        </Button>
       </View>
     </View >
   )
@@ -366,10 +375,8 @@ function ReminderInfo(props) {
 
 export { ReminderInfo }
 
-const styles = StyleSheet.create(
+const inlineStyles = StyleSheet.create(
   {
-    reminderInfo: {
-      view: { flex: 1, flexDirection: 'column' }
-    }
+    view: { flex: 1, flexDirection: 'column', backgroundColor:themeColor.lightBg, paddingTop:12 }
   }
 )

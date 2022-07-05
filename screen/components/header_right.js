@@ -43,14 +43,14 @@ function LogoutButton(props,) {
         )
       }
       }>
-      < FontAwesome5Icon size={40} name="user" />
+      <FontAwesome5Icon size={25} name="cog" color="#fff" />
     </TouchableOpacity>
   )
 }
 
 function HeaderRight(props) {
   return (
-    <View style={{ flexDirection: "row", justifyContent: 'center', alignItems: 'center' }}>
+    <View style={{ flexDirection: "row", justifyContent: 'center', alignItems: 'center', marginRight:10 }}>
       {LogoutButton(props)}
     </View >
   )
