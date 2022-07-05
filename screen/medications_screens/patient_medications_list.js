@@ -3,7 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { FontAwesome5Icon, ListView } from '../components'
 import { patientMedicationApi } from "../../api"
 import { alertHelper, patientHelper, currentUserHelper, userCredentialsHelper, patientMedicationHelper, valueHelper } from '../../helpers'
-import styles from '../../assets/styles.js'
+import { styles } from '../../assets/styles'
 
 function PatientMedication(props) {
   const { navigation, patientMedication } = props

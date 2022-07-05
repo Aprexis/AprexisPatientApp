@@ -1,11 +1,11 @@
 import React from 'react'
-import { SafeAreaView, StyleSheet, Text, View} from 'react-native'
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { Allergies, CheckInteractions, PatientMedicationsList } from "../medications_screens"
 import { currentUserHelper } from '../../helpers'
 import { Button } from 'react-native-paper'
 import { FontAwesome5Icon } from '../components'
-import styles from '../../assets/styles.js'
+import { styles } from '../../assets/styles'
 
 const Tab = createMaterialTopTabNavigator()
 

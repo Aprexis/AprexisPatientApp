@@ -1,5 +1,5 @@
 import React from 'react'
-import { SafeAreaView, StyleSheet, Text, View, Image} from 'react-native'
+import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { CaregiverInfo } from './caregiver_info'
@@ -25,7 +25,6 @@ function CaregiversScreenStack(props) {
         name="CaregiverScreen">
         {(props) => <CaregiverInfo {...props} caregiver={caregiver} currentUser={currentUser} currentPatient={currentPatient} />}
       </Stack.Screen>
-
     </Stack.Navigator>
   )
 }

@@ -7,8 +7,7 @@ import { reminderApi } from '../../api'
 import { DateInput, NumberInput } from '../components'
 import { valueHelper, alertHelper, dateHelper, reminderHelper, userCredentialsHelper, patientHelper, currentUserHelper } from "../../helpers"
 import { reminderActions, reminderTypes } from '../../types'
-import { themeColor } from '../../assets/styles.js'
-import styles from '../../assets/styles.js'
+import { themeColor, styles } from '../../assets/styles'
 
 const daysOfWeek = {
   sunday: 'S',

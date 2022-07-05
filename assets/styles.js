@@ -12,7 +12,7 @@ export const themeColor = {
   icon: '#112B37',
 };
 
-export default StyleSheet.create(
+export const styles = StyleSheet.create(
   {
     lightBackground: {
       backgroundColor: themeColor.lightBg

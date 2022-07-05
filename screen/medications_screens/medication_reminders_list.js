@@ -3,7 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { AddButton, FontAwesome5Icon, ListView, MaterialCommunityIcon } from '../components'
 import { reminderApi } from "../../api"
 import { valueHelper, alertHelper, currentUserHelper, patientHelper, patientMedicationHelper, reminderHelper, userCredentialsHelper } from "../../helpers"
-import styles from '../../assets/styles.js'
+import { styles } from '../../assets/styles'
 
 function MedicationReminder(props) {
   const { navigation, medicationReminder } = props

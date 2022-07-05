@@ -3,7 +3,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { AddButton, DeleteButton, FontAwesome5Icon, MaterialCommunityIcon, ListView } from '../components'
 import { patientAllergyApi } from "../../api"
 import { alertHelper, patientHelper, currentUserHelper, userCredentialsHelper, patientAllergyHelper, valueHelper } from '../../helpers'
-import styles from '../../assets/styles.js'
+import { styles } from '../../assets/styles'
 
 function PatientAllergy(props) {
   const { navigation, patientAllergy, onDelete } = props

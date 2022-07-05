@@ -2,7 +2,7 @@ import React from 'react'
 import { Text, View } from 'react-native'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { dateHelper, valueHelper } from '../../helpers'
-import styles from '../../assets/styles.js'
+import { styles } from '../../assets/styles'
 
 function DateInput({ disabled, field, fieldProps, label, labelProps, onChange, onPress, pickerProps, showPicker, value, viewProps }) {
   const formattedDate = dateValue()

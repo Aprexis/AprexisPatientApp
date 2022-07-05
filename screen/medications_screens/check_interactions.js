@@ -1,6 +1,6 @@
 import React from 'react'
 import { ScrollView, Text } from 'react-native'
-import styles from '../../assets/styles.js'
+import { styles } from '../../assets/styles'
 
 function CheckInteractions(_props) {
   return (

@@ -3,7 +3,7 @@ import { View, TouchableOpacity  } from 'react-native'
 import { Button } from 'react-native-paper'
 import { FontAwesome5Icon } from './font_awesome5_icon'
 import { valueHelper } from '../../helpers'
-import styles from '../../assets/styles.js'
+import { styles } from '../../assets/styles'
 
 function AddButton({ buttonProps, buttonTitle, iconName, iconProps, onPress, viewProps }) {
   const button = valueHelper.isStringValue(buttonTitle) ? buttonTitle : 'Add'

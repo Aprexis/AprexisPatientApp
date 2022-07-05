@@ -23,7 +23,4 @@ function HeaderLeft(props) {
 }
 
 export { HeaderLeft }
-
-
-
-      
+    

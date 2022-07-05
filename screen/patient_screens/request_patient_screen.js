@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Keyboard, KeyboardAvoidingView, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
 import { patientApi } from '../../api'
 import { alertHelper, currentUserHelper, userCredentialsHelper, valueHelper } from '../../helpers'
-import styles from '../../assets/styles.js'
+import { styles } from '../../assets/styles'
 
 function RequestPatientScreen(props) {
   const { navigation } = props
@@ -55,7 +55,7 @@ function RequestPatientScreen(props) {
           {
             flex: 1,
             justifyContent: 'center',
-            alignContent: 'center',
+            alignContent: 'center'
           }
         }>
         <View>

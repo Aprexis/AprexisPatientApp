@@ -3,7 +3,7 @@ import { ScrollView } from 'react-native'
 import { ListCount } from './list_count'
 import { RefreshView } from '../containers/refresh_view'
 import { valueHelper, pageHelper } from '../../helpers'
-import styles from '../../assets/styles.js'
+import { styles } from '../../assets/styles'
 
 function ListView({ forceUpdate, label, onLoadPage, onPresentItem, pageSize, pluralLabel, timeout, navigation }) {
   const workingPageSize = valueHelper.isNumberValue(pageSize) ? pageSize : 20
