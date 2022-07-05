@@ -60,6 +60,17 @@ const patientMedicationKeys = [
   "type"
 ]
 
+const iconMap = {
+  'Capsule': 'capsules',
+  'Tablet': 'tablets',
+  'Syringe': 'syringe',
+  'Needle': 'syringe',
+  'Topical spray': 'spray-can',
+  'drops': 'eye-dropper',
+  'Pressurized inhalation': 'inhaler',
+  'for Compounding': 'mortar-pestle'
+}
+
 function additionalInformation(patientMedication) {
   return fieldHelper.getField(patientMedication, "additional_information")
 }
@@ -193,31 +204,12 @@ function medicationId(patientMedication) {
 }
 
 function medicationIcon(patientMedication) {
-  const icon = patientMedication.medication.label
-  if (icon.includes('Capsule')){
-    return "capsules"
+  const icon = patientMedicationHelper.medicationLabel(patientMedication)
+  const iconKey = Object.keys(iconMap).find((key) => icon.includes(key))
+  if (valueHelper.isStringValue(iconKey)) {
+    return iconMap[iconKey]
   }
-  else if (icon.includes('Tablet')){
-    return "tablets"
-  }
-  else if (icon.includes('Syringe' || 'Needle')){
-    return "syringe"
-  }
-  else if (icon.includes('Topical spray')){
-    return "spray-can"
-  }
-  else if (icon.includes('drops')){
-    return "eye-dropper"
-  }
-  else if (icon.includes('Pressurized inhalation')){
-    return "inhaler"
-  }
-  else if (icon.includes('for Compounding')){
-    return "mortar-pestle"
-  }
-  else {
-    return "prescription"
-  }
+  return 'prescription'
 }
 
 function medicationLabel(patientMedication) {

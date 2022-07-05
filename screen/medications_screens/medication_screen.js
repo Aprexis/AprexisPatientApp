@@ -50,7 +50,7 @@ function MedicationScreen(props) {
   return (
     <View style={styles.view}>
       <View style={styles.titleView}>
-        <FontAwesome5Icon size={30} style={styles.titleIcon} name="pills" />
+        <FontAwesome5Icon size={30} style={ styles.titleIcon } name={patientMedicationHelper.medicationIcon(patientMedication)} />
         <Text style={styles.titleText}>{patientMedicationHelper.medicationLabel(patientMedication)}</Text>
       </View>
       <View style={styles.sectionView}>
