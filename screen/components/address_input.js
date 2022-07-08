@@ -1,41 +1,42 @@
 import React from 'react'
 import { StyleSheet, Text, TextInput, View } from 'react-native'
 import { addressHelper } from '../../helpers'
+import { styles } from '../../assets/styles'
 
 function AddressInput({ addressable, onChangeValue }) {
   return (
     <View>
-      <View style={styles.addressInput.addressFieldView}>
-        <Text style={styles.addressInput.addressFieldName}>Address</Text>
+      <View style={inlineStyles.addressFieldView}>
+        <Text style={inlineStyles.addressFieldName}>Address</Text>
         <TextInput
-          style={styles.addressInput.addressFieldValue}
+          style={styles.inputField}
           onChangeText={(address) => { onChangeValue('address', address) }}
           value={addressHelper.address(addressable)}
         />
       </View>
 
-      <View style={styles.addressInput.addressFieldView}>
-        <Text style={styles.addressInput.addressFieldName}>City</Text>
+      <View style={inlineStyles.addressFieldView}>
+        <Text style={inlineStyles.addressFieldName}>City</Text>
         <TextInput
-          style={styles.addressInput.addressFieldValue}
+          style={styles.inputField}
           onChangeText={(city) => { onChangeValue('city', city) }}
           value={addressHelper.city(addressable)}
         />
       </View>
 
-      <View style={styles.addressInput.addressFieldView}>
-        <Text style={styles.addressInput.addressFieldName}>State</Text>
+      <View style={inlineStyles.addressFieldView}>
+        <Text style={inlineStyles.addressFieldName}>State</Text>
         <TextInput
-          style={styles.addressInput.addressFieldValue}
+          style={styles.inputField}
           onChangeText={(state) => { onChangeValue('state', state) }}
           value={addressHelper.state(addressable)}
         />
       </View>
 
-      <View style={styles.addressInput.addressFieldView}>
-        <Text style={styles.addressInput.addressFieldName}>ZIP Code</Text>
+      <View style={inlineStyles.addressFieldView}>
+        <Text style={inlineStyles.addressFieldName}>ZIP Code</Text>
         <TextInput
-          style={styles.addressInput.addressFieldValue}
+          style={styles.inputField}
           onChangeText={(zipCode) => { onChangeValue('zip_code', zipCode) }}
           value={addressHelper.zipCode(addressable)}
         />
@@ -46,12 +47,10 @@ function AddressInput({ addressable, onChangeValue }) {
 
 export { AddressInput }
 
-const styles = StyleSheet.create(
+const inlineStyles = StyleSheet.create(
   {
-    addressInput: {
-      addressFieldView: { flexDirection: "row", margin: 5, alignItems: 'center' },
-      addressFieldName: { fontWeight: "bold", marginRight: 5 },
-      addressFieldValue: {}
-    }
+    addressFieldView: { flexDirection: "row", margin: 5, alignItems: 'center' },
+    addressFieldName: { fontWeight: "bold", marginRight: 5, display:'flex', width:'25vw', justifyContent:'flex-end'},
+    addressFieldValue: {}
   }
 )

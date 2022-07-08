@@ -1,10 +1,12 @@
 import React, { useEffect, useReducer } from 'react'
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native'
+import { StyleSheet, Text, TextInput, View } from 'react-native'
+import { Button } from 'react-native-paper'
 import { Picker } from '@react-native-picker/picker'
 import { AddressInput } from '../components'
 import { caregiverApi } from '../../api'
 import { valueHelper, alertHelper, caregiverHelper, userCredentialsHelper, currentUserHelper } from "../../helpers"
 import { relationships } from "../../types"
+import { styles } from '../../assets/styles'
 
 function CaregiverInfo(props) {
   const [state, dispatch] = useReducer(updateState, initialState())
@@ -61,34 +63,31 @@ function CaregiverInfo(props) {
   const isNewCaregiver = !valueHelper.isNumberValue(caregiverHelper.id(caregiver))
 
   return (
-    <View style={styles.caregiverInfo.view}>
-      <View style={styles.caregiverInfo.infoArea}>
-        <View style={styles.caregiverInfo.profileFieldView}>
-          <Text style={styles.caregiverInfo.profileFieldName}>First Name</Text>
+    <View style={styles.mainBody}>
+      <View style={inlineStyles.infoArea}>
+        <View style={inlineStyles.profileFieldView}>
+          <Text style={inlineStyles.profileFieldName}>First Name</Text>
           <TextInput
-            style={styles.caregiverInfo.profileFieldValue}
+            style={styles.inputField}
             onChangeText={(firstName) => { changeValue('first_name', firstName) }}
             value={caregiverHelper.firstName(caregiver)}
           />
         </View>
 
-        <View style={styles.caregiverInfo.profileFieldView}>
-          <Text style={styles.caregiverInfo.profileFieldName}>Last Name</Text>
+        <View style={inlineStyles.profileFieldView}>
+          <Text style={inlineStyles.profileFieldName}>Last Name</Text>
           <TextInput
-            style={styles.caregiverInfo.profileFieldValue}
+            style={styles.inputField}
             onChangeText={(lastName) => { changeValue('last_name', lastName) }}
             value={caregiverHelper.lastName(caregiver)}
           />
         </View>
 
-        <View style={styles.caregiverInfo.profileFieldView}>
-          <Text style={styles.caregiverInfo.profileFieldName}>Relationship</Text>
-          <Text style={styles.caregiverInfo.profileFieldValue}>{caregiverHelper.relationship(caregiver)}</Text>
-        </View>
-        <View>
-          <Picker
+        <View style={inlineStyles.profileFieldView}>
+          <Text style={inlineStyles.profileFieldName}>Relationship</Text>
+           <Picker
             enabled={true}
-            style={styles.caregiverInfo.profileFieldValue}
+            style={styles.inputField}
             selectedValue={caregiverHelper.relationship(caregiver)}
             onValueChange={(relationship) => { changeValue('relationship', relationship) }}>
             {
@@ -103,15 +102,24 @@ function CaregiverInfo(props) {
 
         <AddressInput addressable={caregiver} onChangeValue={changeValue} />
 
-        <View style={{ flexDirection: 'row' }}>
+        <View style={{ flexDirection: 'row', justifyContent:'between', display:'flex', marginTop:8 }}>
           <Button
+            mode="outlined" 
             onPress={cancel}
-            title='Cancel'
-            style={{ marginRight: 10 }}
-          />
+            style={ {borderColor:'#03718D'}}
+            color="#03718D"
+            compact='true'
+          >
+            Cancel
+          </Button>
           <Button
             onPress={ok}
-            title='OK' />
+            style={[styles.btnPrimary, { marginRight: 10, display:'flex', marginLeft:'auto', textAlign:'center' }]}
+            color="#03718D"
+            compact='true'
+            title='Save'>
+            <Text style={styles.buttonTextStyle}>Save</Text>
+          </Button>
         </View>
       </View>
     </View>
@@ -195,14 +203,12 @@ function CaregiverInfo(props) {
 
 export { CaregiverInfo }
 
-const styles = StyleSheet.create(
+const inlineStyles = StyleSheet.create(
   {
-    caregiverInfo: {
-      view: { flex: 1, flexDirection: 'column' },
-      infoArea: { flexDirection: "column" },
-      profileFieldView: { flexDirection: "row", margin: 5, alignItems: 'center' },
-      profileFieldName: { fontWeight: "bold", marginRight: 5 },
-      profileFieldValue: {}
-    }
+    view: { flex: 1, flexDirection: 'column' },
+    infoArea: { flexDirection: "column" },
+    profileFieldView: { flexDirection: "row", margin: 5, alignItems: 'center' },
+    profileFieldName: { fontWeight: "bold", marginRight:5, display:'flex', width:'25vw', justifyContent:'flex-end' },
+    profileFieldValue: { border:'solid #ccc 1px' }
   }
 )

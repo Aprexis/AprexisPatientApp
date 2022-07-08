@@ -37,12 +37,12 @@ function MedicationsScreen(props) {
             </View>
           </View>
       </View>
-      <View style={{ flex: 1, padding:8 }}>
+      <View style={{ flex: 1, padding:8, paddingTop:0 }}>
         <Tab.Navigator
           style={{ marginBottom:12, textAlign:'center' }}
           screenOptions={{
             tabBarLabelStyle: { fontSize: 14, fontWeight: '600' },
-            tabBarStyle: { backgroundColor: '#E1EBF1' },
+            tabBarStyle: { backgroundColor: '#E1EBF1', marginBottom:14 },
             tabBarIndicatorStyle: { backgroundColor:'#03718D' },
           }}
         >

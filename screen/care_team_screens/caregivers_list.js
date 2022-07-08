@@ -3,24 +3,25 @@ import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { AddButton, DeleteButton, FontAwesome5Icon, ListView } from '../components'
 import { caregiverApi } from "../../api"
 import { alertHelper, patientHelper, currentUserHelper, userCredentialsHelper, caregiverHelper, valueHelper } from '../../helpers'
+import { styles } from '../../assets/styles'
 
 function Caregiver(props) {
   const { navigation, caregiver, onDelete } = props
   const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
 
   return (
-    <View style={styles.caregiver.view}>
-      <FontAwesome5Icon size={40} style={styles.caregiver.icon} name="hand-holding-medical" />
-      <Text style={styles.caregiver.text}>{caregiverHelper.name(caregiver)}</Text>
-      <Text style={styles.caregiver.text}>{caregiverHelper.relationship(caregiver)}</Text>
-      <DeleteButton iconProps={{ size: 30 }} itemName='Caregiver' onPress={onDelete} />
-      <TouchableOpacity
-        activeOpacity={0.5}
-        style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'center' }}
-        onPress={() => { navigation.navigate('CaregiverScreen', { currentUser, currentPatient, caregiver }) }}>
-        <FontAwesome5Icon size={30} name="angle-right" />
-      </TouchableOpacity>
-    </View>
+    <TouchableOpacity
+      activeOpacity={0.5}
+      style={styles.listButton}
+      onPress={() => { navigation.navigate('CaregiverScreen', { currentUser, currentPatient, caregiver }) }}>
+      <View style={{ flexDirection: "row", alignItems:'center', width:'95%'}}>
+        <FontAwesome5Icon size={27} style={styles.icon} name="user" solid/>
+        <Text style={inlineStyles.text}>{caregiverHelper.name(caregiver)}</Text>
+      </View>
+      <View>
+        <FontAwesome5Icon size={30} name="angle-right" style={[styles.icon, inlineStyles.medIcon]} />
+      </View>
+    </TouchableOpacity>
   )
 }
 
@@ -32,9 +33,10 @@ function CaregiversList(props) {
   useEffect(() => { setForceUpdate(false) })
 
   return (
-    <View style={{ flex: 1 }}>
-      <AddButton onPress={addCaregiver} />
-
+    <View style={styles.mainBody}>
+      <View style={{ display:'flex', justifyContent:'flex-end', textAlign:'right'}}>
+        <AddButton onPress={addCaregiver} />
+      </View>
       <ListView
         forceUpdate={forceUpdate}
         label='Caregiver'
@@ -107,12 +109,9 @@ function CaregiversList(props) {
 
 export { CaregiversList }
 
-const styles = StyleSheet.create(
+const inlineStyles = StyleSheet.create(
   {
-    caregiver: {
-      view: { flex: 1, flexDirection: "row", height: 50, margin: 5, backgroundColor: "#c8c8c8" },
-      icon: { color: "grey" },
-      text: { fontSize: 20, fontWeight: "bold", marginRight: 30 }
-    }
+    text: { color: "#112B37", fontSize: 18, fontWeight: "500", marginLeft:5 },
+    medIcon: { marginRight: 5 }
   }
 )
