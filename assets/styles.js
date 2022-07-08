@@ -49,6 +49,7 @@ export const styles = StyleSheet.create(
     btnPrimary: {
       backgroundColor: themeColor.brightBlue,
       color: themeColor.darkBlue,
+      lignItems: 'center',
     },
     buttonStyle: {
       backgroundColor: themeColor.brightBlue,
@@ -83,10 +84,9 @@ export const styles = StyleSheet.create(
       flex: 1,
       color: themeColor.darkBlue,
       fontWeight: '500',
-      paddingLeft: 15,
-      paddingRight: 15,
+      padding: 10,
       borderWidth: 1,
-      borderRadius: 10,
+      borderRadius: 5,
       borderColor: '#dadae8',
       backgroundColor:'rgba(255,255,255,.65)',
       outlineColor: '#fff',

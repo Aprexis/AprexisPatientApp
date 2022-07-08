@@ -7,6 +7,9 @@ import { CaregiversList } from './caregivers_list'
 import { HcpsList } from './hcps_list'
 import { PharmacistsList } from './pharmacists_list'
 import { currentUserHelper } from '../../helpers'
+import { Button } from 'react-native-paper'
+import { FontAwesome5Icon } from '../components'
+import { styles } from '../../assets/styles'
 
 const Stack = createNativeStackNavigator()
 const Tab = createMaterialTopTabNavigator()
@@ -16,9 +19,19 @@ function CaregiversScreenStack(props) {
   const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
 
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={
+        { 
+          headerStyle: { backgroundColor: '#E0EBF1', height:35 }, 
+          headerTitleStyle:{ color:'#003949' },
+          headerShadowVisible: false
+        }
+      }
+    >
       <Stack.Screen
-        name="CaregiversList">
+        name="CaregiversList"
+        options={{ headerShown: false }}
+        >
         {(props) => <CaregiversList {...props} currentUser={currentUser} currentPatient={currentPatient} />}
       </Stack.Screen>
       <Stack.Screen
@@ -33,13 +46,41 @@ function CareTeamScreen(props) {
   const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
 
   return (
-    <SafeAreaView style={styles.careTeamScreen.safeArea}>
-      <View style={styles.careTeamScreen.titleView}>
-        <Text style={styles.careTeamScreen.titleText}>CARE TEAM</Text>
+    <SafeAreaView style={ styles.mainBody }>
+      <View style={ [styles.row, { justifyContent:'flex-end' }] }>
+          <View style={{ flex:.6, textAlign:'center' }}>
+            <Text style={inlineStyles.titleText}>CARE TEAM</Text>
+          </View>
+          <View style={{ flex:.2, paddingRight:2 }}>
+            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+              <Button
+                icon={({ size, color }) => (
+                  <FontAwesome5Icon name="plus" size={14} color="#03718D" style={{ marginLeft:'-8px' }}  />
+                )}
+                mode="outlined" 
+                onPress={() => console.log('Add Care Team Member')}
+                contentStyle={{ height:30 }}
+                style={ {borderColor:'#03718D'}}
+                color="#03718D"
+                compact='true'
+              >
+                Add
+              </Button>
+            </View>
+          </View>
       </View>
-      <Tab.Navigator>
+      <View style={{ flex: 1, padding:8, paddingTop:0 }}>
+        <Tab.Navigator
+          style={{ marginBottom:12, textAlign:'center' }}
+          screenOptions={{
+            tabBarLabelStyle: { fontSize: 14, fontWeight: '600' },
+            tabBarStyle: { backgroundColor: '#E1EBF1', marginBottom:14  },
+            tabBarIndicatorStyle: { backgroundColor:'#03718D' },
+          }}
+        >
         <Tab.Screen
           name="HCPs"
+          style={{ padding: 8, fontWeight: '700' }}
           options={{ headerShown: false }}>
           {(props) => <HcpsList {...props} currentUser={currentUser} currentPatient={currentPatient} />}
         </Tab.Screen>
@@ -53,19 +94,18 @@ function CareTeamScreen(props) {
           options={{ headerShown: false }}>
           {(props) => <PharmacistsList {...props} currentUser={currentUser} currentPatient={currentPatient} />}
         </Tab.Screen>
-      </Tab.Navigator>
+        </Tab.Navigator>
+      </View>
     </SafeAreaView>
   )
-}
+} 
 
 export { CareTeamScreen }
 
-const styles = StyleSheet.create(
+const inlineStyles = StyleSheet.create(
   {
-    careTeamScreen: {
-      safeArea: { flex: 1 },
-      titleView: { flexDirection: "row", justifyContent: "center", alignContent: "center" },
-      titleText: { fontSize: 30, fontWeight: "bold" }
-    }
+    titleView: { flexDirection: "row", justifyContent: "center", alignContent: "center", marginTop:10 },
+    titleText: { fontSize: 18, fontWeight: "bold", color: "#112B37", margin:'0 auto'}
   }
 )
+

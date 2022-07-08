@@ -10,7 +10,15 @@ function Allergies(props) {
   const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
 
   return (
-    <Stack.Navigator>
+    <Stack.Navigator
+      screenOptions={
+        { 
+          headerStyle: { backgroundColor: '#E0EBF1', height:35 }, 
+          headerTitleStyle:{ color:'#003949' },
+          headerShadowVisible: false
+        }
+      }
+    >
       <Stack.Screen
         name="PatientAllergiesList"
         options={{ title: "Allergies", headerShown: false }}>

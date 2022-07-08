@@ -1,10 +1,12 @@
 import React, { useEffect, useReducer } from 'react'
-import { Button, StyleSheet, Text, TextInput, View } from 'react-native'
+import { StyleSheet, Text, TextInput, View } from 'react-native'
+import { Button } from 'react-native-paper'
 import { Picker } from '@react-native-picker/picker'
 import { NumberInput } from "../components"
 import { patientAllergyApi } from '../../api'
 import { valueHelper, alertHelper, currentUserHelper, patientAllergyHelper, userCredentialsHelper } from "../../helpers"
 import { allergyCategories } from '../../types'
+import { styles } from '../../assets/styles'
 
 function PatientAllergyInfo(props) {
   const [state, dispatch] = useReducer(updateState, initialState())
@@ -67,25 +69,22 @@ function PatientAllergyInfo(props) {
   const isNewPatientAllergy = !valueHelper.isNumberValue(patientAllergyHelper.id(patientAllergy))
 
   return (
-    <View style={styles.allergyInfo.view}>
-      <View style={styles.allergyInfo.infoArea}>
-        <View style={styles.allergyInfo.profileFieldView}>
-          <Text style={styles.allergyInfo.profileFieldName}>Name</Text>
+    <View style={styles.mainBody}>
+      <View style={inlineStyles.infoArea}>
+        <View style={inlineStyles.profileFieldView}>
+          <Text style={inlineStyles.profileFieldName}>Name</Text>
           <TextInput
             editable={isNewPatientAllergy}
-            style={styles.allergyInfo.profileFieldValue}
+            style={styles.inputField}
             onChangeText={(allergyName) => { changeValue('allergy_name', allergyName) }}
             value={patientAllergyHelper.allergyName(patientAllergy)}
           />
         </View>
 
-        <View style={styles.allergyInfo.profileFieldView}>
-          <Text style={styles.allergyInfo.profileFieldName}>Type</Text>
-          <Text style={styles.allergyInfo.profileFieldValue}>{patientAllergyHelper.allergyType(patientAllergy)}</Text>
-        </View>
-
-        <View>
+        <View style={inlineStyles.profileFieldView}>
+          <Text style={inlineStyles.profileFieldName}>Type</Text>
           <Picker
+            style={[styles.inputField, {fontSize:15}]}
             enabled={!valueHelper.isStringValue(allergyType)}
             selectedValue={patientAllergyHelper.allergyType(patientAllergy)}
             onValueChange={(allergyType) => { changeValue('allergy_type', allergyType) }}>
@@ -99,37 +98,46 @@ function PatientAllergyInfo(props) {
           </Picker>
         </View>
 
-        <View style={styles.allergyInfo.profileFieldView}>
-          <Text style={styles.allergyInfo.profileFieldName}>Year</Text>
+        <View style={inlineStyles.profileFieldView}>
+          <Text style={inlineStyles.profileFieldName}>Year</Text>
           {
             !state.needLoad &&
             <NumberInput
-              style={styles.allergyInfo.profileFieldValue}
+              style={styles.inputField}
               onChangeText={(year) => { changeValue('year', year) }}
               value={patientAllergyHelper.year(patientAllergy)}
             />
           }
         </View>
 
-        <View style={styles.allergyInfo.profileFieldView}>
-          <Text style={styles.allergyInfo.profileFieldName}>Reaction</Text>
+        <View style={inlineStyles.profileFieldView}>
+          <Text style={inlineStyles.profileFieldName}>Reaction</Text>
           <TextInput
-            style={styles.allergyInfo.profileFieldValue}
+            style={styles.inputField}
             onChangeText={(reaction) => { changeValue('reaction', reaction) }}
             value={patientAllergyHelper.reaction(patientAllergy)}
           />
         </View>
       </View>
 
-      <View style={{ flexDirection: 'row' }}>
+      <View style={{ flexDirection: 'row', justifyContent:'between', display:'flex', marginTop:8 }}>
         <Button
+          mode="outlined" 
           onPress={cancel}
-          title='Cancel'
-          style={{ marginRight: 10 }}
-        />
+          style={ {borderColor:'#03718D'}}
+          color="#03718D"
+          compact='true'
+        >
+          Cancel
+        </Button>
         <Button
           onPress={ok}
-          title='OK' />
+          style={[styles.btnPrimary, { marginRight: 10, display:'flex', marginLeft:'auto', textAlign:'center' }]}
+          color="#03718D"
+          compact='true'
+          title='Save'>
+          <Text style={styles.buttonTextStyle}>Save</Text>
+        </Button>
       </View>
     </View>
   )
@@ -212,14 +220,12 @@ function PatientAllergyInfo(props) {
 
 export { PatientAllergyInfo }
 
-const styles = StyleSheet.create(
+const inlineStyles = StyleSheet.create(
   {
-    allergyInfo: {
-      view: {},
-      infoArea: { flexDirection: "column" },
-      profileFieldView: { flexDirection: "row", margin: 5, alignItems: 'center' },
-      profileFieldName: { fontWeight: "bold", marginRight: 5 },
-      profileFieldValue: {}
-    }
+    view: {},
+    infoArea: { flexDirection: "column" },
+    profileFieldView: { flexDirection: "row", margin: 5, alignItems: 'center' },
+    profileFieldName: { fontWeight: "bold", marginRight:5, display:'flex', width:'20vw', justifyContent:'flex-end' },
+    profileFieldValue: {}
   }
 )
