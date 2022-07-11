@@ -20,9 +20,13 @@ function ListView({ forceUpdate, label, onLoadPage, onPresentItem, pageSize, plu
   useEffect(loadData)
   useEffect(
     () => {
-      const unsubscribe = navigation.addListener('focus', (_event) => { dispatch({ type: 'NEED-LOAD' }) })
+      navigation.addListener('focus', (_event) => { dispatch({ type: 'FOCUS' }) })
+      navigation.addListener('blur', (_event) => { dispatch({ type: 'BLUR' }) })
 
-      return unsubscribe;
+      return () => {
+        navigation.removeListener('focus')
+        navigation.removeListener('blur')
+      }
     },
     [navigation]
   )
@@ -179,6 +183,12 @@ function ListView({ forceUpdate, label, onLoadPage, onPresentItem, pageSize, plu
 
   function updateState(oldState, action) {
     switch (action.type) {
+      case 'BLUR':
+        return { ...oldState, needLoad: false, scrolling: false }
+
+      case 'FOCUS':
+        return { ...oldState, needLoad: true, lastPage: { number: 1, pageSize: workingPageSize, total: -1 } }
+
       case 'LIST':
         return { ...oldState, ...action.data, needLoad: false, scrolling: false }
 

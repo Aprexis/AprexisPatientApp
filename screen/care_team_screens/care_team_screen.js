@@ -2,13 +2,10 @@ import React from 'react'
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
-import { CaregiverInfo } from './caregiver_info'
 import { CaregiversList } from './caregivers_list'
 import { HcpsList } from './hcps_list'
 import { PharmacistsList } from './pharmacists_list'
 import { currentUserHelper } from '../../helpers'
-import { Button } from 'react-native-paper'
-import { FontAwesome5Icon } from '../components'
 import { styles } from '../../assets/styles'
 
 const Stack = createNativeStackNavigator()
@@ -33,10 +30,6 @@ function CaregiversScreenStack(props) {
         options={{ headerShown: false }}
       >
         {(props) => <CaregiversList {...props} currentUser={currentUser} currentPatient={currentPatient} />}
-      </Stack.Screen>
-      <Stack.Screen
-        name="CaregiverScreen">
-        {(props) => <CaregiverInfo {...props} caregiver={caregiver} currentUser={currentUser} currentPatient={currentPatient} />}
       </Stack.Screen>
     </Stack.Navigator>
   )

@@ -1,1 +1,1 @@
-export * from './reminder_info'
+export * from './reminder_modal'

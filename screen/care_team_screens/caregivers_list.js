@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from 'react'
+import React, { useReducer } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { AddButton, DeleteButton, FontAwesome5Icon, ListView } from '../components'
+import { AddButton, FontAwesome5Icon, ListView } from '../components'
 import { caregiverApi } from "../../api"
 import { alertHelper, patientHelper, currentUserHelper, userCredentialsHelper, caregiverHelper, valueHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
+import { CaregiverModal } from './caregiver_modal'
 
 function Caregiver(props) {
-  const { navigation, caregiver } = props
+  const { caregiver, onEdit } = props
   const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
 
   return (
     <TouchableOpacity
       activeOpacity={0.5}
       style={styles.listButton}
-      onPress={() => { navigation.navigate('CaregiverScreen', { currentUser, currentPatient, caregiver }) }}>
+      onPress={() => { onEdit(caregiver) }}>
       <View style={{ flexDirection: "row", alignItems: 'center', width: '95%' }}>
         <FontAwesome5Icon size={27} style={styles.icon} name="user" solid />
         <Text style={inlineStyles.text}>{caregiverHelper.name(caregiver)}</Text>
@@ -28,17 +29,23 @@ function Caregiver(props) {
 function CaregiversList(props) {
   const { navigation } = props
   const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
-  const [forceUpdate, setForceUpdate] = useState(false)
-
-  useEffect(() => { setForceUpdate(false) })
+  const [state, dispatch] = useReducer(updateState, initialState())
 
   return (
     <View style={styles.mainBody}>
       <View style={{ display: 'flex', justifyContent: 'flex-end', textAlign: 'right' }}>
         <AddButton onPress={addCaregiver} />
       </View>
+      <CaregiverModal
+        action={state.modalAction}
+        currentPatient={currentPatient}
+        currentUser={currentUser}
+        onClose={closeModal}
+        caregiver={state.caregiver}
+        visible={state.modalVisible}
+      />
       <ListView
-        forceUpdate={forceUpdate}
+        forceUpdate={state.forceUpdate}
         label='Caregiver'
         navigation={navigation}
         onLoadPage={loadPage}
@@ -49,28 +56,12 @@ function CaregiversList(props) {
     </View>
   )
 
-  function loadPage(number, size, onSuccess) {
-    userCredentialsHelper.getUserCredentials(
-      (userCredentials) => {
-        if (!valueHelper.isValue(userCredentials)) {
-          return
-        }
-        caregiverApi.listForPatient(
-          userCredentials,
-          patientHelper.id(currentPatient),
-          { for_active: true, page: { number, size, total: 0 }, sort: 'created_at-,medication.label' },
-          onSuccess,
-          (error) => {
-            alertHelper.error(error)
-            return
-          }
-        )
-      }
-    )
+  function addCaregiver() {
+    dispatch({ type: 'ADD' })
   }
 
-  function addCaregiver() {
-    navigation.navigate('CaregiverScreen', { currentUser, currentPatient })
+  function closeModal() {
+    dispatch({ type: 'CLOSE' })
   }
 
   function deleteCaregiver(caregiver) {
@@ -95,15 +86,76 @@ function CaregiversList(props) {
     )
   }
 
+  function editCaregiver(caregiver) {
+    dispatch({ type: 'EDIT', caregiver })
+  }
+
+
+  function initialState() {
+    return { modalVisible: false, forceUpdate: props.forceUpdate }
+  }
+
+  function loadPage(number, size, onSuccess) {
+    userCredentialsHelper.getUserCredentials(
+      (userCredentials) => {
+        if (!valueHelper.isValue(userCredentials)) {
+          return
+        }
+        caregiverApi.listForPatient(
+          userCredentials,
+          patientHelper.id(currentPatient),
+          { for_active: true, page: { number, size, total: 0 }, sort: 'created_at-,medication.label' },
+          (page, pageHeaders) => {
+            dispatch({ type: 'UPDATED' })
+            onSuccess(page, pageHeaders)
+          },
+          (error) => {
+            alertHelper.error(error)
+            return
+          }
+        )
+      }
+    )
+  }
+
+
   function presentItem(caregiver, caregiverIdx) {
     return (
       <Caregiver
         key={`cargiver-${caregiverHelper.id(caregiver)}-${caregiverIdx}`}
         caregiver={caregiver}
         onDelete={() => { deleteCaregiver(caregiver) }}
+        onEdit={() => { editCaregiver(caregiver) }}
         {...props}
       />
     )
+  }
+
+  function updateState(oldState, action) {
+    switch (action.type) {
+      case 'ADD':
+        return { ...oldState, modalVisible: true, modalAction: 'ADD' }
+
+      case 'CLOSE':
+        const newState = { ...oldState }
+        delete newState.modalAction
+        delete newState.reminder
+        newState.modalVisible = !newState.modalVisible
+        newState.forceUpdate = !newState.modalVisible
+        return newState
+
+      case 'EDIT':
+        return { ...oldState, modalVisible: true, modalAction: 'EDIT', caregiver: action.caregiver }
+
+      case 'FORCE_UPDATE':
+        return { ...oldState, forceUpdate: true }
+
+      case 'UPDATED':
+        return { ...oldState, forceUpdate: false }
+
+      default:
+        return oldState
+    }
   }
 }
 

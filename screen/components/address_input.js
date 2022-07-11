@@ -50,7 +50,7 @@ export { AddressInput }
 const inlineStyles = StyleSheet.create(
   {
     addressFieldView: { flexDirection: "row", margin: 5, alignItems: 'center' },
-    addressFieldName: { fontWeight: "bold", marginRight: 5, display:'flex', width:'25vw', justifyContent:'flex-end'},
+    addressFieldName: { fontWeight: "bold", marginRight: 5, display: 'flex', justifyContent: 'flex-end' },
     addressFieldValue: {}
   }
 )

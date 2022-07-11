@@ -1,5 +1,6 @@
 import React from "react"
 import { Text } from "react-native"
+import { StackActions } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs'
 import { CareTeamScreen } from './care_team_screens'
@@ -101,9 +102,7 @@ function PatientScreen(props) {
   const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
 
   return (
-    <Tab.Navigator
-      barStyle={{ backgroundColor: '#03718D' }}
-    >
+    <Tab.Navigator barStyle={{ backgroundColor: '#03718D' }} screenOptions={{ unmountOnBlur: true }}>
       <Tab.Screen
         name="Home"
         options={
@@ -121,7 +120,7 @@ function PatientScreen(props) {
           {
             headerShown: false,
             tabBarLabel: (<Text style={{ fontSize: 15 }}>MEDICATIONS</Text>),
-            tabBarIcon: ({ color }) => (<FontAwesome5Icon name="pills" color={color} size={28} style={{ marginTop: -4 }} />)
+            tabBarIcon: ({ color }) => (<FontAwesome5Icon name="pills" color={color} size={28} style={{ marginTop: -4 }} />),
           }
         }>
         {(props) => <MedicationsScreenStack {...props} currentUser={currentUser} currentPatient={currentPatient} />}
