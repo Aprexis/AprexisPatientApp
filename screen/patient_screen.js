@@ -18,7 +18,7 @@ function headerOptions(navigation, currentUser, currentPatient) {
     headerTitle: `Hi ${patientHelper.firstName(currentPatient)}!`,
     headerStyle: { backgroundColor: "#03718D" },
     headerTintColor: '#fff',
-    headerTitleStyle: { fontWeight:'600', position:'relative', left:'-10px'  }
+    headerTitleStyle: { fontWeight: '600', position: 'relative', left: -10 }
   }
 }
 
@@ -44,11 +44,11 @@ function HomeScreenStack(props) {
 
   return (
     <Stack.Navigator
-      initialRouteName={initialRouteName} 
+      initialRouteName={initialRouteName}
       screenOptions={
-        { 
-          headerStyle: { backgroundColor: '#E0EBF1' }, 
-          headerTitleStyle:{color:'#003949'},
+        {
+          headerStyle: { backgroundColor: '#E0EBF1' },
+          headerTitleStyle: { color: '#003949' },
           headerShadowVisible: false
         }
       }
@@ -74,9 +74,9 @@ function MedicationsScreenStack(props) {
   return (
     <Stack.Navigator
       screenOptions={
-        { 
-          headerStyle: { backgroundColor: '#E0EBF1', height:35 }, 
-          headerTitleStyle:{ color:'#003949' },
+        {
+          headerStyle: { backgroundColor: '#E0EBF1', height: 35 },
+          headerTitleStyle: { color: '#003949' },
           headerShadowVisible: false
         }
       }
@@ -110,7 +110,7 @@ function PatientScreen(props) {
           {
             headerShown: false,
             tabBarLabel: (<Text style={{ fontSize: 15 }}>HOME</Text>),
-            tabBarIcon: ({ color }) => (<FontAwesome5Icon name="home" color={color} size={27} style={{ marginTop:'-4px' }}/>)
+            tabBarIcon: ({ color }) => (<FontAwesome5Icon name="home" color={color} size={27} style={{ marginTop: -4 }} />)
           }
         }>
         {(props) => <HomeScreenStack {...props} currentUser={currentUser} currentPatient={currentPatient} />}
@@ -121,7 +121,7 @@ function PatientScreen(props) {
           {
             headerShown: false,
             tabBarLabel: (<Text style={{ fontSize: 15 }}>MEDICATIONS</Text>),
-            tabBarIcon: ({ color }) => (<FontAwesome5Icon name="pills" color={color} size={28} style={{ marginTop:'-4px' }}/>)
+            tabBarIcon: ({ color }) => (<FontAwesome5Icon name="pills" color={color} size={28} style={{ marginTop: -4 }} />)
           }
         }>
         {(props) => <MedicationsScreenStack {...props} currentUser={currentUser} currentPatient={currentPatient} />}
@@ -132,7 +132,7 @@ function PatientScreen(props) {
           {
             headerSHown: false,
             tabBarLabel: (<Text style={{ fontSize: 15 }}>CARE TEAM</Text>),
-            tabBarIcon: ({ color }) => (<FontAwesome5Icon name="hand-holding-medical" color={color} size={28}  style={{ marginTop:'-4px' }}/>)
+            tabBarIcon: ({ color }) => (<FontAwesome5Icon name="hand-holding-medical" color={color} size={28} style={{ marginTop: -4 }} />)
           }
         }>
         {(props) => <CareTeamScreenStack {...props} currentUser={currentUser} currentPatient={currentPatient} />}
