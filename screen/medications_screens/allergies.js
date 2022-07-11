@@ -12,9 +12,9 @@ function Allergies(props) {
   return (
     <Stack.Navigator
       screenOptions={
-        { 
-          headerStyle: { backgroundColor: '#E0EBF1', height:35 }, 
-          headerTitleStyle:{ color:'#003949' },
+        {
+          headerStyle: { backgroundColor: '#E0EBF1', height: 35 },
+          headerTitleStyle: { color: '#003949' },
           headerShadowVisible: false
         }
       }

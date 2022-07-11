@@ -14,8 +14,8 @@ function PatientMedication(props) {
       activeOpacity={0.5}
       style={styles.listButton}
       onPress={() => { navigation.navigate('MedicationScreen', { currentUser, currentPatient, patientMedication }) }}>
-      <View style={{ flexDirection: "row", alignItems:'center', width:'95%'}}>
-        <FontAwesome5Icon size={35} style={ styles.icon } name={patientMedicationHelper.medicationIcon(patientMedication)} />
+      <View style={{ flexDirection: "row", alignItems: 'center', width: '95%' }}>
+        <FontAwesome5Icon size={35} style={styles.icon} name={patientMedicationHelper.medicationIcon(patientMedication)} />
         <Text style={inlineStyles.text}>{patientMedicationHelper.medicationLabel(patientMedication)}</Text>
       </View>
       <View>
@@ -75,7 +75,7 @@ export { PatientMedicationsList }
 
 const inlineStyles = StyleSheet.create(
   {
-    text: { color: "#112B37", fontSize: 18, fontWeight: "500", marginLeft:5 },
+    text: { color: "#112B37", fontSize: 18, fontWeight: "500", marginLeft: 5 },
     medIcon: { marginRight: 5 }
   }
 )

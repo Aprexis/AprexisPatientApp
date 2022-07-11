@@ -85,7 +85,7 @@ function CaregiverInfo(props) {
 
         <View style={inlineStyles.profileFieldView}>
           <Text style={inlineStyles.profileFieldName}>Relationship</Text>
-           <Picker
+          <Picker
             enabled={true}
             style={styles.inputField}
             selectedValue={caregiverHelper.relationship(caregiver)}
@@ -102,11 +102,11 @@ function CaregiverInfo(props) {
 
         <AddressInput addressable={caregiver} onChangeValue={changeValue} />
 
-        <View style={{ flexDirection: 'row', justifyContent:'between', display:'flex', marginTop:8 }}>
+        <View style={{ flexDirection: 'row', justifyContent: 'between', display: 'flex', marginTop: 8 }}>
           <Button
-            mode="outlined" 
+            mode="outlined"
             onPress={cancel}
-            style={ {borderColor:'#03718D'}}
+            style={{ borderColor: '#03718D' }}
             color="#03718D"
             compact='true'
           >
@@ -114,7 +114,7 @@ function CaregiverInfo(props) {
           </Button>
           <Button
             onPress={ok}
-            style={[styles.btnPrimary, { marginRight: 10, display:'flex', marginLeft:'auto', textAlign:'center' }]}
+            style={[styles.btnPrimary, { marginRight: 10, display: 'flex', marginLeft: 'auto', textAlign: 'center' }]}
             color="#03718D"
             compact='true'
             title='Save'>
@@ -208,7 +208,7 @@ const inlineStyles = StyleSheet.create(
     view: { flex: 1, flexDirection: 'column' },
     infoArea: { flexDirection: "column" },
     profileFieldView: { flexDirection: "row", margin: 5, alignItems: 'center' },
-    profileFieldName: { fontWeight: "bold", marginRight:5, display:'flex', width:'25vw', justifyContent:'flex-end' },
-    profileFieldValue: { border:'solid #ccc 1px' }
+    profileFieldName: { fontWeight: "bold", marginRight: 5, display: 'flex', width: '25vw', justifyContent: 'flex-end' },
+    profileFieldValue: { border: 'solid #ccc 1' }
   }
 )

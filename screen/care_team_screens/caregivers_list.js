@@ -6,7 +6,7 @@ import { alertHelper, patientHelper, currentUserHelper, userCredentialsHelper, c
 import { styles } from '../../assets/styles'
 
 function Caregiver(props) {
-  const { navigation, caregiver, onDelete } = props
+  const { navigation, caregiver } = props
   const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
 
   return (
@@ -14,8 +14,8 @@ function Caregiver(props) {
       activeOpacity={0.5}
       style={styles.listButton}
       onPress={() => { navigation.navigate('CaregiverScreen', { currentUser, currentPatient, caregiver }) }}>
-      <View style={{ flexDirection: "row", alignItems:'center', width:'95%'}}>
-        <FontAwesome5Icon size={27} style={styles.icon} name="user" solid/>
+      <View style={{ flexDirection: "row", alignItems: 'center', width: '95%' }}>
+        <FontAwesome5Icon size={27} style={styles.icon} name="user" solid />
         <Text style={inlineStyles.text}>{caregiverHelper.name(caregiver)}</Text>
       </View>
       <View>
@@ -34,7 +34,7 @@ function CaregiversList(props) {
 
   return (
     <View style={styles.mainBody}>
-      <View style={{ display:'flex', justifyContent:'flex-end', textAlign:'right'}}>
+      <View style={{ display: 'flex', justifyContent: 'flex-end', textAlign: 'right' }}>
         <AddButton onPress={addCaregiver} />
       </View>
       <ListView
@@ -111,7 +111,7 @@ export { CaregiversList }
 
 const inlineStyles = StyleSheet.create(
   {
-    text: { color: "#112B37", fontSize: 18, fontWeight: "500", marginLeft:5 },
+    text: { color: "#112B37", fontSize: 18, fontWeight: "500", marginLeft: 5 },
     medIcon: { marginRight: 5 }
   }
 )
