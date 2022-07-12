@@ -1,11 +1,10 @@
-import React, { useReducer } from 'react'
-import { Modal, StyleSheet, Text, View } from 'react-native'
-import { Button } from 'react-native-paper'
+import React from 'react'
+import { Text, View } from 'react-native'
 import Checkbox from 'expo-checkbox'
 import { Picker } from '@react-native-picker/picker'
 import { reminderApi } from '../../api'
-import { DateInput, NumberInput } from '../components'
-import { valueHelper, alertHelper, dateHelper, reminderHelper, userCredentialsHelper, patientHelper, currentUserHelper } from "../../helpers"
+import { AprexisModal, DateInput, NumberInput } from '../components'
+import { valueHelper, dateHelper, reminderHelper, patientHelper, currentUserHelper } from "../../helpers"
 import { reminderActions, reminderTypes } from '../../types'
 import { themeColor, styles } from '../../assets/styles'
 
@@ -19,7 +18,7 @@ const daysOfWeek = {
   saturday: 'Sa'
 }
 
-function DayOfWeekPicker({ reminder, changedReminder, dayOfWeek, onValueChange }) {
+function DayOfWeekPicker({ reminder, dayOfWeek, onValueChange }) {
   const label = daysOfWeek[dayOfWeek]
 
   return (
@@ -28,7 +27,7 @@ function DayOfWeekPicker({ reminder, changedReminder, dayOfWeek, onValueChange }
         color={themeColor.lightBlue}
         style={{ height: 20, width: 20 }}
         value={valueHelper.isSet(reminder[dayOfWeek])}
-        onValueChange={(newValue) => onValueChange(reminder, changedReminder, dayOfWeek, newValue)}
+        onValueChange={(newValue) => onValueChange(dayOfWeek, newValue)}
       />
       <Text style={styles.inlineLabel}>{label}</Text>
     </View>
@@ -75,26 +74,53 @@ function DayOfMonthPicker({ reminder, onDayOfMonthChange }) {
 }
 
 function ReminderModal(props) {
-  const [state, dispatch] = useReducer(updateState, initialState())
   const { currentPatient } = currentUserHelper.getCurrentProps(props)
-  const { visible } = props
-  const { reminder, changedReminder } = state
-  const isNewReminder = !valueHelper.isNumberValue(reminderHelper.id(reminder))
+  const { action, onClose, visible } = props
+  const isNewReminder = action == 'ADD'
   const hasPhone = valueHelper.isStringValue(patientHelper.phone(currentPatient))
   const hasEmail = valueHelper.isStringValue(patientHelper.email(currentPatient))
   const hasMobilePhone = valueHelper.isStringValue(patientHelper.mobilePhone(currentPatient))
 
   return (
-    <Modal visible={visible} onRequestClose={cancel} onShow={loadModal}>
+    <AprexisModal
+      action={action}
+      buildNewModel={buildNewModel}
+      createModel={createModel}
+      displayModel={displayModel}
+      getChangedModelFrom={getChangedModelFrom}
+      getModelFrom={getModelFrom}
+      helper={reminderHelper}
+      loadEditModel={loadEditModel}
+      onClose={onClose}
+      updateModel={updateModel}
+      visible={visible}
+    />
+  )
+
+  function buildNewModel(userCredentials, onSuccess, onError) {
+    reminderApi.buildNew(
+      userCredentials,
+      currentPatient.id,
+      (model) => {
+        const changedModel = reminderHelper.buildNewChanged(model)
+        onSuccess(model, changedModel)
+      },
+      onError
+    )
+  }
+
+  function createModel(userCredentials, changedModel, onSuccess, onError) {
+    reminderApi.create(userCredentials, changedModel, onSuccess, onError)
+  }
+
+  function displayModel(model, fields, inlineStyles, changeValue, setField) {
+    return (
       <View style={inlineStyles.view}>
         <Picker
           style={styles.picker}
           enabled={isNewReminder}
-          selectedValue={reminderHelper.action(reminder)}
-          onValueChange={(action) => {
-            const updated = reminderHelper.changeField(reminder, changedReminder, 'action', action)
-            dispatch({ type: 'UPDATE-DATA', reminder: updated.reminder, changedReminder: updated.changedReminder })
-          }}>
+          selectedValue={reminderHelper.action(model)}
+          onValueChange={(action) => { changeValue('action', action) }}>
           {
             Object.keys(reminderActions).map(
               (action) => {
@@ -104,6 +130,7 @@ function ReminderModal(props) {
             )
           }
         </Picker>
+
         <View style={styles.formRow}>
           <Text style={styles.fieldLabel}>Delivery Method</Text>
           <View style={{ flexDirection: "row", marginLeft: 6 }}>
@@ -112,12 +139,11 @@ function ReminderModal(props) {
                 color={themeColor.lightBlue}
                 style={{ height: 20, width: 20 }}
                 disable={!hasMobilePhone}
-                value={valueHelper.isStringValue(reminderHelper.txtNumber(reminder))}
+                value={valueHelper.isStringValue(reminderHelper.txtNumber(model))}
                 onValueChange={
                   (newValue) => {
                     const txtNumber = valueHelper.isSet(newValue) ? patientHelper.mobilePhone(currentPatient) : ''
-                    const updated = reminderHelper.changeField(reminder, changedReminder, 'txt_number', txtNumber)
-                    dispatch({ type: 'UPDATE-DATA', reminder: updated.reminder, changedReminder: updated.changedReminder })
+                    changeValue('txt_number', txtNumber)
                   }
                 }
               />
@@ -128,12 +154,11 @@ function ReminderModal(props) {
                 color={themeColor.lightBlue}
                 style={{ height: 20, width: 20 }}
                 disabled={!hasEmail}
-                value={valueHelper.isStringValue(reminderHelper.emailAddress(reminder))}
+                value={valueHelper.isStringValue(reminderHelper.emailAddress(model))}
                 onValueChange={
                   (newValue) => {
                     const emailAddress = valueHelper.isSet(newValue) ? patientHelper.email(currentPatient) : ''
-                    const updated = reminderHelper.changeField(reminder, changedReminder, 'email_address', emailAddress)
-                    dispatch({ type: 'UPDATE-DATA', reminder: updated.reminder, changedReminder: updated.changedReminder })
+                    changeValue('email_address', emailAddress)
                   }
                 }
               />
@@ -144,12 +169,11 @@ function ReminderModal(props) {
                 color={themeColor.lightBlue}
                 style={{ height: 20, width: 20 }}
                 disabled={!hasPhone}
-                value={valueHelper.isStringValue(reminderHelper.voiceNumber(reminder))}
+                value={valueHelper.isStringValue(reminderHelper.voiceNumber(model))}
                 onValueChange={
                   (newValue) => {
                     const voiceNumber = valueHelper.isSet(newValue) ? patientHelper.phone(currentPatient) : ''
-                    const updated = reminderHelper.changeField(reminder, changedReminder, 'voice_number', voiceNumber)
-                    dispatch({ type: 'UPDATE-DATA', reminder: updated.reminder, changedReminder: updated.changedReminder })
+                    changeValue('voice_number', voiceNumber)
                   }
                 }
               />
@@ -162,11 +186,8 @@ function ReminderModal(props) {
           <Picker
             style={styles.picker}
             enabled={isNewReminder}
-            selectedValue={reminderHelper.type(reminder)}
-            onValueChange={(type) => {
-              const updated = reminderHelper.changeField(reminder, changedReminder, 'type', type)
-              dispatch({ type: 'UPDATE-DATA', reminder: updated.reminder, changedReminder: updated.changedReminder })
-            }}>
+            selectedValue={reminderHelper.type(model)}
+            onValueChange={(type) => { changeValue('type', type) }}>
             {
               Object.keys(reminderTypes).map(
                 (type) => {
@@ -176,8 +197,8 @@ function ReminderModal(props) {
               )
             }
           </Picker>
-          <DaysOfWeekPicker reminder={reminder} changedReminder={changedReminder} onValueChange={changeDayOfWeek} />
-          <DayOfMonthPicker reminder={reminder} onDayOfMonthChange={changeDayOfMonth} />
+          <DaysOfWeekPicker reminder={model} onValueChange={changeValue} />
+          <DayOfMonthPicker reminder={model} onDayOfMonthChange={(newValue) => { changeValue('day_of_month', newValue) }} />
         </View>
 
         <View style={styles.formRow}>
@@ -187,8 +208,8 @@ function ReminderModal(props) {
             label='Start Date'
             onChange={changeReminderDate}
             onPress={pressReminderDate}
-            showPiucker={state.showStartPicker}
-            value={dateHelper.makeDate(reminderHelper.recurFrom(reminder))}
+            showPiucker={valueHelper.isSet(fields.showStartPicker)}
+            value={dateHelper.makeDate(reminderHelper.recurFrom(model))}
           />
         </View>
 
@@ -196,192 +217,63 @@ function ReminderModal(props) {
           <DateInput
             field='recur_to'
             label='End Date'
-            pickerProps={{ minimumDate: dateHelper.makeDate(reminderHelper.recurFrom(reminder)) }}
+            pickerProps={{ minimumDate: dateHelper.makeDate(reminderHelper.recurFrom(model)) }}
             onChange={changeReminderDate}
             onPress={pressReminderDate}
-            showPicker={state.showEndPicker}
-            value={dateHelper.makeDate(reminderHelper.recurTo(reminder))}
+            showPicker={valueHelper.isSet(fields.showEndPicker)}
+            value={dateHelper.makeDate(reminderHelper.recurTo(model))}
           />
         </View>
-
-        <View style={{ flexDirection: 'row', justifyContent: 'flex-end' }}>
-          <Button
-            mode="contained"
-            onPress={cancel}
-            contentStyle={{ height: 30 }}
-            labelStyle={{ color: themeColor.darkBlue }}
-            color={themeColor.brightBlue}
-            compact='true'>
-            Cancel
-          </Button>
-
-          <Button
-            mode="contained"
-            onPress={ok}
-            contentStyle={{ height: 30 }}
-            labelStyle={{ color: themeColor.darkBlue }}
-            color={themeColor.brightBlue}
-            compact='true'>
-            Save
-          </Button>
-        </View>
-      </View >
-    </Modal>
-  )
-
-  function cancel() {
-    const { onClose } = props
-    onClose()
-  }
-
-  function changeDayOfWeek(reminder, changedReminder, dayOfWeek, newValue) {
-    const updated = reminderHelper.changeField(reminder, changedReminder, dayOfWeek, newValue)
-    dispatch({ type: 'UPDATE-DATA', reminder: updated.reminder, changedReminder: updated.changedReminder })
-  }
-
-  function changeDayOfMonth(newValue) {
-    const { reminder, changedReminder } = state
-    const updated = reminderHelper.changeField(reminder, changedReminder, 'day_of_month', newValue)
-    dispatch({ type: 'UPDATE-DATA', reminder: updated.reminder, changedReminder: updated.changedReminder })
-  }
-
-  function changeReminderDate(field, newDate) {
-    const { reminder, changedReminder } = state
-    const updated = reminderHelper.changeField(reminder, changedReminder, field, dateHelper.formatDate(newDate, 'yyyy-MM-dd'))
-    dispatch({ type: 'UPDATE-DATA', reminder: updated.reminder, changedReminder: updated.changedReminder })
-  }
-
-  function initialState() {
-    const { patientMedication, reminder } = props
-    return { patientMedication, reminder, showStartPicker: false, showEndPicker: false }
-  }
-
-  function loadModal() {
-    const { patientMedication, reminder } = props
-
-    userCredentialsHelper.getUserCredentials(
-      (userCredentials) => {
-        if (!valueHelper.isValue(userCredentials)) {
-          return
-        }
-
-        if (!valueHelper.isValue(reminder)) {
-          reminderApi.buildNew(
-            userCredentials,
-            currentPatient.id,
-            (newReminder) => {
-              let updated = { reminder: newReminder }
-              if (valueHelper.isValue(patientMedication)) {
-                updated = reminderHelper.addPatientMedication(updated.reminder, updated.changedReminder, patientMedication)
-              }
-              dispatch({ type: 'LOAD-DATA', reminder: updated.reminder, changedReminder: updated.changedReminder })
-            },
-            (message) => {
-              dispatch({ type: 'ERROR' })
-              alertHelper.error(message)
-              return
-            }
-          )
-          return
-        }
-
-        reminderApi.edit(
-          userCredentials,
-          reminder.id,
-          (existingReminder) => {
-            dispatch({ type: 'LOAD-DATA', reminder: existingReminder })
-          },
-          (message) => {
-            dispatch({ type: 'ERROR' })
-            alertHelper.error(message)
-            return
-          }
-        )
-      }
+      </View>
     )
-  }
 
-  function ok() {
-    const { onClose } = props
-
-    userCredentialsHelper.getUserCredentials(
-      (userCredentials) => {
-        const { reminder, changedReminder } = state
-        if (!valueHelper.isValue(userCredentials)) {
-          return
-        }
-
-        if (!valueHelper.isNumberValue(reminderHelper.id(reminder))) {
-          reminderApi.create(
-            userCredentials,
-            changedReminder,
-            onClose,
-            (message) => {
-              dispatch({ type: 'ERROR' })
-              alertHelper.error(message)
-              return
-            }
-          )
-          return
-        }
-
-        if (!valueHelper.isValue(changedReminder)) {
-          onClose()
-          return
-        }
-
-        reminderApi.update(
-          userCredentials,
-          changedReminder,
-          onClose,
-          (message) => {
-            dispatch({ type: 'ERROR' })
-            alertHelper.error(message)
-            return
-          }
-        )
+    function changeReminderDate(field, newDate) {
+      changeValue(field, dateHelper.formatDate(newDate, 'yyyy-MM-dd'))
+      switch (field) {
+        case 'recur_from':
+          setField('showStartPicker', false)
+        case 'recur_to':
+          setField('showEndPicker', false)
+        default:
+          break
       }
-    )
-  }
+    }
 
-  function pressReminderDate(field) {
-    switch (field) {
-      case 'recur_from':
-        dispatch({ type: 'SHOW-START-PICKER', showStartPicker: true })
-      case 'recur_to':
-        dispatch({ type: 'SHOW-END-PICKER', showEndPicker: true })
-      default:
-        break
+    function pressReminderDate(field) {
+      switch (field) {
+        case 'recur_from':
+          setField('showStartPicker', true)
+        case 'recur_to':
+          setField('showEndPicker', true)
+        default:
+          break
+      }
     }
   }
 
-  function updateState(oldState, action) {
-    switch (action.type) {
-      case 'ERROR':
-        return { ...oldState }
+  function getChangedModelFrom(hash) {
+    const { changedReminder } = hash
+    return changedReminder
+  }
 
-      case 'LOAD-DATA':
-        return { ...oldState, reminder: action.reminder }
+  function getModelFrom(hash) {
+    const { reminder } = hash
+    return reminder
+  }
 
-      case 'SHOW-START-PICKER':
-        return { ...oldState, showStartPicker: action.showStartPicker }
+  function loadEditModel(userCredentials, onSuccess, onError) {
+    const reminder = getModelFrom(props)
+    reminderApi.edit(userCredentials, reminderHelper.id(reminder), onSuccess, onError)
+  }
 
-      case 'SHOW-END-PICKER':
-        return { ...oldState, showEndPicker: action.showEndPicker }
-
-      case 'UPDATE-DATA':
-        return { ...oldState, reminder: action.reminder, changedReminder: action.changedReminder, showStartPicker: false, showEndPicker: false }
-
-      default:
-        return oldState
+  function updateModel(userCredentials, changedModel, onSuccess, onError) {
+    if (!valueHelper.isValue(changedModel)) {
+      onSuccess()
+      return
     }
+
+    reminderApi.update(userCredentials, changedModel, onSuccess, onError)
   }
 }
 
 export { ReminderModal }
-
-const inlineStyles = StyleSheet.create(
-  {
-    view: { flex: 1, flexDirection: 'column', backgroundColor: themeColor.lightBg, paddingTop: 12 }
-  }
-)

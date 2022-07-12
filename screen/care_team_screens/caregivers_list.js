@@ -1,6 +1,6 @@
-import React, { useReducer } from 'react'
+import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { AddButton, FontAwesome5Icon, ListView } from '../components'
+import { FontAwesome5Icon, ListView } from '../components'
 import { caregiverApi } from "../../api"
 import { alertHelper, patientHelper, currentUserHelper, userCredentialsHelper, caregiverHelper, valueHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
@@ -8,7 +8,6 @@ import { CaregiverModal } from './caregiver_modal'
 
 function Caregiver(props) {
   const { caregiver, onEdit } = props
-  const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
 
   return (
     <TouchableOpacity
@@ -29,23 +28,11 @@ function Caregiver(props) {
 function CaregiversList(props) {
   const { navigation } = props
   const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
-  const [state, dispatch] = useReducer(updateState, initialState())
 
   return (
     <View style={styles.mainBody}>
-      <View style={{ display: 'flex', justifyContent: 'flex-end', textAlign: 'right' }}>
-        <AddButton onPress={addCaregiver} />
-      </View>
-      <CaregiverModal
-        action={state.modalAction}
-        currentPatient={currentPatient}
-        currentUser={currentUser}
-        onClose={closeModal}
-        caregiver={state.caregiver}
-        visible={state.modalVisible}
-      />
       <ListView
-        forceUpdate={state.forceUpdate}
+        addEditModal={addEditModal}
         label='Caregiver'
         navigation={navigation}
         onLoadPage={loadPage}
@@ -56,14 +43,20 @@ function CaregiversList(props) {
     </View>
   )
 
-  function addCaregiver() {
-    dispatch({ type: 'ADD' })
+  function addEditModal(caregiver, action, visible, closeModal) {
+    return (
+      <CaregiverModal
+        action={action}
+        currentPatient={currentPatient}
+        currentUser={currentUser}
+        onClose={closeModal}
+        caregiver={caregiver}
+        visible={visible}
+      />
+    )
   }
 
-  function closeModal() {
-    dispatch({ type: 'CLOSE' })
-  }
-
+  /* Providing delete handling should be done by the list view with a callback to this component.
   function deleteCaregiver(caregiver) {
     userCredentialsHelper.getUserCredentials(
       (userCredentials) => {
@@ -74,9 +67,7 @@ function CaregiversList(props) {
         caregiverApi.destroy(
           userCredentials,
           caregiverHelper.id(caregiver),
-          () => {
-            setForceUpdate(true)
-          },
+          () => { dispatch('FORCE_UPDATE') },
           (error) => {
             alertHelper.error(error)
             return
@@ -85,15 +76,7 @@ function CaregiversList(props) {
       }
     )
   }
-
-  function editCaregiver(caregiver) {
-    dispatch({ type: 'EDIT', caregiver })
-  }
-
-
-  function initialState() {
-    return { modalVisible: false, forceUpdate: props.forceUpdate }
-  }
+  */
 
   function loadPage(number, size, onSuccess) {
     userCredentialsHelper.getUserCredentials(
@@ -105,10 +88,7 @@ function CaregiversList(props) {
           userCredentials,
           patientHelper.id(currentPatient),
           { for_active: true, page: { number, size, total: 0 }, sort: 'created_at-,medication.label' },
-          (page, pageHeaders) => {
-            dispatch({ type: 'UPDATED' })
-            onSuccess(page, pageHeaders)
-          },
+          onSuccess,
           (error) => {
             alertHelper.error(error)
             return
@@ -118,44 +98,16 @@ function CaregiversList(props) {
     )
   }
 
-
-  function presentItem(caregiver, caregiverIdx) {
+  function presentItem(caregiver, caregiverIdx, editCaregiver) {
     return (
       <Caregiver
         key={`cargiver-${caregiverHelper.id(caregiver)}-${caregiverIdx}`}
         caregiver={caregiver}
-        onDelete={() => { deleteCaregiver(caregiver) }}
-        onEdit={() => { editCaregiver(caregiver) }}
+        //onDelete={deleteCaregiver}
+        onEdit={editCaregiver}
         {...props}
       />
     )
-  }
-
-  function updateState(oldState, action) {
-    switch (action.type) {
-      case 'ADD':
-        return { ...oldState, modalVisible: true, modalAction: 'ADD' }
-
-      case 'CLOSE':
-        const newState = { ...oldState }
-        delete newState.modalAction
-        delete newState.reminder
-        newState.modalVisible = !newState.modalVisible
-        newState.forceUpdate = !newState.modalVisible
-        return newState
-
-      case 'EDIT':
-        return { ...oldState, modalVisible: true, modalAction: 'EDIT', caregiver: action.caregiver }
-
-      case 'FORCE_UPDATE':
-        return { ...oldState, forceUpdate: true }
-
-      case 'UPDATED':
-        return { ...oldState, forceUpdate: false }
-
-      default:
-        return oldState
-    }
   }
 }
 

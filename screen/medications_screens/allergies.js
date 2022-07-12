@@ -1,7 +1,7 @@
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { currentUserHelper } from '../../helpers'
-import { PatientAllergiesList, PatientAllergyScreen } from '../allergies_screens'
+import { PatientAllergiesList } from '../allergies_screens'
 
 const Stack = createNativeStackNavigator()
 
@@ -23,11 +23,6 @@ function Allergies(props) {
         name="PatientAllergiesList"
         options={{ title: "Allergies", headerShown: false }}>
         {(props) => <PatientAllergiesList {...props} allergyType={allergyType} currentUser={currentUser} currentPatient={currentPatient} />}
-      </Stack.Screen>
-      <Stack.Screen
-        name="PatientAllergyScreen"
-        options={{ title: 'Allergy' }}>
-        {(props) => <PatientAllergyScreen {...props} currentUser={currentUser} currentPatient={currentPatient} />}
       </Stack.Screen>
     </Stack.Navigator>
   )

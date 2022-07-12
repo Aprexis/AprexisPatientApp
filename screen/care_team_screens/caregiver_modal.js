@@ -1,208 +1,115 @@
-import React, { useReducer } from 'react'
-import { Modal, StyleSheet, Text, TextInput, View } from 'react-native'
-import { Button } from 'react-native-paper'
+import React from 'react'
+import { Text, TextInput, View } from 'react-native'
 import { Picker } from '@react-native-picker/picker'
-import { AddressInput } from '../components'
+import { AddressInput, AprexisModal, ContactInput } from '../components'
 import { caregiverApi } from '../../api'
-import { valueHelper, alertHelper, caregiverHelper, userCredentialsHelper, currentUserHelper } from "../../helpers"
+import { valueHelper, caregiverHelper, currentUserHelper, patientHelper } from "../../helpers"
 import { relationships } from "../../types"
 import { styles } from '../../assets/styles'
 
 function CaregiverModal(props) {
-  const [state, dispatch] = useReducer(updateState, initialState())
-  const { visible } = props
+  const { action, onClose, visible } = props
   const { currentPatient } = currentUserHelper.getCurrentProps(props)
-  const { caregiver, changedCaregiver } = state
 
   return (
-    <Modal visible={visible} onRequestClose={cancel} onShow={loadModal}>
-      <View style={styles.mainBody}>
-        <View style={inlineStyles.infoArea}>
-          <View style={inlineStyles.profileFieldView}>
-            <Text style={inlineStyles.profileFieldName}>First Name</Text>
-            <TextInput
-              style={styles.inputField}
-              onChangeText={(firstName) => { changeValue('first_name', firstName) }}
-              value={caregiverHelper.firstName(caregiver)}
-            />
-          </View>
-
-          <View style={inlineStyles.profileFieldView}>
-            <Text style={inlineStyles.profileFieldName}>Last Name</Text>
-            <TextInput
-              style={styles.inputField}
-              onChangeText={(lastName) => { changeValue('last_name', lastName) }}
-              value={caregiverHelper.lastName(caregiver)}
-            />
-          </View>
-
-          <View style={inlineStyles.profileFieldView}>
-            <Text style={inlineStyles.profileFieldName}>Relationship</Text>
-            <Picker
-              enabled={true}
-              style={styles.inputField}
-              selectedValue={caregiverHelper.relationship(caregiver)}
-              onValueChange={(relationship) => { changeValue('relationship', relationship) }}>
-              {
-                relationships.map(
-                  (relationship) => {
-                    return (<Picker.Item key={`caregiver-relationship-${relationships}`} label={relationship} value={relationship} />)
-                  }
-                )
-              }
-            </Picker>
-          </View>
-
-          <AddressInput addressable={caregiver} onChangeValue={changeValue} />
-
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', display: 'flex', marginTop: 8 }}>
-            <Button
-              mode="outlined"
-              onPress={cancel}
-              style={{ borderColor: '#03718D' }}
-              color="#03718D"
-              compact='true'
-              title='Cancel'>
-              <Text style={styles.buttonTextStyle}>Cancel</Text>
-            </Button>
-            <Button
-              onPress={ok}
-              style={[styles.btnPrimary, { marginRight: 10, display: 'flex', textAlign: 'center' }]}
-              color="#03718D"
-              compact='true'
-              title='Save'>
-              <Text style={styles.buttonTextStyle}>Save</Text>
-            </Button>
-          </View>
-        </View>
-      </View>
-    </Modal>
+    <AprexisModal
+      action={action}
+      buildNewModel={buildNewModel}
+      createModel={createModel}
+      displayModel={displayModel}
+      getChangedModelFrom={getChangedModelFrom}
+      getModelFrom={getModelFrom}
+      helper={caregiverHelper}
+      loadEditModel={loadEditModel}
+      onClose={onClose}
+      updateModel={updateModel}
+      visible={visible}
+    />
   )
 
-  function cancel() {
-    const { onClose } = props
-    onClose()
-  }
-
-  function changeValue(fieldName, newValue) {
-    const updated = caregiverHelper.changeField(caregiver, changedCaregiver, fieldName, newValue)
-    dispatch({ type: 'UPDATE-DATA', caregiver: updated.caregiver, changedCaregiver: updated.changedCaregiver })
-  }
-
-  function initialState() {
-    const { caregiver } = props
-    return { needLoad: true, caregiver }
-  }
-
-  function loadModal() {
-    const { caregiver } = props
-
-    userCredentialsHelper.getUserCredentials(
-      (userCredentials) => {
-        if (!valueHelper.isValue(userCredentials)) {
-          return
-        }
-
-        if (!valueHelper.isValue(caregiver)) {
-          caregiverApi.buildNew(
-            userCredentials,
-            currentPatient.id,
-            (newCaregiver) => {
-              dispatch({ type: 'LOAD-DATA', caregiver: newCaregiver })
-            },
-            (message) => {
-              dispatch({ type: 'ERROR' })
-              alertHelper.error(message)
-              return
-            }
-          )
-          return
-        }
-
-        caregiverApi.edit(
-          userCredentials,
-          caregiver.id,
-          (existingCaregiver) => {
-            dispatch({ type: 'LOAD-DATA', caregiver: existingCaregiver })
-          },
-          (message) => {
-            dispatch({ type: 'ERROR' })
-            alertHelper.error(message)
-            return
-          }
-        )
-      }
+  function buildNewModel(userCredentials, onSuccess, onError) {
+    caregiverApi.buildNew(
+      userCredentials,
+      patientHelper.id(currentPatient),
+      (model) => {
+        const changedModel = caregiverHelper.buildNewChanged(model)
+        onSuccess(model, changedModel)
+      },
+      onError
     )
   }
 
-  function ok() {
-    const { onClose } = props
+  function createModel(userCredentials, changedModel, onSuccess, onError) {
+    caregiverApi.create(userCredentials, changedModel, onSuccess, onError)
+  }
 
-    userCredentialsHelper.getUserCredentials(
-      (userCredentials) => {
-        const { caregiver, changedCaregiver } = state
-        if (!valueHelper.isValue(userCredentials)) {
-          return
-        }
+  function displayModel(model, _fields, inlineStyles, changeValue, _setField) {
+    return (
+      <View style={inlineStyles.infoArea}>
+        <View style={inlineStyles.profileFieldView}>
+          <Text style={inlineStyles.profileFieldName}>First Name</Text>
+          <TextInput
+            style={styles.inputField}
+            onChangeText={(firstName) => { changeValue('first_name', firstName) }}
+            value={caregiverHelper.firstName(model)}
+          />
+        </View>
 
-        if (!valueHelper.isNumberValue(caregiverHelper.id(caregiver))) {
-          caregiverApi.create(
-            userCredentials,
-            changedCaregiver,
-            onClose,
-            (message) => {
-              dispatch({ type: 'ERROR' })
-              alertHelper.error(message)
-              return
+        <View style={inlineStyles.profileFieldView}>
+          <Text style={inlineStyles.profileFieldName}>Last Name</Text>
+          <TextInput
+            style={styles.inputField}
+            onChangeText={(lastName) => { changeValue('last_name', lastName) }}
+            value={caregiverHelper.lastName(model)}
+          />
+        </View>
+
+        <View style={inlineStyles.profileFieldView}>
+          <Text style={inlineStyles.profileFieldName}>Relationship</Text>
+          <Picker
+            enabled={true}
+            style={styles.inputField}
+            selectedValue={caregiverHelper.relationship(model)}
+            onValueChange={(relationship) => { changeValue('relationship', relationship) }}>
+            {
+              relationships.map(
+                (relationship) => {
+                  return (<Picker.Item key={`caregiver-relationship-${relationships}`} label={relationship} value={relationship} />)
+                }
+              )
             }
-          )
-          return
-        }
+          </Picker>
+        </View>
 
-        if (!valueHelper.isValue(changedCaregiver)) {
-          onClose()
-          return
-        }
-
-        caregiverApi.update(
-          userCredentials,
-          changedCaregiver,
-          onClose,
-          (message) => {
-            dispatch({ type: 'ERROR' })
-            alertHelper.error(message)
-            return
-          }
-        )
-      }
+        <AddressInput addressable={model} onChangeValue={changeValue} />
+        <ContactInput contactable={model} onChangeValue={changeValue} />
+      </View>
     )
   }
 
-  function updateState(oldState, action) {
-    switch (action.type) {
-      case 'ERROR':
-        return { ...oldState, needLoad: false }
+  function getChangedModelFrom(hash) {
+    const { changedCaregiver } = hash
+    return changedCaregiver
+  }
 
-      case 'LOAD-DATA':
-        return { ...oldState, needLoad: false, caregiver: action.caregiver }
+  function getModelFrom(hash) {
+    const { caregiver } = hash
+    return caregiver
+  }
 
-      case 'UPDATE-DATA':
-        return { ...oldState, needLoad: false, caregiver: action.caregiver, changedCaregiver: action.changedCaregiver }
+  function loadEditModel(userCredentials, onSuccess, onError) {
+    const caregiver = getModelFrom(props)
+    caregiverApi.edit(userCredentials, caregiverHelper.id(caregiver), onSuccess, onError)
+  }
 
-      default:
-        return oldState
+  function updateModel(userCredentials, changedModel, onSuccess, onError) {
+    if (!valueHelper.isValue(changedModel)) {
+      onSuccess()
+      return
     }
+
+    caregiverApi.update(userCredentials, changedModel, onSuccess, onError)
   }
 }
 
 export { CaregiverModal }
-
-const inlineStyles = StyleSheet.create(
-  {
-    view: { flex: 1, flexDirection: 'column' },
-    infoArea: { flexDirection: "column" },
-    profileFieldView: { flexDirection: "row", alignItems: 'center', marginTop: -5, marginBottom: -5 },
-    profileFieldName: { fontWeight: "bold", marginRight: 5, display: 'flex', justifyContent: 'flex-end' },
-    profileFieldValue: { border: 'solid #ccc' }
-  }
-)

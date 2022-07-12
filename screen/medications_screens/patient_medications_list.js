@@ -60,7 +60,7 @@ function PatientMedicationsList(props) {
     )
   }
 
-  function presentItem(patientMedication, patientMedicationIdx) {
+  function presentItem(patientMedication, patientMedicationIdx, _editPatientMedication) {
     return (
       <PatientMedication
         key={`patient-medication-${patientMedicationHelper.id(patientMedication)}-${patientMedicationIdx}`}

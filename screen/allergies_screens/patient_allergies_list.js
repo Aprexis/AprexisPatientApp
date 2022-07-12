@@ -1,21 +1,21 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { AddButton, DeleteButton, FontAwesome5Icon, MaterialCommunityIcon, ListView } from '../components'
+import { FontAwesome5Icon, MaterialCommunityIcon, ListView } from '../components'
 import { patientAllergyApi } from "../../api"
 import { alertHelper, patientHelper, currentUserHelper, userCredentialsHelper, patientAllergyHelper, valueHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
+import { PatientAllergyModal } from './patient_allergy_modal'
 
 function PatientAllergy(props) {
-  const { navigation, patientAllergy, onDelete } = props
-  const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
+  const { patientAllergy, onEdit } = props
 
   return (
-     <TouchableOpacity
-        activeOpacity={0.5}
-        style={styles.listButton}
-        onPress={() => { navigation.navigate('PatientAllergyScreen', { currentUser, currentPatient, patientAllergy }) }}>
-      <View style={{ flexDirection: "row", alignItems:'center', width:'95%'}}>
-        <MaterialCommunityIcon size={40} style={ styles.icon } name="allergy" />
+    <TouchableOpacity
+      activeOpacity={0.5}
+      style={styles.listButton}
+      onPress={() => { onEdit(patientAllergy) }}>
+      <View style={{ flexDirection: "row", alignItems: 'center', width: '95%' }}>
+        <MaterialCommunityIcon size={40} style={styles.icon} name="allergy" />
         <Text style={inlineStyles.text}>{valueHelper.capitalizeWords(patientAllergyHelper.allergyName(patientAllergy))}</Text>
       </View>
       <View>
@@ -28,14 +28,11 @@ function PatientAllergy(props) {
 function PatientAllergiesList(props) {
   const { navigation, allergyType } = props
   const { currentPatient, currentUser } = currentUserHelper.getCurrentProps(props)
-  const [forceUpdate, setForceUpdate] = useState(false)
-
-  useEffect(() => { setForceUpdate(false) })
 
   return (
     <View style={{ flex: 1 }}>
       <ListView
-        forceUpdate={forceUpdate}
+        addEditModal={addEditModal}
         label='Patient Allergy'
         navigation={navigation}
         onLoadPage={loadPage}
@@ -46,6 +43,20 @@ function PatientAllergiesList(props) {
     </View>
   )
 
+  function addEditModal(patientAllergy, action, visible, closeModal) {
+    return (
+      <PatientAllergyModal
+        action={action}
+        currentPatient={currentPatient}
+        currentUser={currentUser}
+        onClose={closeModal}
+        patientAllergy={patientAllergy}
+        visible={visible}
+      />
+    )
+  }
+
+  /* Providing delete handling should be done by the list view with a callback to this component.
   function deletePatientAllergy(patientAllergy) {
     userCredentialsHelper.getUserCredentials(
       (userCredentials) => {
@@ -56,9 +67,7 @@ function PatientAllergiesList(props) {
         patientAllergyApi.destroy(
           userCredentials,
           patientAllergyHelper.id(patientAllergy),
-          () => {
-            setForceUpdate(true)
-          },
+          () => { dispatch('FORCE_UPDATE') },
           (error) => {
             alertHelper.error(error)
             return
@@ -67,6 +76,7 @@ function PatientAllergiesList(props) {
       }
     )
   }
+  */
 
   function loadPage(number, size, onSuccess) {
     userCredentialsHelper.getUserCredentials(
@@ -93,15 +103,12 @@ function PatientAllergiesList(props) {
     )
   }
 
-  function addPatientAllergy() {
-    navigation.navigate('PatientAllergyScreen', { allergyType, currentUser, currentPatient })
-  }
-
-  function presentItem(patientAllergy, patientAllergyIdx) {
+  function presentItem(patientAllergy, patientAllergyIdx, editPatientAllergy) {
     return (
       <PatientAllergy
         key={`patient-allergy-${patientAllergyHelper.id(patientAllergy)}-${patientAllergyIdx}`}
-        onDelete={() => { deletePatientAllergy(patientAllergy) }}
+        //onDelete={deletePatientAllergy}
+        onEdit={editPatientAllergy}
         patientAllergy={patientAllergy}
         {...props}
       />
@@ -113,7 +120,7 @@ export { PatientAllergiesList }
 
 const inlineStyles = StyleSheet.create(
   {
-    text: { color: "#112B37", fontSize: 18, fontWeight: "500", marginLeft:5 },
+    text: { color: "#112B37", fontSize: 18, fontWeight: "500", marginLeft: 5 },
     medIcon: { marginRight: 5 }
   }
 )

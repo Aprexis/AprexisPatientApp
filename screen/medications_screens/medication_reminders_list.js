@@ -1,6 +1,6 @@
-import React, { useReducer } from 'react'
+import React, { useEffect, useReducer } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { AddButton, FontAwesome5Icon, ListView } from '../components'
+import { FontAwesome5Icon, ListView } from '../components'
 import { reminderApi } from "../../api"
 import { valueHelper, alertHelper, currentUserHelper, patientHelper, patientMedicationHelper, reminderHelper, userCredentialsHelper } from "../../helpers"
 import { styles } from '../../assets/styles'
@@ -29,7 +29,7 @@ function MedicationReminder(props) {
       case 'WeeklyReminder':
         return `On ${selectedDaysOfWeek(medicationReminder)}`
       case 'MonthlyReminder':
-        return `On ${reminderHelper.dayOfMonth(medicationReminder)} Day of Month`
+        return `On Day ${reminderHelper.dayOfMonth(medicationReminder)}`
       default:
         return ""
     }
@@ -77,22 +77,20 @@ function MedicationRemindersList(props) {
   const { patientMedication } = props
   const [state, dispatch] = useReducer(updateState, initialState())
 
+  useEffect(
+    () => {
+      if (patientMedicationHelper.id(patientMedication) != patientMedicationHelper.id(state.patientMedication)) {
+        dispatch({ type: 'NEW-PATIENT-MEDICATION', patientMedication })
+      }
+    },
+    [patientMedication]
+  )
+
   return (
     <View style={styles.mainBody}>
-      <View style={{ display: 'flex', justifyContent: 'flex-end', textAlign: 'right' }}>
-        <AddButton onPress={addReminder} />
-      </View>
-      <ReminderModal
-        action={state.modalAction}
-        currentPatient={currentPatient}
-        currentUser={currentUser}
-        onClose={closeModal}
-        patientMedication={patientMedication}
-        reminder={state.reminder}
-        visible={state.modalVisible}
-      />
       <ListView
-        forceUpdate={state.forceUpdate}
+        addEditModal={addEditModal}
+        forceUpdate={patientMedicationHelper.id(patientMedication) != patientMedicationHelper.id(state.patientMedication)}
         label='Medication Reminders'
         navigation={navigation}
         onLoadPage={loadPage}
@@ -103,20 +101,22 @@ function MedicationRemindersList(props) {
     </View>
   )
 
-  function addReminder() {
-    dispatch({ type: 'ADD' })
-  }
-
-  function closeModal() {
-    dispatch({ type: 'CLOSE' })
-  }
-
-  function editReminder(reminder) {
-    dispatch({ type: 'EDIT', reminder })
+  function addEditModal(medicationReminder, action, visible, closeModal) {
+    return (
+      <ReminderModal
+        action={action}
+        currentPatient={currentPatient}
+        currentUser={currentUser}
+        onClose={closeModal}
+        patientMedication={patientMedication}
+        reminder={medicationReminder}
+        visible={visible}
+      />
+    )
   }
 
   function initialState() {
-    return { modalVisible: false }
+    return {}
   }
 
   function loadPage(number, size, onSuccess) {
@@ -129,10 +129,7 @@ function MedicationRemindersList(props) {
           userCredentials,
           patientHelper.id(currentPatient),
           { for_active: true, for_medication_label: patientMedicationHelper.medicationLabel(patientMedication), page: { number, size, total: 0 }, sort: 'recur_from,recur_to,action' },
-          (page, pageHeaders) => {
-            dispatch({ type: 'UPDATED' })
-            onSuccess(page, pageHeaders)
-          },
+          onSuccess,
           (error) => {
             alertHelper.error(error)
             return
@@ -142,7 +139,7 @@ function MedicationRemindersList(props) {
     )
   }
 
-  function presentItem(medicationReminder, medicationReminderIdx) {
+  function presentItem(medicationReminder, medicationReminderIdx, editReminder) {
     return (
       <MedicationReminder
         key={`medication-reminder-${reminderHelper.id(medicationReminder)}-${medicationReminderIdx}`}
@@ -155,22 +152,8 @@ function MedicationRemindersList(props) {
 
   function updateState(oldState, action) {
     switch (action.type) {
-      case 'ADD':
-        return { ...oldState, modalVisible: true, modalAction: 'ADD' }
-
-      case 'CLOSE':
-        const newState = { ...oldState }
-        delete newState.modalAction
-        delete newState.reminder
-        newState.modalVisible = !newState.modalVisible
-        newState.forceUpdate = !newState.modalVisible
-        return newState
-
-      case 'EDIT':
-        return { ...oldState, modalVisible: true, modalAction: 'EDIT', reminder: action.reminder }
-
-      case 'UPDATED':
-        return { ...oldState, forceUpdate: false }
+      case 'NEW-PATIENT-MEDICATION':
+        return { ...oldState, patientMedication: action.patientMedication }
 
       default:
         return oldState

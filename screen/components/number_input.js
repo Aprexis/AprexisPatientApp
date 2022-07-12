@@ -1,13 +1,24 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { TextInput } from 'react-native'
 import { valueHelper } from "../../helpers"
 
 function NumberInput(props) {
   const textInputProps = { ...props }
   delete textInputProps.allowDecimal
-  const [text, setText] = useState(`${props.value}`)
+  const number = forceNumber(props.value)
+  const [text, setText] = useState(`${number}`)
+
+  useEffect(() => { setText(`${number}`) })
 
   return (<TextInput {...textInputProps} keyboardType='decimal-pad' value={text} onChangeText={onChangeText} />)
+
+  function forceNumber(value) {
+    if (valueHelper.isNumberValue(value)) {
+      return value
+    }
+
+    return 0
+  }
 
   function onChangeText(newValue) {
     if (!valueHelper.isNumberValue(newValue)) {
