@@ -31,6 +31,10 @@ export const styles = StyleSheet.create(
       backgroundColor: themeColor.lightBg,
       textAlign: 'center'
     },
+    scrollView: {
+      backgroundColor: themeColor.lightBg,
+      textAlign: 'center'
+    },
     row: {
       display: 'flex',
       flexDirection: 'row',

@@ -98,11 +98,17 @@ function ReminderModal(props) {
   )
 
   function buildNewModel(userCredentials, onSuccess, onError) {
+    const { patientMedication } = props
     reminderApi.buildNew(
       userCredentials,
       currentPatient.id,
       (model) => {
         const changedModel = reminderHelper.buildNewChanged(model)
+        if (valueHelper.isValue(patientMedication)) {
+          changedModel.reminder_medications = [
+            { medication_id: patientMedication.medication_id }
+          ]
+        }
         onSuccess(model, changedModel)
       },
       onError
@@ -113,7 +119,7 @@ function ReminderModal(props) {
     reminderApi.create(userCredentials, changedModel, onSuccess, onError)
   }
 
-  function displayModel(model, fields, inlineStyles, changeValue, setField) {
+  function displayModel(model, _changedModel, fields, inlineStyles, changeValue, setField) {
     return (
       <View style={inlineStyles.view}>
         <Picker

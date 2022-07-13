@@ -43,7 +43,7 @@ function PatientAllergyModal(props) {
     patientAllergyApi.create(userCredentials, changedModel, onSuccess, onError)
   }
 
-  function displayModel(model, _fields, inlineStyles, changeValue, _setField) {
+  function displayModel(model, changedModel, _fields, inlineStyles, changeValue, _setField) {
     const isNewPatientAllergy = action == 'ADD'
     let year = patientAllergyHelper.year(model)
     if (!valueHelper.isNumberValue(year)) {
@@ -55,7 +55,7 @@ function PatientAllergyModal(props) {
         <View style={inlineStyles.profileFieldView}>
           <Text style={inlineStyles.profileFieldName}>Name</Text>
           <TextInput
-            editable={isNewPatientAllergy}
+            editable={isNewPatientAllergy || !valueHelper.isStringValue(patientAllergyHelper.allergyName(model)) || valueHelper.isStringValue(patientAllergyHelper.allergyName(changedModel))}
             style={styles.inputField}
             onChangeText={(allergyName) => { changeValue('allergy_name', allergyName) }}
             value={patientAllergyHelper.allergyName(model)}

@@ -12,7 +12,7 @@ function AprexisModal(props) {
   return (
     <Modal visible={visible} onRequestClose={cancel} onShow={loadModal}>
       <View style={styles.mainBody}>
-        {displayModel(model, fields, inlineStyles, changeValue, setField)}
+        {displayModel(model, changedModel, fields, inlineStyles, changeValue, setField)}
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', display: 'flex', marginTop: 8 }}>
           <Button

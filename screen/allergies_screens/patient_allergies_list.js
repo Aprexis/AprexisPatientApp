@@ -85,9 +85,11 @@ function PatientAllergiesList(props) {
           return
         }
         const params = { page: { number, size, total: 0 }, sort: 'created_at-,allergy.name' }
+        /* TODO: consider whether we really want to handle specific types of allergies or all.
         if (valueHelper.isStringValue(allergyType)) {
           params['for_allergy_type'] = allergyType
         }
+        */
 
         patientAllergyApi.listForPatient(
           userCredentials,

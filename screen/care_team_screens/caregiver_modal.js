@@ -43,7 +43,7 @@ function CaregiverModal(props) {
     caregiverApi.create(userCredentials, changedModel, onSuccess, onError)
   }
 
-  function displayModel(model, _fields, inlineStyles, changeValue, _setField) {
+  function displayModel(model, _changedModel, _fields, inlineStyles, changeValue, _setField) {
     return (
       <View style={inlineStyles.infoArea}>
         <View style={inlineStyles.profileFieldView}>
