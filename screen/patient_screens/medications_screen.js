@@ -3,14 +3,12 @@ import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { Allergies, CheckInteractions, PatientMedicationsList } from "../medications_screens"
 import { currentUserHelper } from '../../helpers'
-import { Button } from 'react-native-paper'
-import { FontAwesome5Icon } from '../components'
 import { styles } from '../../assets/styles'
 
 const Tab = createMaterialTopTabNavigator()
 
 function MedicationsScreen(props) {
-  const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
+  const { currentUser, currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
 
   return (
     <SafeAreaView style={styles.mainBody}>
@@ -32,17 +30,17 @@ function MedicationsScreen(props) {
             name="List"
             style={{ padding: 8, fontWeight: "700" }}
             options={{ headerShown: false }}>
-            {(props) => <PatientMedicationsList {...props} currentUser={currentUser} currentPatient={currentPatient} />}
+            {(props) => <PatientMedicationsList {...props} currentUser={currentUser} currentPatient={currentPatient} userCredentials={userCredentials} />}
           </Tab.Screen>
           <Tab.Screen
             name="Check Interactions"
             options={{ headerShown: false }}>
-            {(props) => <CheckInteractions {...props} currentUser={currentUser} currentPatient={currentPatient} />}
+            {(props) => <CheckInteractions {...props} currentUser={currentUser} currentPatient={currentPatient} userCredentials={userCredentials} />}
           </Tab.Screen>
           <Tab.Screen
             name="Allergies"
             options={{ headerShown: false }}>
-            {(props) => <Allergies {...props} allergyType='Medicine' currentUser={currentUser} currentPatient={currentPatient} />}
+            {(props) => <Allergies {...props} allergyType='Medicine' currentUser={currentUser} currentPatient={currentPatient} userCredentials={userCredentials} />}
           </Tab.Screen>
         </Tab.Navigator>
       </View>

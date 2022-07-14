@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { FontAwesome5Icon, MaterialCommunityIcon, ListView } from '../components'
 import { patientAllergyApi } from "../../api"
-import { alertHelper, patientHelper, currentUserHelper, userCredentialsHelper, patientAllergyHelper, valueHelper } from '../../helpers'
+import { alertHelper, patientHelper, currentUserHelper, patientAllergyHelper, valueHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
 import { PatientAllergyModal } from './patient_allergy_modal'
 
@@ -27,7 +27,7 @@ function PatientAllergy(props) {
 
 function PatientAllergiesList(props) {
   const { navigation, allergyType } = props
-  const { currentPatient, currentUser } = currentUserHelper.getCurrentProps(props)
+  const { currentPatient, currentUser, userCredentials } = currentUserHelper.getCurrentProps(props)
 
   return (
     <View style={{ flex: 1 }}>
@@ -47,10 +47,12 @@ function PatientAllergiesList(props) {
     return (
       <PatientAllergyModal
         action={action}
+        allergyType={allergyType}
         currentPatient={currentPatient}
         currentUser={currentUser}
         onClose={closeModal}
         patientAllergy={patientAllergy}
+        userCredentials={userCredentials}
         visible={visible}
       />
     )
@@ -58,50 +60,31 @@ function PatientAllergiesList(props) {
 
   /* Providing delete handling should be done by the list view with a callback to this component.
   function deletePatientAllergy(patientAllergy) {
-    userCredentialsHelper.getUserCredentials(
-      (userCredentials) => {
-        if (!valueHelper.isValue(userCredentials)) {
-          return
-        }
-
-        patientAllergyApi.destroy(
-          userCredentials,
-          patientAllergyHelper.id(patientAllergy),
-          () => { dispatch('FORCE_UPDATE') },
-          (error) => {
-            alertHelper.error(error)
-            return
-          }
-        )
-      }
+    patientAllergyApi.destroy(
+      userCredentials,
+      patientAllergyHelper.id(patientAllergy),
+      () => { dispatch('FORCE_UPDATE') },
+      alertHelper.handleError
     )
   }
   */
 
   function loadPage(number, size, onSuccess) {
-    userCredentialsHelper.getUserCredentials(
-      (userCredentials) => {
-        if (!valueHelper.isValue(userCredentials)) {
-          return
-        }
-        const params = { page: { number, size, total: 0 }, sort: 'created_at-,allergy.name' }
-        /* TODO: consider whether we really want to handle specific types of allergies or all.
-        if (valueHelper.isStringValue(allergyType)) {
-          params['for_allergy_type'] = allergyType
-        }
-        */
+    if (!valueHelper.isValue(userCredentials)) {
+      return
+    }
 
-        patientAllergyApi.listForPatient(
-          userCredentials,
-          patientHelper.id(currentPatient),
-          params,
-          onSuccess,
-          (error) => {
-            alertHelper.error(error)
-            return
-          }
-        )
-      }
+    const params = { page: { number, size, total: 0 }, sort: 'created_at-,allergy.name' }
+    if (valueHelper.isStringValue(allergyType)) {
+      params['for_allergy_type'] = allergyType
+    }
+
+    patientAllergyApi.listForPatient(
+      userCredentials,
+      patientHelper.id(currentPatient),
+      params,
+      onSuccess,
+      alertHelper.handleError
     )
   }
 

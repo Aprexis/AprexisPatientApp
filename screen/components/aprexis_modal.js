@@ -1,13 +1,14 @@
 import React, { useReducer } from 'react'
 import { Modal, StyleSheet, Text, View } from 'react-native'
 import { Button } from 'react-native-paper'
-import { valueHelper, alertHelper, userCredentialsHelper } from "../../helpers"
+import { valueHelper, alertHelper } from "../../helpers"
 import { styles } from '../../assets/styles'
 
 function AprexisModal(props) {
   const [state, dispatch] = useReducer(updateState, initialState())
   const { displayModel, visible } = props
   const { changedModel, fields, model } = state
+
 
   return (
     <Modal visible={visible} onRequestClose={cancel} onShow={loadModal}>
@@ -54,12 +55,6 @@ function AprexisModal(props) {
     onClose()
   }
 
-  function error(message) {
-    dispatch({ type: 'ERROR' })
-    alertHelper.error(message)
-    return
-  }
-
   function initialState() {
     const { getModelFrom } = props
 
@@ -68,49 +63,29 @@ function AprexisModal(props) {
 
   function loadModal() {
     const { action, buildNewModel, loadEditModel } = props
-    console.log(`Load: ${action}`)
 
-    userCredentialsHelper.getUserCredentials(
-      (userCredentials) => {
-        if (!valueHelper.isValue(userCredentials)) {
-          closeModal()
-          return
-        }
+    if (action == 'ADD') {
+      buildNewModel((newModel, changedNewModel) => { dispatch({ type: 'LOAD-DATA', model: newModel, changedModel: changedNewModel }) })
+      return
+    }
 
-        if (action == 'ADD') {
-          buildNewModel(userCredentials, (newModel, changedNewModel) => { dispatch({ type: 'LOAD-DATA', model: newModel, changedModel: changedNewModel }) }, error)
-          return
-        }
-
-        loadEditModel(userCredentials, (loadedModel) => { dispatch({ type: 'LOAD-DATA', model: loadedModel, changedModel: undefined }) }, error)
-      }
-    )
+    loadEditModel((loadedModel) => { dispatch({ type: 'LOAD-DATA', model: loadedModel, changedModel: undefined }) })
   }
 
   function ok() {
     const { createModel, helper, updateModel } = props
+    const { model, changedModel } = state
+    if (!valueHelper.isNumberValue(helper.id(model))) {
+      createModel(changedModel, closeModal)
+      return
+    }
 
-    userCredentialsHelper.getUserCredentials(
-      (userCredentials) => {
-        if (!valueHelper.isValue(userCredentials)) {
-          return
-        }
+    if (!valueHelper.isValue(changedModel)) {
+      closeModal()
+      return
+    }
 
-        const { model, changedModel } = state
-        if (!valueHelper.isNumberValue(helper.id(model))) {
-          createModel(userCredentials, changedModel, closeModal, error)
-          return
-        }
-
-
-        if (!valueHelper.isValue(changedModel)) {
-          closeModal()
-          return
-        }
-
-        updateModel(userCredentials, changedModel, closeModal, error)
-      }
-    )
+    updateModel(changedModel, closeModal)
   }
 
   function setField(fieldName, fieldValue) {
@@ -124,9 +99,6 @@ function AprexisModal(props) {
         delete newState.model
         delete newState.changedModel
         return newState
-
-      case 'ERROR':
-        return { ...oldState, needLoad: false }
 
       case 'LOAD-DATA':
         return { ...oldState, needLoad: false, model: action.model, changedModel: action.changedModel }

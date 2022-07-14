@@ -27,7 +27,7 @@ function PatientMedication(props) {
 
 function PatientMedicationsList(props) {
   const { navigation } = props
-  const { currentPatient } = currentUserHelper.getCurrentProps(props)
+  const { currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
 
   return (
     <ListView
@@ -41,22 +41,12 @@ function PatientMedicationsList(props) {
   )
 
   function loadPage(number, size, onSuccess) {
-    userCredentialsHelper.getUserCredentials(
-      (userCredentials) => {
-        if (!valueHelper.isValue(userCredentials)) {
-          return
-        }
-        patientMedicationApi.listForPatient(
-          userCredentials,
-          patientHelper.id(currentPatient),
-          { for_active: true, page: { number, size, total: 0 }, sort: 'created_at-,medication.label' },
-          onSuccess,
-          (error) => {
-            alertHelper.error(error)
-            return
-          }
-        )
-      }
+    patientMedicationApi.listForPatient(
+      userCredentials,
+      patientHelper.id(currentPatient),
+      { for_active: true, page: { number, size, total: 0 }, sort: 'created_at-,medication.label' },
+      onSuccess,
+      alertHelper.handleError
     )
   }
 

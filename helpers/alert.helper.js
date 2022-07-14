@@ -2,6 +2,7 @@ import React from 'react'
 
 export const alertHelper = {
   error,
+  handleError,
   info,
   success,
   warning
@@ -17,6 +18,10 @@ function messageText(message) {
   return JSON.stringify(message)
 }
 
+function handleError(error) {
+  alertHelper.error(error)
+  return
+}
 
 function error(message) {
   const text = messageText(message)

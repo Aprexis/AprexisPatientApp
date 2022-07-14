@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { FontAwesome5Icon, ListView } from '../components'
 import { caregiverApi } from "../../api"
-import { alertHelper, patientHelper, currentUserHelper, userCredentialsHelper, caregiverHelper, valueHelper } from '../../helpers'
+import { alertHelper, patientHelper, currentUserHelper, caregiverHelper, valueHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
 import { CaregiverModal } from './caregiver_modal'
 
@@ -27,7 +27,7 @@ function Caregiver(props) {
 
 function CaregiversList(props) {
   const { navigation } = props
-  const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
+  const { currentUser, currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
 
   return (
     <View style={styles.mainBody}>
@@ -51,6 +51,7 @@ function CaregiversList(props) {
         currentUser={currentUser}
         onClose={closeModal}
         caregiver={caregiver}
+        userCredentials={userCredentials}
         visible={visible}
       />
     )
@@ -58,43 +59,22 @@ function CaregiversList(props) {
 
   /* Providing delete handling should be done by the list view with a callback to this component.
   function deleteCaregiver(caregiver) {
-    userCredentialsHelper.getUserCredentials(
-      (userCredentials) => {
-        if (!valueHelper.isValue(userCredentials)) {
-          return
-        }
-
-        caregiverApi.destroy(
-          userCredentials,
-          caregiverHelper.id(caregiver),
-          () => { dispatch('FORCE_UPDATE') },
-          (error) => {
-            alertHelper.error(error)
-            return
-          }
-        )
-      }
+    caregiverApi.destroy(
+      userCredentials,
+      caregiverHelper.id(caregiver),
+      () => { dispatch('FORCE_UPDATE') },
+      alertHelper.handleError
     )
   }
   */
 
   function loadPage(number, size, onSuccess) {
-    userCredentialsHelper.getUserCredentials(
-      (userCredentials) => {
-        if (!valueHelper.isValue(userCredentials)) {
-          return
-        }
-        caregiverApi.listForPatient(
-          userCredentials,
-          patientHelper.id(currentPatient),
-          { for_active: true, page: { number, size, total: 0 }, sort: 'created_at-,medication.label' },
-          onSuccess,
-          (error) => {
-            alertHelper.error(error)
-            return
-          }
-        )
-      }
+    caregiverApi.listForPatient(
+      userCredentials,
+      patientHelper.id(currentPatient),
+      { for_active: true, page: { number, size, total: 0 }, sort: 'created_at-,medication.label' },
+      onSuccess,
+      alertHelper.handleError
     )
   }
 

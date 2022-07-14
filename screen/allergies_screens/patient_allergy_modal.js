@@ -3,13 +3,13 @@ import { Text, TextInput, View } from 'react-native'
 import { Picker } from '@react-native-picker/picker'
 import { AprexisModal, NumberInput } from "../components"
 import { patientAllergyApi } from '../../api'
-import { valueHelper, currentUserHelper, patientAllergyHelper } from "../../helpers"
+import { valueHelper, alertHelper, currentUserHelper, patientAllergyHelper } from "../../helpers"
 import { allergyCategories } from '../../types'
 import { styles } from '../../assets/styles'
 
 function PatientAllergyModal(props) {
   const { action, allergyType, onClose, visible } = props
-  const { currentPatient } = currentUserHelper.getCurrentProps(props)
+  const { currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
 
   return (
     <AprexisModal
@@ -27,7 +27,7 @@ function PatientAllergyModal(props) {
     />
   )
 
-  function buildNewModel(userCredentials, onSuccess, onError) {
+  function buildNewModel(onSuccess) {
     patientAllergyApi.buildNew(
       userCredentials,
       currentPatient.id,
@@ -35,12 +35,12 @@ function PatientAllergyModal(props) {
         const changedModel = patientAllergyHelper.buildNewChanged(model)
         onSuccess(model, changedModel)
       },
-      onError
+      alertHelper.handleError
     )
   }
 
-  function createModel(userCredentials, changedModel, onSuccess, onError) {
-    patientAllergyApi.create(userCredentials, changedModel, onSuccess, onError)
+  function createModel(changedModel, onSuccess) {
+    patientAllergyApi.create(userCredentials, changedModel, onSuccess, alertHelper.handleError)
   }
 
   function displayModel(model, changedModel, _fields, inlineStyles, changeValue, _setField) {
@@ -110,18 +110,18 @@ function PatientAllergyModal(props) {
     return patientAllergy
   }
 
-  function loadEditModel(userCredentials, onSuccess, onError) {
+  function loadEditModel(onSuccess) {
     const patientAllergy = getModelFrom(props)
-    patientAllergyApi.edit(userCredentials, patientAllergyHelper.id(patientAllergy), onSuccess, onError)
+    patientAllergyApi.edit(userCredentials, patientAllergyHelper.id(patientAllergy), onSuccess, alertHelper.handleError)
   }
 
-  function updateModel(userCredentials, changedModel, onSuccess, onError) {
+  function updateModel(changedModel, onSuccess) {
     if (!valueHelper.isValue(changedModel)) {
       onSuccess()
       return
     }
 
-    patientAllergyApi.update(userCredentials, changedModel, onSuccess, onError)
+    patientAllergyApi.update(userCredentials, changedModel, onSuccess, alertHelper.handleError)
   }
 }
 

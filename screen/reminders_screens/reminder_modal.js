@@ -4,7 +4,7 @@ import Checkbox from 'expo-checkbox'
 import { Picker } from '@react-native-picker/picker'
 import { reminderApi } from '../../api'
 import { AprexisModal, DateInput, NumberInput } from '../components'
-import { valueHelper, dateHelper, reminderHelper, patientHelper, currentUserHelper } from "../../helpers"
+import { valueHelper, alertHelper, dateHelper, reminderHelper, patientHelper, currentUserHelper } from "../../helpers"
 import { reminderActions, reminderTypes } from '../../types'
 import { themeColor, styles } from '../../assets/styles'
 
@@ -74,7 +74,7 @@ function DayOfMonthPicker({ reminder, onDayOfMonthChange }) {
 }
 
 function ReminderModal(props) {
-  const { currentPatient } = currentUserHelper.getCurrentProps(props)
+  const { currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
   const { action, onClose, visible } = props
   const isNewReminder = action == 'ADD'
   const hasPhone = valueHelper.isStringValue(patientHelper.phone(currentPatient))
@@ -97,7 +97,7 @@ function ReminderModal(props) {
     />
   )
 
-  function buildNewModel(userCredentials, onSuccess, onError) {
+  function buildNewModel(onSuccess) {
     const { patientMedication } = props
     reminderApi.buildNew(
       userCredentials,
@@ -111,12 +111,12 @@ function ReminderModal(props) {
         }
         onSuccess(model, changedModel)
       },
-      onError
+      alertHelper.handleError
     )
   }
 
-  function createModel(userCredentials, changedModel, onSuccess, onError) {
-    reminderApi.create(userCredentials, changedModel, onSuccess, onError)
+  function createModel(changedModel, onSuccess) {
+    reminderApi.create(userCredentials, changedModel, onSuccess, alertHelper.handleError)
   }
 
   function displayModel(model, _changedModel, fields, inlineStyles, changeValue, setField) {
@@ -267,18 +267,18 @@ function ReminderModal(props) {
     return reminder
   }
 
-  function loadEditModel(userCredentials, onSuccess, onError) {
+  function loadEditModel(onSuccess) {
     const reminder = getModelFrom(props)
-    reminderApi.edit(userCredentials, reminderHelper.id(reminder), onSuccess, onError)
+    reminderApi.edit(userCredentials, reminderHelper.id(reminder), onSuccess, alertHelper.handleError)
   }
 
-  function updateModel(userCredentials, changedModel, onSuccess, onError) {
+  function updateModel(changedModel, onSuccess) {
     if (!valueHelper.isValue(changedModel)) {
       onSuccess()
       return
     }
 
-    reminderApi.update(userCredentials, changedModel, onSuccess, onError)
+    reminderApi.update(userCredentials, changedModel, onSuccess, alertHelper.handleError)
   }
 }
 

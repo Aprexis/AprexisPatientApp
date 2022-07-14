@@ -3,13 +3,13 @@ import { Text, TextInput, View } from 'react-native'
 import { Picker } from '@react-native-picker/picker'
 import { AddressInput, AprexisModal, ContactInput } from '../components'
 import { caregiverApi } from '../../api'
-import { valueHelper, caregiverHelper, currentUserHelper, patientHelper } from "../../helpers"
+import { valueHelper, alertHelper, caregiverHelper, currentUserHelper, patientHelper } from "../../helpers"
 import { relationships } from "../../types"
 import { styles } from '../../assets/styles'
 
 function CaregiverModal(props) {
   const { action, onClose, visible } = props
-  const { currentPatient } = currentUserHelper.getCurrentProps(props)
+  const { currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
 
   return (
     <AprexisModal
@@ -27,7 +27,7 @@ function CaregiverModal(props) {
     />
   )
 
-  function buildNewModel(userCredentials, onSuccess, onError) {
+  function buildNewModel(onSuccess) {
     caregiverApi.buildNew(
       userCredentials,
       patientHelper.id(currentPatient),
@@ -35,12 +35,12 @@ function CaregiverModal(props) {
         const changedModel = caregiverHelper.buildNewChanged(model)
         onSuccess(model, changedModel)
       },
-      onError
+      alertHelper.handleError
     )
   }
 
-  function createModel(userCredentials, changedModel, onSuccess, onError) {
-    caregiverApi.create(userCredentials, changedModel, onSuccess, onError)
+  function createModel(changedModel, onSuccess) {
+    caregiverApi.create(changedModel, onSuccess, alertHelper.handleError)
   }
 
   function displayModel(model, _changedModel, _fields, inlineStyles, changeValue, _setField) {
@@ -97,18 +97,18 @@ function CaregiverModal(props) {
     return caregiver
   }
 
-  function loadEditModel(userCredentials, onSuccess, onError) {
+  function loadEditModel(onSuccess) {
     const caregiver = getModelFrom(props)
-    caregiverApi.edit(userCredentials, caregiverHelper.id(caregiver), onSuccess, onError)
+    caregiverApi.edit(userCredentials, caregiverHelper.id(caregiver), onSuccess, alertHelper.handleError)
   }
 
-  function updateModel(userCredentials, changedModel, onSuccess, onError) {
+  function updateModel(changedModel, onSuccess) {
     if (!valueHelper.isValue(changedModel)) {
       onSuccess()
       return
     }
 
-    caregiverApi.update(userCredentials, changedModel, onSuccess, onError)
+    caregiverApi.update(userCredentials, changedModel, onSuccess, alertHelper.handleError)
   }
 }
 
