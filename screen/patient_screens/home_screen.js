@@ -1,7 +1,7 @@
 import React from 'react'
 import { SafeAreaView, Text, View } from 'react-native'
 import { valueHelper, patientHelper, userHelper, currentUserHelper } from '../../helpers'
-import { themeColor, styles } from '../../assets/styles'
+import { styles } from '../../assets/styles'
 
 function HomeScreen(props) {
   const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)

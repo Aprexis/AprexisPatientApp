@@ -88,7 +88,6 @@ export const styles = StyleSheet.create(
       flex: 1,
       color: themeColor.darkBlue,
       fontWeight: '500',
-      padding: 10,
       borderWidth: 1,
       borderRadius: 5,
       borderColor: '#dadae8',

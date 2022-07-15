@@ -1,5 +1,6 @@
 import React from 'react'
-import { StyleSheet, Text, TextInput, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
+import { TextInput } from 'react-native-paper'
 import { contactHelper } from '../../helpers'
 import { NumberInput } from './number_input'
 import { styles } from '../../assets/styles'

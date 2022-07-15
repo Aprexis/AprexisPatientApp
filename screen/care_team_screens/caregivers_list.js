@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { FontAwesome5Icon, ListView } from '../components'
 import { caregiverApi } from "../../api"
-import { alertHelper, patientHelper, currentUserHelper, caregiverHelper, valueHelper } from '../../helpers'
+import { alertHelper, patientHelper, currentUserHelper, caregiverHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
 import { CaregiverModal } from './caregiver_modal'
 
@@ -16,7 +16,7 @@ function Caregiver(props) {
       onPress={() => { onEdit(caregiver) }}>
       <View style={{ flexDirection: "row", alignItems: 'center', width: '95%' }}>
         <FontAwesome5Icon size={27} style={styles.icon} name="user" solid />
-        <Text style={inlineStyles.text}>{caregiverHelper.name(caregiver)}</Text>
+        <Text style={inlineStyles.text}>{caregiverHelper.name(caregiver)} ({caregiverHelper.relationship(caregiver)})</Text>
       </View>
       <View>
         <FontAwesome5Icon size={30} name="angle-right" style={[styles.icon, inlineStyles.medIcon]} />

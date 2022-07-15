@@ -1,5 +1,6 @@
 import React from 'react'
-import { StyleSheet, Text, TextInput, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
+import { TextInput } from 'react-native-paper'
 import { addressHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
 

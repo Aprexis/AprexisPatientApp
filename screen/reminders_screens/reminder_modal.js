@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Text, View } from 'react-native'
 import Checkbox from 'expo-checkbox'
-import { Picker } from '@react-native-picker/picker'
+import { Button, Menu } from 'react-native-paper'
 import { reminderApi } from '../../api'
 import { AprexisModal, DateInput, NumberInput } from '../components'
 import { valueHelper, alertHelper, dateHelper, reminderHelper, patientHelper, currentUserHelper } from "../../helpers"
@@ -80,6 +80,8 @@ function ReminderModal(props) {
   const hasPhone = valueHelper.isStringValue(patientHelper.phone(currentPatient))
   const hasEmail = valueHelper.isStringValue(patientHelper.email(currentPatient))
   const hasMobilePhone = valueHelper.isStringValue(patientHelper.mobilePhone(currentPatient))
+  const [actionVisible, setActionVisible] = useState(false)
+  const [reminderTypeVisible, setReminderTypeVisible] = useState(false)
 
   return (
     <AprexisModal
@@ -122,20 +124,20 @@ function ReminderModal(props) {
   function displayModel(model, _changedModel, fields, inlineStyles, changeValue, setField) {
     return (
       <View style={inlineStyles.view}>
-        <Picker
-          style={styles.picker}
-          enabled={isNewReminder}
-          selectedValue={reminderHelper.action(model)}
-          onValueChange={(action) => { changeValue('action', action) }}>
+        <Menu
+          anchor={<Button onPress={openActionMenu}>{reminderActions[reminderHelper.action(model)]}</Button>}
+          onDismiss={closeActionMenu}
+          style={[styles.inputField, { fontSize: 15 }]}
+          visible={valueHelper.isSet(actionVisible)}>
           {
             Object.keys(reminderActions).map(
               (action) => {
                 const label = reminderActions[action]
-                return (<Picker.Item key={`reminder-action-${action}`} label={label} value={action} />)
+                return (<Menu.Item key={`reminder-action-${action}`} title={label} onPress={() => { closeActionMenu(); changeValue('action', action) }} />)
               }
             )
           }
-        </Picker>
+        </Menu>
 
         <View style={styles.formRow}>
           <Text style={styles.fieldLabel}>Delivery Method</Text>
@@ -189,20 +191,21 @@ function ReminderModal(props) {
         </View>
 
         <View>
-          <Picker
-            style={styles.picker}
-            enabled={isNewReminder}
-            selectedValue={reminderHelper.type(model)}
-            onValueChange={(type) => { changeValue('type', type) }}>
+          <Menu
+            anchor={<Button onPress={openReminderTypeMenu}>{reminderTypes[reminderHelper.type(model)]}</Button>}
+            disabled={!isNewReminder}
+            onDismiss={closeReminderTypeMenu}
+            style={[styles.inputField, { fontSize: 15 }]}
+            visible={valueHelper.isSet(reminderTypeVisible)}>
             {
               Object.keys(reminderTypes).map(
                 (type) => {
                   const label = reminderTypes[type]
-                  return (<Picker.Item key={`reminder-type-${type}`} label={label} value={type} />)
+                  return (<Menu.Item key={`reminder-type-${type}`} title={label} onPress={() => { closeReminderTypeMenu(); changeValue('type', type) }} />)
                 }
               )
             }
-          </Picker>
+          </Menu>
           <DaysOfWeekPicker reminder={model} onValueChange={changeValue} />
           <DayOfMonthPicker reminder={model} onDayOfMonthChange={(newValue) => { changeValue('day_of_month', newValue) }} />
         </View>
@@ -243,6 +246,22 @@ function ReminderModal(props) {
         default:
           break
       }
+    }
+
+    function closeActionMenu() {
+      setActionVisible(false)
+    }
+
+    function closeReminderTypeMenu() {
+      setReminderTypeVisible(false)
+    }
+
+    function openActionMenu() {
+      setActionVisible(true)
+    }
+
+    function openReminderTypeMenu() {
+      setReminderTypeVisible(true)
     }
 
     function pressReminderDate(field) {

@@ -1,6 +1,6 @@
-import React from 'react'
-import { Text, TextInput, View } from 'react-native'
-import { Picker } from '@react-native-picker/picker'
+import React, { useState } from 'react'
+import { Text, View } from 'react-native'
+import { Button, Menu, TextInput } from 'react-native-paper'
 import { AddressInput, AprexisModal, ContactInput } from '../components'
 import { caregiverApi } from '../../api'
 import { valueHelper, alertHelper, caregiverHelper, currentUserHelper, patientHelper } from "../../helpers"
@@ -10,6 +10,7 @@ import { styles } from '../../assets/styles'
 function CaregiverModal(props) {
   const { action, onClose, visible } = props
   const { currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
+  const [relationshipVisible, setRelationshipVisible] = useState(false)
 
   return (
     <AprexisModal
@@ -66,25 +67,33 @@ function CaregiverModal(props) {
 
         <View style={inlineStyles.profileFieldView}>
           <Text style={inlineStyles.profileFieldName}>Relationship</Text>
-          <Picker
-            enabled={true}
-            style={styles.inputField}
-            selectedValue={caregiverHelper.relationship(model)}
-            onValueChange={(relationship) => { changeValue('relationship', relationship) }}>
+          <Menu
+            anchor={<Button onPress={openMenu}>{caregiverHelper.relationship(model)}</Button>}
+            onDismiss={closeMenu}
+            style={[styles.inputField, { fontSize: 15 }]}
+            visible={valueHelper.isSet(relationshipVisible)}>
             {
               relationships.map(
-                (relationship) => {
-                  return (<Picker.Item key={`caregiver-relationship-${relationships}`} label={relationship} value={relationship} />)
+                (relationship, idx) => {
+                  return (<Menu.Item key={`caregiver-relationship-${idx}`} title={relationship} onPress={() => { closeMenu(); changeValue('relationship', relationship) }} />)
                 }
               )
             }
-          </Picker>
+          </Menu>
         </View>
 
         <AddressInput addressable={model} onChangeValue={changeValue} />
         <ContactInput contactable={model} onChangeValue={changeValue} />
       </View>
     )
+
+    function openMenu() {
+      setRelationshipVisible(true)
+    }
+
+    function closeMenu() {
+      setRelationshipVisible(false)
+    }
   }
 
   function getChangedModelFrom(hash) {

@@ -1,6 +1,6 @@
-import React from 'react'
-import { Text, TextInput, View } from 'react-native'
-import { Picker } from '@react-native-picker/picker'
+import React, { useState } from 'react'
+import { Text, View } from 'react-native'
+import { Button, Menu, TextInput } from 'react-native-paper'
 import { AprexisModal, NumberInput } from "../components"
 import { patientAllergyApi } from '../../api'
 import { valueHelper, alertHelper, currentUserHelper, patientAllergyHelper } from "../../helpers"
@@ -10,6 +10,7 @@ import { styles } from '../../assets/styles'
 function PatientAllergyModal(props) {
   const { action, allergyType, onClose, visible } = props
   const { currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
+  const [allergyTypeVisible, setAllergyTypeVisible] = useState(false)
 
   return (
     <AprexisModal
@@ -64,19 +65,19 @@ function PatientAllergyModal(props) {
 
         <View style={inlineStyles.profileFieldView}>
           <Text style={inlineStyles.profileFieldName}>Type</Text>
-          <Picker
+          <Menu
+            anchor={<Button disabled={valueHelper.isStringValue(allergyType)} onPress={openMenu}>{allergyType}</Button>}
+            onDismiss={closeMenu}
             style={[styles.inputField, { fontSize: 15 }]}
-            enabled={!valueHelper.isStringValue(allergyType)}
-            selectedValue={patientAllergyHelper.allergyType(model)}
-            onValueChange={(allergyType) => { changeValue('allergy_type', allergyType) }}>
+            visible={valueHelper.isSet(allergyTypeVisible)}>
             {
               allergyCategories.map(
                 (allergyType) => {
-                  return (<Picker.Item key={`allergy-type-${allergyType}`} label={allergyType} value={allergyType} />)
+                  return (<Menu.Item key={`allergy-type-${allergyType}`} title={allergyType} onPress={() => { closeMenu(); changeValue('allergy_type', allergyType) }} />)
                 }
               )
             }
-          </Picker>
+          </Menu>
         </View>
 
         <View style={inlineStyles.profileFieldView}>
@@ -98,6 +99,14 @@ function PatientAllergyModal(props) {
         </View>
       </View>
     )
+
+    function closeMenu() {
+      setAllergyTypeVisible(false)
+    }
+
+    function openMenu() {
+      setAllergyTypeVisible(true)
+    }
   }
 
   function getChangedModelFrom(hash) {

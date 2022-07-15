@@ -1,5 +1,5 @@
 import React, { useEffect, useReducer } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { Button, Modal, Portal } from 'react-native-paper'
 import { valueHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
@@ -20,27 +20,31 @@ function AprexisModal(props) {
   return (
     <Portal>
       <Modal visible={visible} onDismiss={cancel} contentContainerStyle={styles.mainBody}>
-        {displayModel(model, changedModel, fields, inlineStyles, changeValue, setField)}
+        <ScrollView
+          contentContainerStyle={styles.scrollView}
+          keyboardShouldPersistTaps="handled">
+          {displayModel(model, changedModel, fields, inlineStyles, changeValue, setField)}
 
-        <View style={{ flexDirection: 'row', justifyContent: 'space-between', display: 'flex', marginTop: 8 }}>
-          <Button
-            mode='outlined'
-            onPress={cancel}
-            style={{ borderColor: '#03718D' }}
-            color='#03718D'
-            compact='true'
-            title='Cancel'>
-            <Text style={styles.buttonTextStyle}>Cancel</Text>
-          </Button>
-          <Button
-            onPress={ok}
-            style={[styles.btnPrimary, { marginRight: 10, display: 'flex', textAlign: 'center' }]}
-            color='#03718D'
-            compact='true'
-            title='Save'>
-            <Text style={styles.buttonTextStyle}>Save</Text>
-          </Button>
-        </View>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', display: 'flex', marginTop: 8 }}>
+            <Button
+              mode='outlined'
+              onPress={cancel}
+              style={{ borderColor: '#03718D' }}
+              color='#03718D'
+              compact='true'
+              title='Cancel'>
+              <Text style={styles.buttonTextStyle}>Cancel</Text>
+            </Button>
+            <Button
+              onPress={ok}
+              style={[styles.btnPrimary, { marginRight: 10, display: 'flex', textAlign: 'center' }]}
+              color='#03718D'
+              compact='true'
+              title='Save'>
+              <Text style={styles.buttonTextStyle}>Save</Text>
+            </Button>
+          </View>
+        </ScrollView>
       </Modal>
     </Portal>
   )
@@ -78,8 +82,8 @@ function AprexisModal(props) {
   function closeModal() {
     const { onClose } = props
 
-    dispatch({ type: 'CLEAR' })
     onClose()
+    dispatch({ type: 'CLEAR' })
   }
 
   function initialState() {
@@ -125,6 +129,7 @@ function AprexisModal(props) {
         const newState = { ...oldState }
         delete newState.model
         delete newState.changedModel
+        newState.loaded = false
         return newState
 
       case 'LOAD-DATA':

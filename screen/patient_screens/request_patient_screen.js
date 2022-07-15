@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
-import { Keyboard, KeyboardAvoidingView, SafeAreaView, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Keyboard, KeyboardAvoidingView, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import { TextInput } from 'react-native-paper'
 import { patientApi } from '../../api'
 import { alertHelper, currentUserHelper, valueHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
