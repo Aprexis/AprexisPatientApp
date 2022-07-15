@@ -1,26 +1,33 @@
-import React, { useReducer } from 'react'
-import { Modal, StyleSheet, Text, View } from 'react-native'
-import { Button } from 'react-native-paper'
-import { valueHelper, alertHelper } from "../../helpers"
+import React, { useEffect, useReducer } from 'react'
+import { StyleSheet, Text, View } from 'react-native'
+import { Button, Modal, Portal } from 'react-native-paper'
+import { valueHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
 
 function AprexisModal(props) {
   const [state, dispatch] = useReducer(updateState, initialState())
   const { displayModel, visible } = props
-  const { changedModel, fields, model } = state
+  const { changedModel, fields, model, loaded } = state
 
+  useEffect(
+    () => {
+      if (valueHelper.isSet(props.visible) && !valueHelper.isSet(loaded)) {
+        loadModal()
+      }
+    }
+  )
 
   return (
-    <Modal visible={visible} onRequestClose={cancel} onShow={loadModal}>
-      <View style={styles.mainBody}>
+    <Portal>
+      <Modal visible={visible} onDismiss={cancel} contentContainerStyle={styles.mainBody}>
         {displayModel(model, changedModel, fields, inlineStyles, changeValue, setField)}
 
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', display: 'flex', marginTop: 8 }}>
           <Button
-            mode="outlined"
+            mode='outlined'
             onPress={cancel}
             style={{ borderColor: '#03718D' }}
-            color="#03718D"
+            color='#03718D'
             compact='true'
             title='Cancel'>
             <Text style={styles.buttonTextStyle}>Cancel</Text>
@@ -28,14 +35,14 @@ function AprexisModal(props) {
           <Button
             onPress={ok}
             style={[styles.btnPrimary, { marginRight: 10, display: 'flex', textAlign: 'center' }]}
-            color="#03718D"
+            color='#03718D'
             compact='true'
             title='Save'>
             <Text style={styles.buttonTextStyle}>Save</Text>
           </Button>
         </View>
-      </View>
-    </Modal>
+      </Modal>
+    </Portal>
   )
 
   function cancel() {
@@ -44,8 +51,28 @@ function AprexisModal(props) {
 
   function changeValue(fieldName, newValue) {
     const { getChangedModelFrom, getModelFrom, helper } = props
-    const updated = helper.changeField(model, changedModel, fieldName, newValue)
+    const updated = updateModel(model, changedModel, fieldName, newValue)
     dispatch({ type: 'UPDATE-DATA', model: getModelFrom(updated), changedModel: getChangedModelFrom(updated) })
+
+    function updateModel(model, changedModel, fieldName, newValue) {
+      if (Array.isArray(fieldName)) {
+        return updateModelFromArray(model, changedModel, fieldName, newValue)
+      }
+
+      return helper.changeField(model, changedModel, fieldName, newValue)
+
+      function updateModelFromArray(model, changedModel, fieldNames, newValues) {
+        let updated = helper.changeField(model, changedModel, fieldNames[0], newValues[0])
+
+        for (let idx = 1; idx < fieldNames.length; ++idx) {
+          const workingModel = getModelFrom(updated)
+          const workingChangedModel = getChangedModelFrom(updated)
+          updated = helper.changeField(workingModel, workingChangedModel, fieldNames[idx], newValues[idx])
+        }
+
+        return updated
+      }
+    }
   }
 
   function closeModal() {
@@ -101,7 +128,7 @@ function AprexisModal(props) {
         return newState
 
       case 'LOAD-DATA':
-        return { ...oldState, needLoad: false, model: action.model, changedModel: action.changedModel }
+        return { ...oldState, needLoad: false, model: action.model, changedModel: action.changedModel, loaded: true }
 
       case 'SET-FIELD':
         return { ...oldState, fields: { ...oldState.fields, [action.fieldName]: action.fieldValue } }
@@ -119,10 +146,9 @@ export { AprexisModal }
 
 const inlineStyles = StyleSheet.create(
   {
-    view: { flex: 1, flexDirection: 'column' },
-    infoArea: { flexDirection: "column" },
-    profileFieldView: { flexDirection: "row", alignItems: 'center', marginTop: -5, marginBottom: -5 },
-    profileFieldName: { fontWeight: "bold", marginRight: 5, display: 'flex', justifyContent: 'flex-end' },
+    infoArea: { flexGrow: 1, flexDirection: 'column' },
+    profileFieldView: { flexDirection: 'row', alignItems: 'center' },
+    profileFieldName: { fontWeight: 'bold', marginRight: 5, display: 'flex', justifyContent: 'flex-end' },
     profileFieldValue: { border: 'solid #ccc' }
   }
 )
