@@ -3,40 +3,37 @@ import { SafeAreaView, StyleSheet, Text, View, useWindowDimensions } from 'react
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { Allergies, CheckInteractions, PatientMedicationsList } from "../medications_screens"
 import { currentUserHelper } from '../../helpers'
-import { Button } from 'react-native-paper'
-import { FontAwesome5Icon } from '../components'
 import { styles } from '../../assets/styles'
 
 import { TabView, SceneMap } from 'react-native-tab-view';
 
 
-function MedicationsScreen(props, { navigation }: RootTabScreenProps<'TabOne'>) {
-  const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
-  //console.log(`Styles; ${JSON.stringify(styles, null, 2)}`)
+function MedicationsScreen(props) {
+  const { currentUser, currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
 
   const medicationsList = () => (
     <View>
-      {(props) => <PatientMedicationsList {...props} currentUser={currentUser} currentPatient={currentPatient} />}
+      <Text>{(props) => <PatientMedicationsList {...props} currentUser={currentUser} currentPatient={currentPatient} />}</Text>
     </View>
-    );
+    )
 
   const checkInteractions = () => (
     <View>
-      {(props) => <CheckInteractions {...props} currentUser={currentUser} currentPatient={currentPatient} />}
+      <Text>{(props) => <CheckInteractions {...props} currentUser={currentUser} currentPatient={currentPatient} />}</Text>
     </View>
-  );
+  )
 
   const Allergies = () => (
     <View>
-      {(props) => <Allergies {...props} allergyType='Medicine' currentUser={currentUser} currentPatient={currentPatient} />}
+      <Text>{(props) => <Allergies {...props} allergyType='Medicine' currentUser={currentUser} currentPatient={currentPatient} />}</Text>
     </View>
-  );
+  )
 
   const renderScene = SceneMap({
     first: medicationsList,
     second: checkInteractions,
     third: Allergies,
-  });
+  })
 
   const layout = useWindowDimensions();
 
@@ -44,8 +41,8 @@ function MedicationsScreen(props, { navigation }: RootTabScreenProps<'TabOne'>) 
   const [routes] = React.useState([
     { first: 'First' },
     { second: 'Second' },
-    { third: 'Third' },
-  ]);
+    { third: 'Third' }
+  ])
 
   return (
     <TabView
@@ -55,8 +52,8 @@ function MedicationsScreen(props, { navigation }: RootTabScreenProps<'TabOne'>) 
       onIndexChange={setIndex}
       initialLayout={{ width: layout.width }}
     />
-
   )
 }
 
 export { MedicationsScreen }
+

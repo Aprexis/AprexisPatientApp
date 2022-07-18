@@ -4,14 +4,12 @@ import {
   Keyboard,
   KeyboardAvoidingView,
   Platform,
-  TouchableWithoutFeedback,
   ScrollView,
-  StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View
 } from 'react-native'
+import { TextInput } from 'react-native-paper'
 import { authenticationApi } from '../api'
 import { Loader } from './components'
 import { alertHelper, userCredentialsHelper, currentUserHelper } from '../helpers'
@@ -61,7 +59,7 @@ function LoginScreen({ navigation }) {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS === "ios" ? "padding" : "height"}
-      style={{flex:1}}
+      style={{ flex: 1 }}
     >
       <View style={styles.mainFullScreen}>
         <Loader loading={loading} />
@@ -88,19 +86,19 @@ function LoginScreen({ navigation }) {
               </View>
               <View style={styles.sectionStyle}>
                 <TextInput
-                style={styles.inputField}
-                onChangeText={(userEmail) => setUserEmail(userEmail)}
-                placeholder="Enter Username"
-                placeholderTextColor="#8b9cb5"
-                autoCapitalize='none'
-                keyboardType='email-address'
-                returnKeyType='next'
-                onSubmitEditing={() =>
-                  passwordInputRef.current &&
-                  passwordInputRef.current.focus()
-                }
-                underlineColorAndroid="#f000"
-                blurOnSubmit={false}
+                  style={styles.inputField}
+                  onChangeText={(userEmail) => setUserEmail(userEmail)}
+                  placeholder="Enter Username"
+                  placeholderTextColor="#8b9cb5"
+                  autoCapitalize='none'
+                  keyboardType='email-address'
+                  returnKeyType='next'
+                  onSubmitEditing={() =>
+                    passwordInputRef.current &&
+                    passwordInputRef.current.focus()
+                  }
+                  underlineColorAndroid="#f000"
+                  blurOnSubmit={false}
                 />
               </View>
               <View style={styles.sectionStyle}>

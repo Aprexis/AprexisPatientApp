@@ -12,8 +12,9 @@ export const currentUserHelper = {
 function getCurrentProps(props) {
   const currentUser = getCurrentUser(props)
   const currentPatient = getCurrentPatient(props)
+  const userCredentials = getUserCredentials(props)
 
-  return { currentUser, currentPatient }
+  return { currentUser, currentPatient, userCredentials }
 
   function getCurrentUser(props) {
     return getCurrentEntry(props, 'currentUser')
@@ -21,6 +22,10 @@ function getCurrentProps(props) {
 
   function getCurrentPatient(props) {
     return getCurrentEntry(props, 'currentPatient')
+  }
+
+  function getUserCredentials(props) {
+    return getCurrentEntry(props, 'userCredentials')
   }
 
   function getCurrentEntry(props, entryName) {

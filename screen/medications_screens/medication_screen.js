@@ -14,14 +14,14 @@ const Stack = createNativeStackNavigator()
 
 function MedicationRemindersScreenStack(props) {
   const { patientMedication } = props
-  const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
+  const { currentUser, currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
 
   return (
     <Stack.Navigator
       screenOptions={
-        { 
-          headerStyle: { backgroundColor: '#E0EBF1', height:35 }, 
-          headerTitleStyle:{ color:'#003949'},
+        {
+          headerStyle: { backgroundColor: '#E0EBF1', height: 35 },
+          headerTitleStyle: { color: '#003949' },
           headerShadowVisible: false,
         }
       }
@@ -29,13 +29,13 @@ function MedicationRemindersScreenStack(props) {
       <Stack.Screen
         name="MedicationRemindersList"
         options={{ title: "Reminders", headerShown: false }}>
-        {(props) => <MedicationRemindersList {...props} patientMedication={patientMedication} currentUser={currentUser} currentPatient={currentPatient} />}
+        {(props) => <MedicationRemindersList {...props} patientMedication={patientMedication} currentUser={currentUser} currentPatient={currentPatient} userCredentials={userCredentials} />}
       </Stack.Screen>
       <Stack.Screen
         name="ReminderScreen"
         options={{ title: 'Reminder' }}
-        >
-        {(props) => <ReminderInfo {...props} currentUser={currentUser} currentPatient={currentPatient} />}
+      >
+        {(props) => <ReminderInfo {...props} currentUser={currentUser} currentPatient={currentPatient} userCredentials={userCredentials} />}
       </Stack.Screen>
     </Stack.Navigator>
   )
@@ -45,45 +45,46 @@ const Tab = createMaterialTopTabNavigator()
 
 function MedicationScreen(props) {
   const { patientMedication } = props.route.params
-  const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
+  const { currentUser, currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
 
   return (
     <View style={styles.view}>
       <View style={styles.titleView}>
-        <FontAwesome5Icon size={30} style={ styles.titleIcon } name={patientMedicationHelper.medicationIcon(patientMedication)} />
+        <FontAwesome5Icon size={30} style={styles.titleIcon} name={patientMedicationHelper.medicationIcon(patientMedication)} />
         <Text style={styles.titleText}>{patientMedicationHelper.medicationLabel(patientMedication)}</Text>
       </View>
       <View style={styles.sectionView}>
         <Tab.Navigator
-          sceneContainerStyle={{ backgroundColor:'#F3F6F9', padding:12, flex:'1' }}
+          sceneContainerStyle={{ backgroundColor: '#F3F6F9', padding: 12, flex: 1 }}
           screenOptions={{
-            tabBarIndicatorStyle: { backgroundColor:'#03718D', marginLeft:'-1px' },
-            tabBarItemStyle: { width:'auto', margin:5, padding:0 },
-            tabBarStyle: { width:'auto', alignItems:'center', justifyContent:'space-between', backgroundColor:'#E2EBF1' },
+            tabBarIndicatorStyle: { backgroundColor: '#03718D', marginLeft: -1 },
+            tabBarItemStyle: { margin: 5, padding: 0 },
+            tabBarStyle: { justifyContent: 'space-between', backgroundColor: '#E2EBF1' },
             tabBarActiveTintColor: '#003949',
             tabBarInactiveTintColor: '#03718D',
-            tabBarLabelStyle: { fontSize: 14, fontWeight: '600' },            
-          }}
-          >
+            tabBarLabelStyle: { fontSize: 11, fontWeight: "600" }
+          }
+          }
+        >
           <Tab.Screen
             name="MedicationInfo"
-            options={{ title: "Info", headerShown: false, }}>
-            {(props) => <MedicationInfo {...props} patientMedication={patientMedication} currentUser={currentUser} currentPatient={currentPatient} />}
+            options={{ title: "Info", headerShown: false }}>
+            {(props) => <MedicationInfo {...props} patientMedication={patientMedication} currentUser={currentUser} currentPatient={currentPatient} userCredentials={userCredentials} />}
           </Tab.Screen>
           <Tab.Screen
             name="MedicationInteractions"
             options={{ title: "Interactions", headerShown: false }}>
-            {(props) => <MedicationInteractions {...props} patientMedication={patientMedication} currentUser={currentUser} currentPatient={currentPatient} />}
+            {(props) => <MedicationInteractions {...props} patientMedication={patientMedication} currentUser={currentUser} currentPatient={currentPatient} userCredentials={userCredentials} />}
           </Tab.Screen>
           <Tab.Screen
             name="MedicationAdherence"
             options={{ title: "Adherence", headerShown: false }}>
-            {(props) => <MedicationAdherence {...props} patientMedication={patientMedication} currentUser={currentUser} currentPatient={currentPatient} />}
+            {(props) => <MedicationAdherence {...props} patientMedication={patientMedication} currentUser={currentUser} currentPatient={currentPatient} userCredentials={userCredentials} />}
           </Tab.Screen>
           <Tab.Screen
             name="MedicationReminders"
             options={{ title: "Reminders", headerShown: false }}>
-            {(props) => <MedicationRemindersScreenStack {...props} patientMedication={patientMedication} currentUser={currentUser} currentPatient={currentPatient} />}
+            {(props) => <MedicationRemindersScreenStack {...props} patientMedication={patientMedication} currentUser={currentUser} currentPatient={currentPatient} userCredentials={userCredentials} />}
           </Tab.Screen>
         </Tab.Navigator>
       </View>
@@ -95,10 +96,10 @@ export { MedicationScreen }
 
 const styles = StyleSheet.create(
   {
-      sectionView: { flex: 4 },
-      titleView: { flex: 1, flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor:'#03718D', color:'#fff' },
-      titleIcon: { color: "#fff" },
-      titleText: { fontSize: 20, fontWeight: "bold", color:'#fff' },
-      view: { flex: 1 }
+    sectionView: { flex: 4 },
+    titleView: { flex: 1, flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: '#03718D', color: '#fff' },
+    titleIcon: { color: "#fff" },
+    titleText: { fontSize: 20, fontWeight: "bold", color: '#fff' },
+    view: { flex: 1 }
   }
 )

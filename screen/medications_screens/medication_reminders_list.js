@@ -1,27 +1,25 @@
-import React from 'react'
+import React, { useEffect, useReducer } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { AddButton, FontAwesome5Icon, ListView, MaterialCommunityIcon } from '../components'
+import { FontAwesome5Icon, ListView } from '../components'
 import { reminderApi } from "../../api"
-import { valueHelper, alertHelper, currentUserHelper, patientHelper, patientMedicationHelper, reminderHelper, userCredentialsHelper } from "../../helpers"
+import { valueHelper, alertHelper, currentUserHelper, patientHelper, patientMedicationHelper, reminderHelper } from "../../helpers"
 import { styles } from '../../assets/styles'
+import { ReminderModal } from '../reminders_screens'
 
 function MedicationReminder(props) {
-  const { navigation, medicationReminder } = props
-  const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
+  const { medicationReminder, onEdit } = props
 
-  return ( 
+  return (
     <TouchableOpacity
       activeOpacity={0.5}
       style={styles.listButton}
-      onPress={() => { navigation.navigate('ReminderScreen', { currentUser, currentPatient, reminder: medicationReminder }) }}>
-      <View style={{ flexDirection: "row", alignItems:'center', width:'95%'}}>
+      onPress={() => { onEdit(medicationReminder) }}>
+      <View style={{ flexDirection: "row", alignItems: 'center', width: '95%' }}>
         <FontAwesome5Icon size={27} name="clock" style={[styles.icon, inlineStyles.medIcon]} />
         <Text style={inlineStyles.text}>{reminderHelper.displayAction(medicationReminder)}</Text>
+        <Text style={inlineStyles.text}>{reminderDates(medicationReminder)}</Text>
       </View>
-      <View>
-        <FontAwesome5Icon size={30} name="angle-right" style={[styles.icon, inlineStyles.medIcon]} />
-      </View>
-    </TouchableOpacity> 
+    </TouchableOpacity>
   )
 
   function reminderDates(medicationReminder) {
@@ -29,9 +27,9 @@ function MedicationReminder(props) {
       case 'DailyReminder':
         return 'Daily'
       case 'WeeklyReminder':
-        return selectedDaysOfWeek(medicationReminder)
+        return `On ${selectedDaysOfWeek(medicationReminder)}`
       case 'MonthlyReminder':
-        return `Day of Month: ${reminderHelper.dayOfMonth(medicationReminder)}`
+        return `On Day ${reminderHelper.dayOfMonth(medicationReminder)}`
       default:
         return ""
     }
@@ -75,15 +73,24 @@ function MedicationReminder(props) {
 
 function MedicationRemindersList(props) {
   const { navigation } = props
-  const { currentPatient, currentUser } = currentUserHelper.getCurrentProps(props)
+  const { currentPatient, currentUser, userCredentials } = currentUserHelper.getCurrentProps(props)
   const { patientMedication } = props
+  const [state, dispatch] = useReducer(updateState, initialState())
+
+  useEffect(
+    () => {
+      if (patientMedicationHelper.id(patientMedication) != patientMedicationHelper.id(state.patientMedication)) {
+        dispatch({ type: 'NEW-PATIENT-MEDICATION', patientMedication })
+      }
+    },
+    [patientMedication]
+  )
 
   return (
     <View style={styles.mainBody}>
-      <View style={{ display:'flex', justifyContent:'flex-end', textAlign:'right'}}>
-        <AddButton onPress={addReminder} />
-      </View>
       <ListView
+        addEditModal={addEditModal}
+        forceUpdate={patientMedicationHelper.id(patientMedication) != patientMedicationHelper.id(state.patientMedication)}
         label='Medication Reminders'
         navigation={navigation}
         onLoadPage={loadPage}
@@ -94,38 +101,54 @@ function MedicationRemindersList(props) {
     </View>
   )
 
-  function addReminder() {
-    navigation.navigate('ReminderScreen', { currentUser, currentPatient, patientMedication: patientMedication })
-  }
-
-  function loadPage(number, size, onSuccess) {
-    userCredentialsHelper.getUserCredentials(
-      (userCredentials) => {
-        if (!valueHelper.isValue(userCredentials)) {
-          return
-        }
-        reminderApi.listForPatient(
-          userCredentials,
-          patientHelper.id(currentPatient),
-          { for_active: true, for_medication_label: patientMedicationHelper.medicationLabel(patientMedication), page: { number, size, total: 0 }, sort: 'recur_from,recur_to,action' },
-          onSuccess,
-          (error) => {
-            alertHelper.error(error)
-            return
-          }
-        )
-      }
+  function addEditModal(medicationReminder, action, visible, closeModal) {
+    return (
+      <ReminderModal
+        action={action}
+        currentPatient={currentPatient}
+        currentUser={currentUser}
+        onClose={closeModal}
+        patientMedication={patientMedication}
+        reminder={medicationReminder}
+        userCredentials={userCredentials}
+        visible={visible}
+      />
     )
   }
 
-  function presentItem(medicationReminder, medicationReminderIdx) {
+  function initialState() {
+    return {}
+  }
+
+  function loadPage(number, size, onSuccess) {
+    reminderApi.listForPatient(
+      userCredentials,
+      patientHelper.id(currentPatient),
+      { for_active: true, for_medication_label: patientMedicationHelper.medicationLabel(patientMedication), page: { number, size, total: 0 }, sort: 'recur_from,recur_to,action' },
+      onSuccess,
+      alertHelper.handleError
+    )
+  }
+
+  function presentItem(medicationReminder, medicationReminderIdx, editReminder) {
     return (
       <MedicationReminder
         key={`medication-reminder-${reminderHelper.id(medicationReminder)}-${medicationReminderIdx}`}
         medicationReminder={medicationReminder}
+        onEdit={editReminder}
         {...props}
       />
     )
+  }
+
+  function updateState(oldState, action) {
+    switch (action.type) {
+      case 'NEW-PATIENT-MEDICATION':
+        return { ...oldState, patientMedication: action.patientMedication }
+
+      default:
+        return oldState
+    }
   }
 }
 
@@ -134,7 +157,7 @@ export { MedicationRemindersList }
 const inlineStyles = StyleSheet.create(
   {
     view: { flex: 1, flexDirection: "row", height: 50, margin: 5, backgroundColor: "#F3F6F9" },
-    text: { color: "#112B37", fontSize: 18, fontWeight: "500", marginLeft:5 },
+    text: { color: "#112B37", fontSize: 18, fontWeight: "500", marginLeft: 5 },
     item: { whiteSpace: 'wrap' },
     medIcon: { marginRight: 5 }
   }
