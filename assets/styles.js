@@ -89,8 +89,6 @@ export const styles = StyleSheet.create(
       borderRadius: 5,
       borderColor: '#dadae8',
       backgroundColor:'rgba(255,255,255,.65)',
-      outlineColor: '#fff',
-      outlineWidth: '1px',
       shadowColor: "#86B9C7",
       shadowOffset: {
         width: 0,

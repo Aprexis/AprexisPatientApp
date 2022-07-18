@@ -1,5 +1,5 @@
 import React from 'react'
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import { SafeAreaView, StyleSheet, Text, View, useWindowDimensions } from 'react-native'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 import { Allergies, CheckInteractions, PatientMedicationsList } from "../medications_screens"
 import { currentUserHelper } from '../../helpers'
@@ -7,72 +7,56 @@ import { Button } from 'react-native-paper'
 import { FontAwesome5Icon } from '../components'
 import { styles } from '../../assets/styles'
 
-const Tab = createMaterialTopTabNavigator()
+import { TabView, SceneMap } from 'react-native-tab-view';
 
-function MedicationsScreen(props) {
+
+function MedicationsScreen(props, { navigation }: RootTabScreenProps<'TabOne'>) {
   const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
   //console.log(`Styles; ${JSON.stringify(styles, null, 2)}`)
 
+  const medicationsList = () => (
+    <View>
+      {(props) => <PatientMedicationsList {...props} currentUser={currentUser} currentPatient={currentPatient} />}
+    </View>
+    );
+
+  const checkInteractions = () => (
+    <View>
+      {(props) => <CheckInteractions {...props} currentUser={currentUser} currentPatient={currentPatient} />}
+    </View>
+  );
+
+  const Allergies = () => (
+    <View>
+      {(props) => <Allergies {...props} allergyType='Medicine' currentUser={currentUser} currentPatient={currentPatient} />}
+    </View>
+  );
+
+  const renderScene = SceneMap({
+    first: medicationsList,
+    second: checkInteractions,
+    third: Allergies,
+  });
+
+  const layout = useWindowDimensions();
+
+  const [index, setIndex] = React.useState(0);
+  const [routes] = React.useState([
+    { first: 'First' },
+    { second: 'Second' },
+    { third: 'Third' },
+  ]);
+
   return (
-    <SafeAreaView style={ styles.mainBody }>
-      <View style={ [styles.row, { justifyContent:'flex-end' }] }>
-          <View style={{ flex:.6, textAlign:'center' }}>
-            <Text style={inlineStyles.titleText}>MEDICATIONS</Text>
-          </View>
-          <View style={{ flex:.2, paddingRight:2 }}>
-            <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-              <Button
-                icon={({ size, color }) => (
-                  <FontAwesome5Icon name="plus" size={14} color="#03718D" style={{ marginLeft:'-8px' }}  />
-                )}
-                mode="outlined" 
-                onPress={() => console.log('Add Medication Pressed')}
-                contentStyle={{ height:30 }}
-                style={ {borderColor:'#03718D'}}
-                color="#03718D"
-                compact='true'
-              >
-                Add
-              </Button>
-            </View>
-          </View>
-      </View>
-      <View style={{ flex: 1, padding:8, paddingTop:0 }}>
-        <Tab.Navigator
-          style={{ marginBottom:12, textAlign:'center' }}
-          screenOptions={{
-            tabBarLabelStyle: { fontSize: 14, fontWeight: '600' },
-            tabBarStyle: { backgroundColor: '#E1EBF1', marginBottom:14 },
-            tabBarIndicatorStyle: { backgroundColor:'#03718D' },
-          }}
-        >
-          <Tab.Screen
-            name="List"
-            style={{ padding: 8, fontWeight: '700' }}
-            options={{ headerShown: false }}>
-            {(props) => <PatientMedicationsList {...props} currentUser={currentUser} currentPatient={currentPatient} />}
-          </Tab.Screen>
-          <Tab.Screen
-            name="Check Interactions"
-            options={{ headerShown: false }}>
-            {(props) => <CheckInteractions {...props} currentUser={currentUser} currentPatient={currentPatient} />}
-          </Tab.Screen>
-          <Tab.Screen
-            name="Allergies"
-            options={{ headerShown: false }}>
-            {(props) => <Allergies {...props} allergyType='Medicine' currentUser={currentUser} currentPatient={currentPatient} />}
-          </Tab.Screen>
-        </Tab.Navigator>
-      </View>
-    </SafeAreaView>
+    <TabView
+      lazy
+      navigationState={{ index, routes }}
+      renderScene={renderScene}
+      onIndexChange={setIndex}
+      initialLayout={{ width: layout.width }}
+    />
+
   )
 }
 
 export { MedicationsScreen }
-
-const inlineStyles = StyleSheet.create(
-  {
-    titleView: { flexDirection: "row", justifyContent: "center", alignContent: "center", marginTop:10 },
-    titleText: { fontSize: 18, fontWeight: "bold", color: "#112B37", margin:'0 auto'}
-  }
-)
