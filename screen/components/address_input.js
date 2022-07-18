@@ -1,5 +1,6 @@
 import React from 'react'
-import { StyleSheet, Text, TextInput, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
+import { TextInput } from 'react-native-paper'
 import { addressHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
 
@@ -50,7 +51,7 @@ export { AddressInput }
 const inlineStyles = StyleSheet.create(
   {
     addressFieldView: { flexDirection: "row", margin: 5, alignItems: 'center' },
-    addressFieldName: { fontWeight: "bold", marginRight: 5, display:'flex', width:'25vw', justifyContent:'flex-end'},
+    addressFieldName: { fontWeight: "bold", marginRight: 5, display: 'flex', justifyContent: 'flex-end' },
     addressFieldValue: {}
   }
 )

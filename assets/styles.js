@@ -31,6 +31,10 @@ export const styles = StyleSheet.create(
       backgroundColor: themeColor.lightBg,
       textAlign: 'center'
     },
+    scrollView: {
+      backgroundColor: themeColor.lightBg,
+      textAlign: 'center'
+    },
     row: {
       display: 'flex',
       flexDirection: 'row',
@@ -84,7 +88,6 @@ export const styles = StyleSheet.create(
       flex: 1,
       color: themeColor.darkBlue,
       fontWeight: '500',
-      padding: 10,
       borderWidth: 1,
       borderRadius: 5,
       borderColor: '#dadae8',

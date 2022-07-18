@@ -1,12 +1,13 @@
 import React, { useState } from 'react'
-import { Keyboard, KeyboardAvoidingView, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
+import { Keyboard, KeyboardAvoidingView, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import { TextInput } from 'react-native-paper'
 import { patientApi } from '../../api'
-import { alertHelper, currentUserHelper, userCredentialsHelper, valueHelper } from '../../helpers'
+import { alertHelper, currentUserHelper, valueHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
 
 function RequestPatientScreen(props) {
   const { navigation } = props
-  const { currentUser } = currentUserHelper.getCurrentProps(props)
+  const { currentUser, userCredentials } = currentUserHelper.getCurrentProps(props)
   const [patientName, setPatientName] = useState('')
 
   const handleSubmitPress = () => {
@@ -14,35 +15,27 @@ function RequestPatientScreen(props) {
       alertHelper.warning('Please fill Patient Name')
       return
     }
+    if (!valueHelper.isValue(userCredentials)) {
+      return
+    }
 
-    userCredentialsHelper.getUserCredentials(
-      (userCredentials) => {
-        if (!valueHelper.isValue(userCredentials)) {
+    patientApi.index(
+      userCredentials,
+      { for_name: patientName },
+      (patients, _patientHeaders) => {
+        if (patients.length == 0) {
+          alertHelper.warning('No matching patient found')
+          return
+        }
+        if (patients.length > 1) {
+          alertHelper.warning('Multiple matching patients found')
           return
         }
 
-        patientApi.index(
-          userCredentials,
-          { for_name: patientName },
-          (patients, _patientHeaders) => {
-            if (patients.length == 0) {
-              alertHelper.warning('No matching patient found')
-              return
-            }
-            if (patients.length > 1) {
-              alertHelper.warning('Multiple matching patients found')
-              return
-            }
-
-            const currentPatient = patients[0]
-            navigation.replace('PatientScreen', { currentUser, currentPatient })
-          },
-          (message) => {
-            alertHelper.error(message)
-            return
-          }
-        )
-      }
+        const currentPatient = patients[0]
+        navigation.replace('PatientScreen', { currentUser, currentPatient, userCredentials })
+      },
+      alertHelper.handleError
     )
   }
 

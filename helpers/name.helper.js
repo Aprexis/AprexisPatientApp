@@ -44,6 +44,9 @@ function name(namedModel, modelName, prefix = "", allowBlank = false) {
     if (valueHelper.isSet(allowBlank)) {
       return
     }
+    if (!valueHelper.isStringValue(modelName)) {
+      return ''
+    }
 
     return `No ${modelName}`
   }

@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { patientMedicationApi } from '../../api'
-import { valueHelper, alertHelper, patientMedicationHelper, userCredentialsHelper } from "../../helpers"
+import { valueHelper, alertHelper, patientMedicationHelper, currentUserHelper } from "../../helpers"
 
 function MedicationInfo(props) {
+  const { userCredentials } = currentUserHelper.getCurrentProps(props)
   const [patientMedication, setPatientMedication] = useState(props.patientMedication)
   const [needLoad, setNeedLoad] = useState(true)
   const physicianName = valueHelper.isValue(patientMedicationHelper.physician(patientMedication)) ? patientMedicationHelper.physicianName(patientMedication) : ""
@@ -14,25 +15,17 @@ function MedicationInfo(props) {
         return
       }
 
-      userCredentialsHelper.getUserCredentials(
-        (userCredentials) => {
-          if (!valueHelper.isValue(userCredentials)) {
-            return
-          }
-
-          patientMedicationApi.profile(
-            userCredentials,
-            patientMedication.id,
-            (patientMedicationProfile) => {
-              setNeedLoad(false)
-              setPatientMedication(patientMedicationProfile)
-            },
-            (message) => {
-              setNeedLoad(false)
-              alertHelper.error(message)
-              return
-            }
-          )
+      patientMedicationApi.profile(
+        userCredentials,
+        patientMedication.id,
+        (patientMedicationProfile) => {
+          setNeedLoad(false)
+          setPatientMedication(patientMedicationProfile)
+        },
+        (message) => {
+          setNeedLoad(false)
+          alertHelper.error(message)
+          return
         }
       )
     }

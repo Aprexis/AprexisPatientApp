@@ -2,21 +2,17 @@ import React from 'react'
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
-import { CaregiverInfo } from './caregiver_info'
 import { CaregiversList } from './caregivers_list'
 import { HcpsList } from './hcps_list'
 import { PharmacistsList } from './pharmacists_list'
 import { currentUserHelper } from '../../helpers'
-import { Button } from 'react-native-paper'
-import { FontAwesome5Icon } from '../components'
 import { styles } from '../../assets/styles'
 
 const Stack = createNativeStackNavigator()
 const Tab = createMaterialTopTabNavigator()
 
 function CaregiversScreenStack(props) {
-  const { caregiver } = props
-  const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
+  const { currentUser, currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
 
   return (
     <Stack.Navigator
@@ -32,18 +28,14 @@ function CaregiversScreenStack(props) {
         name="CaregiversList"
         options={{ headerShown: false }}
       >
-        {(props) => <CaregiversList {...props} currentUser={currentUser} currentPatient={currentPatient} />}
-      </Stack.Screen>
-      <Stack.Screen
-        name="CaregiverScreen">
-        {(props) => <CaregiverInfo {...props} caregiver={caregiver} currentUser={currentUser} currentPatient={currentPatient} />}
+        {(props) => <CaregiversList {...props} currentUser={currentUser} currentPatient={currentPatient} userCredentials={userCredentials} />}
       </Stack.Screen>
     </Stack.Navigator>
   )
 }
 
 function CareTeamScreen(props) {
-  const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
+  const { currentUser, currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
 
   return (
     <SafeAreaView style={styles.mainBody}>
@@ -65,17 +57,17 @@ function CareTeamScreen(props) {
             name="HCPs"
             style={{ padding: 8, fontWeight: '700' }}
             options={{ headerShown: false }}>
-            {(props) => <HcpsList {...props} currentUser={currentUser} currentPatient={currentPatient} />}
+            {(props) => <HcpsList {...props} currentUser={currentUser} currentPatient={currentPatient} userCredentials={userCredentials} />}
           </Tab.Screen>
           <Tab.Screen
             name="Caregivers"
             options={{ headerShown: false }}>
-            {(props) => <CaregiversScreenStack {...props} currentUser={currentUser} currentPatient={currentPatient} />}
+            {(props) => <CaregiversScreenStack {...props} currentUser={currentUser} currentPatient={currentPatient} userCredentials={userCredentials} />}
           </Tab.Screen>
           <Tab.Screen
             name="Pharmacists"
             options={{ headerShown: false }}>
-            {(props) => <PharmacistsList {...props} currentUser={currentUser} currentPatient={currentPatient} />}
+            {(props) => <PharmacistsList {...props} currentUser={currentUser} currentPatient={currentPatient} userCredentials={userCredentials} />}
           </Tab.Screen>
         </Tab.Navigator>
       </View>

@@ -2,7 +2,7 @@ import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { FontAwesome5Icon, ListView } from '../components'
 import { patientMedicationApi } from "../../api"
-import { alertHelper, patientHelper, currentUserHelper, userCredentialsHelper, patientMedicationHelper, valueHelper } from '../../helpers'
+import { alertHelper, patientHelper, currentUserHelper, patientMedicationHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
 
 function PatientMedication(props) {
@@ -27,7 +27,7 @@ function PatientMedication(props) {
 
 function PatientMedicationsList(props) {
   const { navigation } = props
-  const { currentPatient } = currentUserHelper.getCurrentProps(props)
+  const { currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
 
   return (
     <ListView
@@ -41,26 +41,16 @@ function PatientMedicationsList(props) {
   )
 
   function loadPage(number, size, onSuccess) {
-    userCredentialsHelper.getUserCredentials(
-      (userCredentials) => {
-        if (!valueHelper.isValue(userCredentials)) {
-          return
-        }
-        patientMedicationApi.listForPatient(
-          userCredentials,
-          patientHelper.id(currentPatient),
-          { for_active: true, page: { number, size, total: 0 }, sort: 'created_at-,medication.label' },
-          onSuccess,
-          (error) => {
-            alertHelper.error(error)
-            return
-          }
-        )
-      }
+    patientMedicationApi.listForPatient(
+      userCredentials,
+      patientHelper.id(currentPatient),
+      { for_active: true, page: { number, size, total: 0 }, sort: 'created_at-,medication.label' },
+      onSuccess,
+      alertHelper.handleError
     )
   }
 
-  function presentItem(patientMedication, patientMedicationIdx) {
+  function presentItem(patientMedication, patientMedicationIdx, _editPatientMedication) {
     return (
       <PatientMedication
         key={`patient-medication-${patientMedicationHelper.id(patientMedication)}-${patientMedicationIdx}`}

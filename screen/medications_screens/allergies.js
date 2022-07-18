@@ -1,13 +1,13 @@
 import React from 'react'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { currentUserHelper } from '../../helpers'
-import { PatientAllergiesList, PatientAllergyScreen } from '../allergies_screens'
+import { PatientAllergiesList } from '../allergies_screens'
 
 const Stack = createNativeStackNavigator()
 
 function Allergies(props) {
   const { allergyType } = props
-  const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
+  const { currentUser, currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
 
   return (
     <Stack.Navigator
@@ -22,12 +22,7 @@ function Allergies(props) {
       <Stack.Screen
         name="PatientAllergiesList"
         options={{ title: "Allergies", headerShown: false }}>
-        {(props) => <PatientAllergiesList {...props} allergyType={allergyType} currentUser={currentUser} currentPatient={currentPatient} />}
-      </Stack.Screen>
-      <Stack.Screen
-        name="PatientAllergyScreen"
-        options={{ title: 'Allergy' }}>
-        {(props) => <PatientAllergyScreen {...props} currentUser={currentUser} currentPatient={currentPatient} />}
+        {(props) => <PatientAllergiesList {...props} allergyType={allergyType} currentUser={currentUser} currentPatient={currentPatient} userCredentials={userCredentials} />}
       </Stack.Screen>
     </Stack.Navigator>
   )
