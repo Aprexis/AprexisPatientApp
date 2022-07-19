@@ -14,11 +14,14 @@ function PatientMedication(props) {
       activeOpacity={0.5}
       style={styles.listButton}
       onPress={() => { navigation.navigate('MedicationScreen', { currentUser, currentPatient, patientMedication }) }}>
-      <View style={{ flexDirection: "row", alignItems: 'center', width: '95%' }}>
+      <View style={{ flexDirection: "row", alignItems: 'center', justifyContent:'center', width:50 }}>
         <FontAwesome5Icon size={35} style={styles.icon} name={patientMedicationHelper.medicationIcon(patientMedication)} />
+      </View>
+      
+      <View style={{ flexDirection: "row", alignItems: 'center', width: '80%',  }}>
         <Text style={inlineStyles.text}>{patientMedicationHelper.medicationLabel(patientMedication)}</Text>
       </View>
-      <View>
+      <View style={{ flexDirection: "row", alignItems: 'center', width:20 }}>
         <FontAwesome5Icon size={30} name="angle-right" style={[styles.icon, inlineStyles.medIcon]} />
       </View>
     </TouchableOpacity>
@@ -65,7 +68,7 @@ export { PatientMedicationsList }
 
 const inlineStyles = StyleSheet.create(
   {
-    text: { color: "#112B37", fontSize: 18, fontWeight: "500", marginLeft: 5 },
+    text: { color: "#112B37", fontSize: 17, fontWeight: "500", marginLeft: 5, display:'flex', flex:1 },
     medIcon: { marginRight: 5 }
   }
 )
