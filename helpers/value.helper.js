@@ -6,6 +6,7 @@ export const valueHelper = {
   compareWithCast,
   copyForHash,
   copyHash,
+  filterHash,
   getCircularReplacer,
   hashGet,
   hashSet,
@@ -99,6 +100,26 @@ function copyHash(hash, toHash = {}) {
   )
 
   return toHash
+}
+
+function filterHash(hash, { exclude, include }) {
+  const newHash = {}
+
+  Object.keys(hash).filter(
+    (key) => {
+      if (Array.isArray(include) && !include.includes(key)) {
+        return
+      }
+
+      if (Array.isArray(exclude) && exclude.includes(key)) {
+        return
+      }
+
+      newHash[key] = hash[key]
+    }
+  )
+
+  return newHash
 }
 
 function getCircularReplacer() {
