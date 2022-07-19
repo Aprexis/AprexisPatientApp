@@ -12,4 +12,5 @@ function CheckInteractions(_props) {
   )
 }
 
-export { CheckInteractions }
+const MemoizedCheckInteractions = React.memo(CheckInteractions)
+export { MemoizedCheckInteractions as CheckInteractions }

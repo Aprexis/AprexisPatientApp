@@ -91,7 +91,8 @@ function CaregiversList(props) {
   }
 }
 
-export { CaregiversList }
+const MemoizedCaregiversList = React.memo(CaregiversList)
+export { MemoizedCaregiversList as CaregiversList }
 
 const inlineStyles = StyleSheet.create(
   {

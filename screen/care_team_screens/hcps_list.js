@@ -97,7 +97,8 @@ function HcpsList(props) {
   }
 }
 
-export { HcpsList }
+const MemoizedHcpsList = React.memo(HcpsList)
+export { MemoizedHcpsList as HcpsList }
 
 const inlineStyles = StyleSheet.create(
   {
