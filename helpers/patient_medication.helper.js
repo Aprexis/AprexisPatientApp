@@ -60,7 +60,7 @@ const patientMedicationKeys = [
   "type"
 ]
 
-const iconMap = {
+const medicationLabelMap = {
   'capsule': 'capsules',
   'tablet': 'tablets',
   'syringe': 'syringe',
@@ -204,10 +204,10 @@ function medicationId(patientMedication) {
 }
 
 function medicationIcon(patientMedication) {
-  const icon = patientMedicationHelper.medicationLabel(patientMedication).toLowerCase()
-  const iconKey = Object.keys(iconMap).find((key) => icon.includes(key))
-  if (valueHelper.isStringValue(iconKey)) {
-    return iconMap[iconKey]
+  const medicationLabel = patientMedicationHelper.medicationLabel(patientMedication).toLowerCase()
+  const medicationLabelKey = Object.keys(medicationLabelMap).find((key) => medicationLabel.includes(key))
+  if (valueHelper.isStringValue(medicationLabelKey)) {
+    return medicationLabelMap[medicationLabelKey]
   }
   return 'prescription'
 }
