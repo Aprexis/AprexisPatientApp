@@ -84,24 +84,21 @@ export const styles = StyleSheet.create(
       width: '100%',
       alignSelf: 'center',
     },
+    textInput: {
+      width:'80%',
+      alignSelf:'center'
+    },
     inputField: {
       flex: 1,
       color: themeColor.darkBlue,
       fontWeight: '500',
       borderWidth: 1,
-      borderRadius: 5,
+      borderRadius: 10,
       borderColor: '#dadae8',
       backgroundColor: 'rgba(255,255,255,.65)',
-      //outlineColor: '#fff',
-      //outlineWidth: '1px',
-      shadowColor: "#86B9C7",
-      shadowOffset: {
-        width: 0,
-        height: 5,
-      },
-      shadowOpacity: 0.53,
-      shadowRadius: 13.97,
-      elevation: 21,
+      width: "100%",
+      padding: 10,
+      height:30
     },
     icon: {
       color: themeColor.darkBlue,

@@ -3,7 +3,7 @@ import { Keyboard, KeyboardAvoidingView, SafeAreaView, ScrollView, Text, Touchab
 import { TextInput } from 'react-native-paper'
 import { patientApi } from '../../api'
 import { alertHelper, currentUserHelper, valueHelper } from '../../helpers'
-import { styles } from '../../assets/styles'
+import { themeColor, styles } from '../../assets/styles'
 
 function RequestPatientScreen(props) {
   const { navigation } = props
@@ -53,16 +53,18 @@ function RequestPatientScreen(props) {
         }>
         <View>
           <KeyboardAvoidingView enabled>
-            <View style={styles.sectionStyle}>
+            <View>
               <TextInput
-                style={styles.inputField}
                 onChangeText={(patientName) => setPatientName(patientName)}
-                placeholder='Enter Patient Name'
-                placeholderTextColor="#8b9cb5"
+                label='Enter Patient Name'
                 keyboardType="default"
                 onSubmitEditing={Keyboard.dismiss}
                 underlineColorAndroid="#f000"
                 returnKeyType="next"
+                mode="outlined"
+                dense='true'
+                style={styles.textInput}
+                activeOutlineColor={themeColor.lightBlue}
               />
             </View>
             <TouchableOpacity

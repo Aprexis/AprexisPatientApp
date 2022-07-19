@@ -13,7 +13,7 @@ import { TextInput } from 'react-native-paper'
 import { authenticationApi } from '../api'
 import { Loader } from './components'
 import { alertHelper, userCredentialsHelper, currentUserHelper } from '../helpers'
-import { styles } from '../assets/styles'
+import { themeColor, styles } from '../assets/styles'
 
 function LoginScreen({ navigation }) {
   const [userEmail, setUserEmail] = useState('')
@@ -84,12 +84,10 @@ function LoginScreen({ navigation }) {
                   }}
                 />
               </View>
-              <View style={styles.sectionStyle}>
+              <View>
                 <TextInput
-                  style={styles.inputField}
                   onChangeText={(userEmail) => setUserEmail(userEmail)}
                   placeholder="Enter Username"
-                  placeholderTextColor="#8b9cb5"
                   autoCapitalize='none'
                   keyboardType='email-address'
                   returnKeyType='next'
@@ -97,23 +95,26 @@ function LoginScreen({ navigation }) {
                     passwordInputRef.current &&
                     passwordInputRef.current.focus()
                   }
-                  underlineColorAndroid="#f000"
                   blurOnSubmit={false}
+                  mode="outlined"
+                  dense='true'
+                  style={styles.textInput}
+                  activeOutlineColor={themeColor.brightBlue}
                 />
               </View>
-              <View style={styles.sectionStyle}>
+              <View>
                 <TextInput
-                  style={styles.inputField}
                   onChangeText={(userPassword) => setUserPassword(userPassword)}
                   placeholder='Enter Password'
-                  placeholderTextColor="#8b9cb5"
-                  keyboardType="default"
                   ref={passwordInputRef}
                   onSubmitEditing={Keyboard.dismiss}
                   blurOnSubmit={false}
                   secureTextEntry={true}
-                  underlineColorAndroid="#f000"
                   returnKeyType="next"
+                  mode="outlined"
+                  dense='true'
+                  style={styles.textInput}
+                  activeOutlineColor={themeColor.brightBlue}
                 />
               </View>
               <TouchableOpacity
