@@ -20,6 +20,7 @@ const routes = [
 
 function MedicationsScreen(props) {
   const [state, dispatch] = useReducer(updateState, { index: 0, routes })
+  const { navigation } = props
   const { currentUser, currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
 
   return (
@@ -48,7 +49,7 @@ function MedicationsScreen(props) {
       return null
     }
 
-    return <Screen currentPatient={currentPatient} currentUser={currentUser} jumpTo={jumpTo} route={route} userCredentials={userCredentials} />
+    return <Screen currentPatient={currentPatient} currentUser={currentUser} jumpTo={jumpTo} navigation={navigation} route={route} userCredentials={userCredentials} />
   }
 
   function updateState(oldState, action) {

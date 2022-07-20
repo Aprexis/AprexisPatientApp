@@ -13,4 +13,5 @@ export * from './list_view'
 export * from './loader'
 export * from './material_community_icon'
 export * from './number_input'
-export * from "./select_id"
+export * from './select_id'
+export * from './stack_screen'

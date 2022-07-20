@@ -6,22 +6,21 @@ import { alertHelper, patientHelper, currentUserHelper, patientMedicationHelper 
 import { styles } from '../../assets/styles'
 
 function PatientMedication(props) {
-  const { navigation, patientMedication } = props
-  const { currentUser, currentPatient } = currentUserHelper.getCurrentProps(props)
+  const { patientMedication, setPatientMedication } = props
 
   return (
     <TouchableOpacity
       activeOpacity={0.5}
       style={styles.listButton}
-      onPress={() => { navigation.navigate('MedicationScreen', { currentUser, currentPatient, patientMedication }) }}>
-      <View style={{ flexDirection: "row", alignItems: 'center', justifyContent:'center', width:50 }}>
+      onPress={() => { setPatientMedication(patientMedication) }}>
+      <View style={{ flexDirection: "row", alignItems: 'center', width: 50 }}>
         <FontAwesome5Icon size={35} style={styles.icon} name={patientMedicationHelper.medicationIcon(patientMedication)} />
       </View>
-      
-      <View style={{ flexDirection: "row", alignItems: 'center', width: '80%',  }}>
+
+      <View style={{ flexDirection: "row", alignItems: 'center', width: '80%', }}>
         <Text style={inlineStyles.text}>{patientMedicationHelper.medicationLabel(patientMedication)}</Text>
       </View>
-      <View style={{ flexDirection: "row", alignItems: 'center', width:20 }}>
+      <View style={{ flexDirection: "row", alignItems: 'center', width: 20 }}>
         <FontAwesome5Icon size={30} name="angle-right" style={[styles.icon, inlineStyles.medIcon]} />
       </View>
     </TouchableOpacity>
@@ -29,13 +28,12 @@ function PatientMedication(props) {
 }
 
 function PatientMedicationsList(props) {
-  const { navigation } = props
+  const { setPatientMedication } = props
   const { currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
 
   return (
     <ListView
       label='Patient Medication'
-      navigation={navigation}
       onLoadPage={loadPage}
       onPresentItem={presentItem}
       pageSize={20}
@@ -58,6 +56,7 @@ function PatientMedicationsList(props) {
       <PatientMedication
         key={`patient-medication-${patientMedicationHelper.id(patientMedication)}-${patientMedicationIdx}`}
         patientMedication={patientMedication}
+        setPatientMedication={setPatientMedication}
         {...props}
       />
     )
@@ -68,7 +67,7 @@ export { PatientMedicationsList }
 
 const inlineStyles = StyleSheet.create(
   {
-    text: { color: "#112B37", fontSize: 17, fontWeight: "500", marginLeft: 5, display:'flex', flex:1 },
+    text: { color: "#112B37", fontSize: 17, fontWeight: "500", marginLeft: 5, display: 'flex', flex: 1 },
     medIcon: { marginRight: 5 }
   }
 )

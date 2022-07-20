@@ -11,7 +11,8 @@ function MedicationAdherence(props) {
   )
 }
 
-export { MedicationAdherence }
+const MemoizedMedicationAdherence = React.memo(MedicationAdherence)
+export { MemoizedMedicationAdherence as MedicationAdherence }
 
 const styles = StyleSheet.create(
   {

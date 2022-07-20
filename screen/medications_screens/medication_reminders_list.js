@@ -72,7 +72,6 @@ function MedicationReminder(props) {
 }
 
 function MedicationRemindersList(props) {
-  const { navigation } = props
   const { currentPatient, currentUser, userCredentials } = currentUserHelper.getCurrentProps(props)
   const { patientMedication } = props
   const [state, dispatch] = useReducer(updateState, initialState())
@@ -92,7 +91,6 @@ function MedicationRemindersList(props) {
         addEditModal={addEditModal}
         forceUpdate={patientMedicationHelper.id(patientMedication) != patientMedicationHelper.id(state.patientMedication)}
         label='Medication Reminders'
-        navigation={navigation}
         onLoadPage={loadPage}
         onPresentItem={presentItem}
         pageSize={20}

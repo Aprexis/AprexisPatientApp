@@ -1,50 +1,30 @@
-import React from 'react'
-import { StyleSheet, Text, View } from 'react-native'
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { FontAwesome5Icon } from '../components'
+import React, { useReducer } from 'react'
+import { Dimensions, StyleSheet, Text, View } from 'react-native'
+import { TabView } from 'react-native-tab-view'
+import { FontAwesome5Icon, LazyPlaceholder } from '../components'
 import { MedicationAdherence } from './medication_adherence'
 import { MedicationInfo } from "./medication_info"
 import { MedicationInteractions } from './medication_interactions'
 import { MedicationRemindersList } from './medication_reminders_list'
-import { ReminderInfo } from '../reminders_screens'
-import { currentUserHelper, patientMedicationHelper } from "../../helpers"
+import { valueHelper, currentUserHelper, patientMedicationHelper } from "../../helpers"
 
-const Stack = createNativeStackNavigator()
-
-function MedicationRemindersScreenStack(props) {
-  const { patientMedication } = props
-  const { currentUser, currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
-
-  return (
-    <Stack.Navigator
-      screenOptions={
-        {
-          headerStyle: { backgroundColor: '#E0EBF1', height: 35 },
-          headerTitleStyle: { color: '#003949' },
-          headerShadowVisible: false,
-        }
-      }
-    >
-      <Stack.Screen
-        name="MedicationRemindersList"
-        options={{ title: "Reminders", headerShown: false }}>
-        {(props) => <MedicationRemindersList {...props} patientMedication={patientMedication} currentUser={currentUser} currentPatient={currentPatient} userCredentials={userCredentials} />}
-      </Stack.Screen>
-      <Stack.Screen
-        name="ReminderScreen"
-        options={{ title: 'Reminder' }}
-      >
-        {(props) => <ReminderInfo {...props} currentUser={currentUser} currentPatient={currentPatient} userCredentials={userCredentials} />}
-      </Stack.Screen>
-    </Stack.Navigator>
-  )
+const screens = {
+  info: MedicationInfo,
+  interactions: MedicationInteractions,
+  adherence: MedicationAdherence,
+  reminders: MedicationRemindersList
 }
 
-const Tab = createMaterialTopTabNavigator()
+const routes = [
+  { key: 'info', title: 'Info' },
+  { key: 'interacitons', title: 'Interactions' },
+  { key: 'adherence', title: 'Adherence' },
+  { key: 'reminders', title: 'Reminders' }
+]
 
 function MedicationScreen(props) {
   const { patientMedication } = props.route.params
+  const [state, dispatch] = useReducer(updateState, { index: 0, routes })
   const { currentUser, currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
 
   return (
@@ -53,43 +33,45 @@ function MedicationScreen(props) {
         <FontAwesome5Icon size={30} style={styles.titleIcon} name={patientMedicationHelper.medicationIcon(patientMedication)} />
         <Text style={styles.titleText}>{patientMedicationHelper.medicationLabel(patientMedication)}</Text>
       </View>
-      <View style={styles.sectionView}>
-        <Tab.Navigator
-          sceneContainerStyle={{ backgroundColor: '#F3F6F9', padding: 12, flex: 1 }}
-          screenOptions={{
-            tabBarIndicatorStyle: { backgroundColor: '#03718D', marginLeft: -1 },
-            tabBarItemStyle: { margin: 5, padding: 0 },
-            tabBarStyle: { justifyContent: 'space-between', backgroundColor: '#E2EBF1' },
-            tabBarActiveTintColor: '#003949',
-            tabBarInactiveTintColor: '#03718D',
-            tabBarLabelStyle: { fontSize: 11, fontWeight: "600" }
-          }
-          }
-        >
-          <Tab.Screen
-            name="MedicationInfo"
-            options={{ title: "Info", headerShown: false }}>
-            {(props) => <MedicationInfo {...props} patientMedication={patientMedication} currentUser={currentUser} currentPatient={currentPatient} userCredentials={userCredentials} />}
-          </Tab.Screen>
-          <Tab.Screen
-            name="MedicationInteractions"
-            options={{ title: "Interactions", headerShown: false }}>
-            {(props) => <MedicationInteractions {...props} patientMedication={patientMedication} currentUser={currentUser} currentPatient={currentPatient} userCredentials={userCredentials} />}
-          </Tab.Screen>
-          <Tab.Screen
-            name="MedicationAdherence"
-            options={{ title: "Adherence", headerShown: false }}>
-            {(props) => <MedicationAdherence {...props} patientMedication={patientMedication} currentUser={currentUser} currentPatient={currentPatient} userCredentials={userCredentials} />}
-          </Tab.Screen>
-          <Tab.Screen
-            name="MedicationReminders"
-            options={{ title: "Reminders", headerShown: false }}>
-            {(props) => <MedicationRemindersScreenStack {...props} patientMedication={patientMedication} currentUser={currentUser} currentPatient={currentPatient} userCredentials={userCredentials} />}
-          </Tab.Screen>
-        </Tab.Navigator>
-      </View>
+
+      <TabView
+        lazy
+        navigationState={state}
+        renderScene={renderScene}
+        renderLazyPlaceholder={renderLazyPlaceholder}
+        onIndexChange={handleIndexChange}
+        initialLayout={{ width: Dimensions.get('window').width }}
+        style={styles.sectionView}
+      />
     </View >
   )
+
+  function handleIndexChange(index) {
+    dispatch({ type: 'INDEX-CHANGE', index })
+  }
+
+  function renderLazyPlaceholder({ route }) {
+    return (<LazyPlaceholder route={route} />)
+  }
+
+  function renderScene({ jumpTo, route }) {
+    const Screen = screens[route.key]
+    if (!valueHelper.isValue(Screen)) {
+      return null
+    }
+
+    return <Screen currentPatient={currentPatient} currentUser={currentUser} jumpTo={jumpTo} patientMedication={patientMedication} route={route} userCredentials={userCredentials} />
+  }
+
+  function updateState(oldState, action) {
+    switch (action.type) {
+      case 'INDEX-CHANGE':
+        return { ...oldState, index: action.index }
+
+      default:
+        return oldState
+    }
+  }
 }
 
 export { MedicationScreen }
