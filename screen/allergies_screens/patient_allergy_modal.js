@@ -1,11 +1,11 @@
 import React, { useState } from 'react'
-import { Text, View } from 'react-native'
+import { Text, View, Keyboard } from 'react-native'
 import { Button, Menu, TextInput } from 'react-native-paper'
 import { AprexisModal, NumberInput } from "../components"
 import { patientAllergyApi } from '../../api'
 import { valueHelper, alertHelper, currentUserHelper, patientAllergyHelper } from "../../helpers"
 import { allergyCategories } from '../../types'
-import { styles } from '../../assets/styles'
+import { themeColor, styles } from '../../assets/styles'
 
 function PatientAllergyModal(props) {
   const { action, allergyType, onClose, visible } = props
@@ -52,15 +52,10 @@ function PatientAllergyModal(props) {
     }
 
     return (
-      <View style={inlineStyles.infoArea}>
+      <View style={{ display:'flex', width:'100%' }}>
+
         <View style={inlineStyles.profileFieldView}>
-          <Text style={inlineStyles.profileFieldName}>Name</Text>
-          <TextInput
-            editable={isNewPatientAllergy || !valueHelper.isStringValue(patientAllergyHelper.allergyName(model)) || valueHelper.isStringValue(patientAllergyHelper.allergyName(changedModel))}
-            style={styles.inputField}
-            onChangeText={(allergyName) => { changeValue('allergy_name', allergyName) }}
-            value={patientAllergyHelper.allergyName(model)}
-          />
+          <Text style={{ fontSize:20, fontWeight:'600' }}>Record an Allergic Reaction</Text>
         </View>
 
         <View style={inlineStyles.profileFieldView}>
@@ -81,20 +76,43 @@ function PatientAllergyModal(props) {
         </View>
 
         <View style={inlineStyles.profileFieldView}>
-          <Text style={inlineStyles.profileFieldName}>Year</Text>
-          <NumberInput
-            style={styles.inputField}
-            onChangeText={(year) => { changeValue('year', year) }}
-            value={year}
+          <TextInput
+            editable={isNewPatientAllergy || !valueHelper.isStringValue(patientAllergyHelper.allergyName(model)) || valueHelper.isStringValue(patientAllergyHelper.allergyName(changedModel))}
+            onChangeText={(allergyName) => { changeValue('allergy_name', allergyName) }}
+            value={patientAllergyHelper.allergyName(model)}         
+            label='Allergen Name'
+            keyboardType="default"
+            onSubmitEditing={Keyboard.dismiss}
+            underlineColorAndroid="#f000"
+            returnKeyType="next"
+            mode="outlined"
+            dense='true'
+            style={styles.textInput}
+            activeOutlineColor={themeColor.lightBlue}   
           />
         </View>
 
         <View style={inlineStyles.profileFieldView}>
-          <Text style={inlineStyles.profileFieldName}>Reaction</Text>
+          <NumberInput
+            onChangeText={(year) => { changeValue('year', year) }}
+            value={year}
+            mode="outlined"
+            label="Year Started"
+            dense='true'
+            style={styles.textInput}
+            activeOutlineColor={themeColor.lightBlue} 
+          />
+        </View>
+
+        <View style={inlineStyles.profileFieldView}>
           <TextInput
-            style={styles.inputField}
             onChangeText={(reaction) => { changeValue('reaction', reaction) }}
             value={patientAllergyHelper.reaction(model)}
+            mode="outlined"
+            label="Reaction"
+            dense='true'
+            style={styles.textInput}
+            activeOutlineColor={themeColor.lightBlue} 
           />
         </View>
       </View>

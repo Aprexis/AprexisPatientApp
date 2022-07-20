@@ -19,13 +19,15 @@ function AprexisModal(props) {
 
   return (
     <Portal>
-      <Modal visible={visible} onDismiss={cancel} contentContainerStyle={styles.mainBody}>
+      <Modal visible={visible} onDismiss={cancel} contentContainerStyle={{ backgroundColor:'rgba(255,255,255),.75' }} style={{ padding:20 }}>
         <ScrollView
-          contentContainerStyle={styles.scrollView}
+          contentContainerStyle={[styles.scrollView, { alignItems: 'center', padding:10 }]}
           keyboardShouldPersistTaps="handled">
-          {displayModel(model, changedModel, fields, inlineStyles, changeValue, setField)}
+          <View style={{ display:'flex', alignItems: 'center', width:'100%', paddingTop:10, paddingBottom:20 }}>
+            {displayModel(model, changedModel, fields, inlineStyles, changeValue, setField)}
+          </View>
 
-          <View style={{ flexDirection: 'row', justifyContent: 'space-between', display: 'flex', marginTop: 8 }}>
+          <View style={{ flexDirection: 'row', justifyContent: 'space-between', display: 'flex', marginTop: 8, flex:1, width:'100%' }}>
             <Button
               mode='outlined'
               onPress={cancel}
@@ -37,7 +39,7 @@ function AprexisModal(props) {
             </Button>
             <Button
               onPress={ok}
-              style={[styles.btnPrimary, { marginRight: 10, display: 'flex', textAlign: 'center' }]}
+              style={[styles.btnPrimary, { display: 'flex', textAlign: 'center' }]}
               color='#03718D'
               compact='true'
               title='Save'>
@@ -152,8 +154,8 @@ export { AprexisModal }
 const inlineStyles = StyleSheet.create(
   {
     infoArea: { flexGrow: 1, flexDirection: 'column' },
-    profileFieldView: { flexDirection: 'row', alignItems: 'center' },
-    profileFieldName: { fontWeight: 'bold', marginRight: 5, display: 'flex', justifyContent: 'flex-end' },
+    profileFieldView: { flexDirection: 'row', alignItems: 'center', alignSelf:'center', marginTop:10 },
+    profileFieldName: { fontWeight: '500', marginRight: 5, display: 'flex', justifyContent: 'flex-end', fontSize:16 },
     profileFieldValue: { border: 'solid #ccc' }
   }
 )
