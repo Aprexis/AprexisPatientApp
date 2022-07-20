@@ -1,13 +1,22 @@
-import { fieldHelper } from "./field.helper"
+import { fieldHelper } from './field.helper'
+import { nameHelper } from './name.helper'
+import { valueHelper } from './value.helper'
 
 export const userHelper = {
   email,
   hasRole,
-  role
+  id,
+  name,
+  role,
+  roleLabel
 }
 
 function email(user) {
-  return fieldHelper.getField(user, "email")
+  return fieldHelper.getField(user, 'email')
+}
+
+function id(user) {
+  return fieldHelper.getField(user, 'id')
 }
 
 function hasRole(user, role) {
@@ -18,6 +27,17 @@ function hasRole(user, role) {
 
   return userRole == role
 }
+
+function name(user) {
+  return nameHelper.name(user, 'User')
+}
+
 function role(user) {
-  return fieldHelper.getField(user, "role")
+  return fieldHelper.getField(user, 'role')
+}
+
+function roleLabel(user) {
+  const role = userHelper.role(user)
+
+  return valueHelper.capitalizeWords(valueHelper.humanize(role))
 }
