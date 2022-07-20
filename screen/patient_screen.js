@@ -1,9 +1,9 @@
 import React, { useEffect, useReducer } from "react"
-import { Dimensions } from "react-native"
+import { Dimensions, StyleSheet, Text, View } from "react-native"
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { TabBar, TabView } from 'react-native-tab-view'
 import { CareTeamScreen } from './care_team_screens'
 import { FontAwesome5Icon, StackScreen } from './components'
-import { MedicationScreen } from "./medications_screens"
 import { HomeScreen, MedicationsScreen, RequestPatientScreen } from "./patient_screens"
 import { HeaderLeft, HeaderRight, LazyPlaceholder } from "./components"
 import { valueHelper, patientHelper, currentUserHelper, userCredentialsHelper } from "../helpers"
@@ -12,7 +12,7 @@ import { styles } from '../assets/styles'
 function headerOptions(navigation, currentUser, currentPatient, userCredentials) {
   return {
     headerLeft: () => (<HeaderLeft currentUser={currentUser} currentPatient={currentPatient} userCredentials={userCredentials} />),
-    headerRight: () => (<HeaderRight navigation={navigation} currentUser={currentUser} currentPatient={currentPatient} userCredentials={userCredentials} />),
+    headerRight: () => (<HeaderRight currentUser={currentUser} currentPatient={currentPatient} userCredentials={userCredentials} />),
     headerTitle: `Hi ${patientHelper.firstName(currentPatient)}!`,
     headerStyle: { backgroundColor: "#03718D" },
     headerTintColor: '#fff',
@@ -42,42 +42,21 @@ function HomeScreenStack(props) {
 }
 const Home = React.memo(HomeScreenStack)
 
-function MedicationsScreenStack(props) {
-  const childScreens = { medications: MedicationsScreen, medication: MedicationScreen }
-
-  return (
-    <StackScreen
-      {...props}
-      childScreens={childScreens}
-      selectInitialScreen={selectInitialScreen}
-    />
-  )
-
-  function selectInitialScreen({ patientMedication }) {
-    if (!valueHelper.isValue(patientMedication)) {
-      return 'medications'
-    }
-
-    return 'medication'
-  }
-}
-const Medications = React.memo(MedicationsScreenStack)
-
 const screens = {
   home: Home,
-  medications: Medications,
+  medications: MedicationsScreen,
   care_team: CareTeamScreen
 }
 
-const routes = [
+const routeList = [
   { key: 'home', title: 'Home' },
   { key: 'medications', title: 'Medications' },
   { key: 'care_team', title: 'Care Team' }
 ]
 
 function PatientScreen(props) {
-  const [state, dispatch] = useReducer(updateState, { index: 0, routes })
-  const { userCredentials } = state
+  const [state, dispatch] = useReducer(updateState, { index: 0, routes: routes(props.currentPatient) })
+  const { currentPatient, userCredentials } = state
   const { currentUser } = currentUserHelper.getCurrentProps(props)
 
   useEffect(
@@ -101,21 +80,62 @@ function PatientScreen(props) {
   )
 
   return (
-    <TabView
-      lazy
-      navigationState={state}
-      renderScene={renderScene}
-      renderLazyPlaceholder={renderLazyPlaceholder}
-      onIndexChange={handleIndexChange}
-      initialLayout={{ width: Dimensions.get('window').width }}
-      renderTabBar={renderTabBar}
-      style={styles.mainBody}
-      tabBarPosition='bottom'
-    />
+    <View style={{ flex: 1 }}>
+      {header()}
+
+      <TabView
+        getAccessible={accessible}
+        lazy
+        navigationState={state}
+        renderScene={renderScene}
+        renderLazyPlaceholder={renderLazyPlaceholder}
+        onIndexChange={handleIndexChange}
+        initialLayout={{ width: Dimensions.get('window').width }}
+        renderTabBar={renderTabBar}
+        style={styles.mainBody}
+        tabBarPosition='bottom'
+      />
+    </View>
   )
+
+  function accessible({ route }) {
+    if (route.key == 'home') {
+      return true
+    }
+
+    return valueHelper.isValue(currentPatient)
+  }
 
   function handleIndexChange(index) {
     dispatch({ type: 'INDEX-CHANGE', index })
+  }
+
+  function header() {
+    const { setCurrent, setStackScreen } = props
+
+    if (!valueHelper.isValue(currentUser) || !valueHelper.isValue(currentPatient)) {
+      return null
+    }
+
+    return (
+      <SafeAreaView
+        edges={['top']}
+        style={inlineStyles.appBar}
+      >
+        <View style={inlineStyles.appbarContent}>
+          <HeaderLeft currentUser={currentUser} currentPatient={currentPatient} userCredentials={userCredentials} />
+          <View style={{ flex: 1, justifyContent: 'flex-start' }}>
+            <Text>Hi {patientHelper.firstName(currentPatient)}!</Text>
+          </View>
+          <HeaderRight
+            currentUser={currentUser}
+            currentPatient={currentPatient}
+            performLogout={() => { setStackScreen('login') }}
+            userCredentials={userCredentials}
+          />
+        </View>
+      </SafeAreaView>
+    )
   }
 
   function renderLazyPlaceholder({ route }) {
@@ -139,6 +159,7 @@ function PatientScreen(props) {
   }
 
   function renderScene({ jumpTo, route }) {
+    const { setCurrent, setStackScreen } = props
     const Screen = screens[route.key]
     if (!valueHelper.isValue(Screen)) {
       return null
@@ -150,8 +171,9 @@ function PatientScreen(props) {
         currentUser={currentUser}
         jumpTo={jumpTo}
         route={route}
+        setCurrent={setCurrent}
         setCurrentPatient={setCurrentPatient}
-        setPatientMedication={setPatientMedication}
+        setUserCredentials={setUserCredentials}
         userCredentials={userCredentials}
       />
     )
@@ -161,12 +183,16 @@ function PatientScreen(props) {
     return (<TabBar {...props} renderIcon={renderIcon} />)
   }
 
-  function setCurrentPatient(currentPatient) {
-    dispatch({ type: 'SET-CURRENT-PATIENT', currentPatient })
+  function routes(patient) {
+    if (valueHelper.isValue(patient)) {
+      return routeList
+    }
+
+    return [{ key: routeList[0].key, title: routeList[0].title }]
   }
 
-  function setPatientMedication(patientMedicaiton) {
-    dispatch({ type: 'SET-PATIENT-MEDICATION', patientMedication })
+  function setCurrentPatient(currentPatient) {
+    dispatch({ type: 'SET-CURRENT-PATIENT', currentPatient })
   }
 
   function setUserCredentials(userCredentials) {
@@ -179,10 +205,7 @@ function PatientScreen(props) {
         return { ...oldState, index: action.index }
 
       case 'SET-CURRENT-PATIENT':
-        return { ...oldState, currentPatient: action.currentPatient }
-
-      case 'SET-PATIENT-MEDICATION':
-        return { ...oldState, currentMedication: action.patientMedication }
+        return { ...oldState, currentPatient: action.currentPatient, routes: routes(action.currentPatient) }
 
       case 'SET-USER-CREDENTIALS':
         return { ...oldState, userCredentials: action.userCredentials }
@@ -194,3 +217,17 @@ function PatientScreen(props) {
 }
 
 export { PatientScreen }
+
+const inlineStyles = new StyleSheet.create(
+  {
+    appbar: {
+      borderBottomColor: 'rgba(0, 0, 0, 0.1)',
+    },
+    appbarContent: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+      height: 56,
+    }
+  }
+)

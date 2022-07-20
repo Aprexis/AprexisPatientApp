@@ -6,13 +6,18 @@ import { alertHelper, patientHelper, currentUserHelper, patientMedicationHelper 
 import { styles } from '../../assets/styles'
 
 function PatientMedication(props) {
-  const { patientMedication, setPatientMedication } = props
+  const { patientMedication, setPatientMedication, setStackScreen } = props
 
   return (
     <TouchableOpacity
       activeOpacity={0.5}
       style={styles.listButton}
-      onPress={() => { setPatientMedication(patientMedication) }}>
+      onPress={
+        () => {
+          setPatientMedication(patientMedication)
+          setStackScreen('medication')
+        }
+      }>
       <View style={{ flexDirection: "row", alignItems: 'center', width: 50 }}>
         <FontAwesome5Icon size={35} style={styles.icon} name={patientMedicationHelper.medicationIcon(patientMedication)} />
       </View>
@@ -54,10 +59,10 @@ function PatientMedicationsList(props) {
   function presentItem(patientMedication, patientMedicationIdx, _editPatientMedication) {
     return (
       <PatientMedication
+        {...props}
         key={`patient-medication-${patientMedicationHelper.id(patientMedication)}-${patientMedicationIdx}`}
         patientMedication={patientMedication}
         setPatientMedication={setPatientMedication}
-        {...props}
       />
     )
   }

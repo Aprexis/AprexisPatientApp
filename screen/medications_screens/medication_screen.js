@@ -1,5 +1,5 @@
 import React, { useReducer } from 'react'
-import { Dimensions, StyleSheet, Text, View } from 'react-native'
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { TabView } from 'react-native-tab-view'
 import { FontAwesome5Icon, LazyPlaceholder } from '../components'
 import { MedicationAdherence } from './medication_adherence'
@@ -17,21 +17,39 @@ const screens = {
 
 const routes = [
   { key: 'info', title: 'Info' },
-  { key: 'interacitons', title: 'Interactions' },
+  { key: 'interactions', title: 'Interactions' },
   { key: 'adherence', title: 'Adherence' },
   { key: 'reminders', title: 'Reminders' }
 ]
 
+function BackButton({ goBack }) {
+  return (
+    <TouchableOpacity
+      onPress={goBack}
+      style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', backgroundColor: '#03718D', color: '#fff', height: '100%', paddingRight: 5 }}
+    >
+      <FontAwesome5Icon style={styles.titleIcon} size={30} name='angle-left' />
+    </TouchableOpacity>
+  )
+}
+
 function MedicationScreen(props) {
-  const { patientMedication } = props.route.params
+  const { patientMedication, setStackScreen } = props
   const [state, dispatch] = useReducer(updateState, { index: 0, routes })
   const { currentUser, currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
 
+  if (!valueHelper.isValue(patientMedication)) {
+    return null
+  }
+
   return (
     <View style={styles.view}>
-      <View style={styles.titleView}>
-        <FontAwesome5Icon size={30} style={styles.titleIcon} name={patientMedicationHelper.medicationIcon(patientMedication)} />
-        <Text style={styles.titleText}>{patientMedicationHelper.medicationLabel(patientMedication)}</Text>
+      <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+        <BackButton goBack={() => { setStackScreen('medications') }} />
+        <View style={styles.titleView}>
+          <FontAwesome5Icon size={30} style={styles.titleIcon} name={patientMedicationHelper.medicationIcon(patientMedication)} />
+          <Text style={styles.titleText}>{patientMedicationHelper.medicationLabel(patientMedication)}</Text>
+        </View>
       </View>
 
       <TabView
@@ -79,7 +97,7 @@ export { MedicationScreen }
 const styles = StyleSheet.create(
   {
     sectionView: { flex: 4 },
-    titleView: { flex: 1, flexDirection: "column", justifyContent: "center", alignItems: "center", backgroundColor: '#03718D', color: '#fff' },
+    titleView: { flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center", backgroundColor: '#03718D', color: '#fff' },
     titleIcon: { color: "#fff" },
     titleText: { fontSize: 20, fontWeight: "bold", color: '#fff' },
     view: { flex: 1 }

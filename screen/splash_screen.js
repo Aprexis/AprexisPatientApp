@@ -7,30 +7,31 @@ import {
 } from 'react-native'
 import { valueHelper, userCredentialsHelper, currentUserHelper } from '../helpers'
 
-function splashTimeOut(navigation) {
+function splashTimeOut(setCurrent, setStackScreen) {
   userCredentialsHelper.getUserCredentials(loadCurrentUser)
 
   function loadCurrentUser(userCredentials) {
     if (!valueHelper.isValue(userCredentials)) {
-      navigation.navigate('LoginScreen')
+      setStackScreen('login')
       return
     }
 
-    currentUserHelper.loadCurrentUser(userCredentials, (currentUser, currentPatient) => { gotoPatient(navigation, currentUser, currentPatient) })
+    currentUserHelper.loadCurrentUser(userCredentials, (currentUser, currentPatient) => { gotoPatient(currentUser, currentPatient) })
   }
 
-  function gotoPatient(navigation, currentUser, currentPatient) {
-    navigation.navigate('PatientScreen', { currentUser, currentPatient })
+  function gotoPatient(currentUser, currentPatient) {
+    setCurrent(currentUser, currentPatient)
+    setStackScreen('patient')
   }
 }
 
-function SplashScreen({ navigation }) {
+function SplashScreen({ setCurrent, setStackScreen }) {
   const [animating, setAnimating] = useState(true)
 
   useEffect(() => {
     setTimeout(() => {
       setAnimating(false)
-      splashTimeOut(navigation)
+      splashTimeOut(setCurrent, setStackScreen)
     }, 5000)
   }, [])
 

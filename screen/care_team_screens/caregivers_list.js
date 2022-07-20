@@ -18,9 +18,6 @@ function Caregiver(props) {
         <FontAwesome5Icon size={27} style={styles.icon} name="user" solid />
         <Text style={inlineStyles.text}>{caregiverHelper.name(caregiver)} ({caregiverHelper.relationship(caregiver)})</Text>
       </View>
-      <View>
-        <FontAwesome5Icon size={30} name="angle-right" style={[styles.icon, inlineStyles.medIcon]} />
-      </View>
     </TouchableOpacity>
   )
 }

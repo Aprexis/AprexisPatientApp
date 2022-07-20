@@ -1,13 +1,34 @@
 import React, { useReducer } from 'react'
 import { Dimensions } from 'react-native'
 import { TabView } from 'react-native-tab-view'
-import { LazyPlaceholder } from '../components'
-import { Allergies, CheckInteractions, PatientMedicationsList } from "../medications_screens"
+import { LazyPlaceholder, StackScreen } from '../components'
+import { Allergies, CheckInteractions, MedicationScreen, PatientMedicationsList } from "../medications_screens"
 import { valueHelper, currentUserHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
 
+function MedicationsStack(props) {
+  const childScreens = { medications: PatientMedicationsList, medication: MedicationScreen }
+
+  return (
+    <StackScreen
+      {...props}
+      childScreens={childScreens}
+      selectInitialScreen={selectInitialScreen}
+    />
+  )
+
+  function selectInitialScreen({ patientMedication }) {
+    if (!valueHelper.isValue(patientMedication)) {
+      return 'medications'
+    }
+
+    return 'medication'
+  }
+}
+const Medications = React.memo(MedicationsStack)
+
 const screens = {
-  medications: PatientMedicationsList,
+  medications: Medications,
   check_interactions: CheckInteractions,
   allergies: Allergies
 }
@@ -49,13 +70,31 @@ function MedicationsScreen(props) {
       return null
     }
 
-    return <Screen currentPatient={currentPatient} currentUser={currentUser} jumpTo={jumpTo} navigation={navigation} route={route} userCredentials={userCredentials} />
+    return (
+      <Screen currentPatient={currentPatient}
+        currentUser={currentUser}
+        jumpTo={jumpTo}
+        navigation={navigation}
+        route={route}
+        patientMedication={state.currentMedication}
+        setPatientMedication={setPatientMedication}
+        userCredentials={userCredentials}
+      />
+    )
+  }
+
+  function setPatientMedication(patientMedication) {
+    console.log(`Set PM: ${JSON.stringify(patientMedication, null, 2)}`)
+    dispatch({ type: 'SET-PATIENT-MEDICATION', patientMedication })
   }
 
   function updateState(oldState, action) {
     switch (action.type) {
       case 'INDEX-CHANGE':
         return { ...oldState, index: action.index }
+
+      case 'SET-PATIENT-MEDICATION':
+        return { ...oldState, currentMedication: action.patientMedication }
 
       default:
         return oldState
