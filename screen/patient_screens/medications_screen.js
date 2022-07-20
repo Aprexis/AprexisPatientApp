@@ -1,6 +1,6 @@
 import React, { useReducer } from 'react'
 import { Dimensions } from 'react-native'
-import { TabView } from 'react-native-tab-view'
+import { TabBar, TabView } from 'react-native-tab-view'
 import { LazyPlaceholder, StackScreen } from '../components'
 import { Allergies, CheckInteractions, MedicationScreen, PatientMedicationsList } from "../medications_screens"
 import { valueHelper, currentUserHelper } from '../../helpers'
@@ -46,12 +46,13 @@ function MedicationsScreen(props) {
 
   return (
     <TabView
+      initialLayout={{ width: Dimensions.get('window').width }}
       lazy
       navigationState={state}
+      onIndexChange={handleIndexChange}
       renderScene={renderScene}
       renderLazyPlaceholder={renderLazyPlaceholder}
-      onIndexChange={handleIndexChange}
-      initialLayout={{ width: Dimensions.get('window').width }}
+      renderTabBar={renderTabBar}
       style={styles.mainBody}
     />
   )
@@ -72,6 +73,7 @@ function MedicationsScreen(props) {
 
     return (
       <Screen currentPatient={currentPatient}
+        allergyType={'medicine'}
         currentUser={currentUser}
         jumpTo={jumpTo}
         navigation={navigation}
@@ -83,8 +85,17 @@ function MedicationsScreen(props) {
     )
   }
 
+  function renderTabBar(props) {
+    const { currentMedication } = state
+    let style = {}
+    if (valueHelper.isValue(currentMedication)) {
+      style = { display: 'none' }
+    }
+
+    return (<TabBar {...props} style={style} />)
+  }
+
   function setPatientMedication(patientMedication) {
-    console.log(`Set PM: ${JSON.stringify(patientMedication, null, 2)}`)
     dispatch({ type: 'SET-PATIENT-MEDICATION', patientMedication })
   }
 

@@ -9,17 +9,6 @@ import { HeaderLeft, HeaderRight, LazyPlaceholder } from "./components"
 import { valueHelper, patientHelper, currentUserHelper, userCredentialsHelper } from "../helpers"
 import { styles } from '../assets/styles'
 
-function headerOptions(navigation, currentUser, currentPatient, userCredentials) {
-  return {
-    headerLeft: () => (<HeaderLeft currentUser={currentUser} currentPatient={currentPatient} userCredentials={userCredentials} />),
-    headerRight: () => (<HeaderRight currentUser={currentUser} currentPatient={currentPatient} userCredentials={userCredentials} />),
-    headerTitle: `Hi ${patientHelper.firstName(currentPatient)}!`,
-    headerStyle: { backgroundColor: "#03718D" },
-    headerTintColor: '#fff',
-    headerTitleStyle: { fontWeight: '600', position: 'relative', left: -10 }
-  }
-}
-
 function HomeScreenStack(props) {
   const childScreens = { requestPatient: RequestPatientScreen, home: HomeScreen }
 
@@ -84,7 +73,6 @@ function PatientScreen(props) {
       {header()}
 
       <TabView
-        getAccessible={accessible}
         lazy
         navigationState={state}
         renderScene={renderScene}
@@ -98,20 +86,12 @@ function PatientScreen(props) {
     </View>
   )
 
-  function accessible({ route }) {
-    if (route.key == 'home') {
-      return true
-    }
-
-    return valueHelper.isValue(currentPatient)
-  }
-
   function handleIndexChange(index) {
     dispatch({ type: 'INDEX-CHANGE', index })
   }
 
   function header() {
-    const { setCurrent, setStackScreen } = props
+    const { setStackScreen } = props
 
     if (!valueHelper.isValue(currentUser) || !valueHelper.isValue(currentPatient)) {
       return null
@@ -159,7 +139,7 @@ function PatientScreen(props) {
   }
 
   function renderScene({ jumpTo, route }) {
-    const { setCurrent, setStackScreen } = props
+    const { setCurrent } = props
     const Screen = screens[route.key]
     if (!valueHelper.isValue(Screen)) {
       return null

@@ -26,7 +26,7 @@ function BackButton({ goBack }) {
   return (
     <TouchableOpacity
       onPress={goBack}
-      style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', backgroundColor: '#03718D', color: '#fff', height: '100%', paddingRight: 5 }}
+      style={{ flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', backgroundColor: '#03718D', color: '#fff', width: 30, height: '100%' }}
     >
       <FontAwesome5Icon style={styles.titleIcon} size={30} name='angle-left' />
     </TouchableOpacity>
@@ -34,7 +34,7 @@ function BackButton({ goBack }) {
 }
 
 function MedicationScreen(props) {
-  const { patientMedication, setStackScreen } = props
+  const { patientMedication, setPatientMedication, setStackScreen } = props
   const [state, dispatch] = useReducer(updateState, { index: 0, routes })
   const { currentUser, currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
 
@@ -45,7 +45,7 @@ function MedicationScreen(props) {
   return (
     <View style={styles.view}>
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
-        <BackButton goBack={() => { setStackScreen('medications') }} />
+        <BackButton goBack={() => { setPatientMedication(); setStackScreen('medications') }} />
         <View style={styles.titleView}>
           <FontAwesome5Icon size={30} style={styles.titleIcon} name={patientMedicationHelper.medicationIcon(patientMedication)} />
           <Text style={styles.titleText}>{patientMedicationHelper.medicationLabel(patientMedication)}</Text>
