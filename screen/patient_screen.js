@@ -65,6 +65,8 @@ function PatientScreen(props) {
 
           setUserCredentials(retrievedUserCredentials)
         })
+
+      return () => { }
     }
   )
 

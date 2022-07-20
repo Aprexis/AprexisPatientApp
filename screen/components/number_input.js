@@ -8,7 +8,12 @@ function NumberInput(props) {
   const number = forceNumber(props.value)
   const [text, setText] = useState(`${number}`)
 
-  useEffect(() => { setText(`${number}`) })
+  useEffect(
+    () => {
+      setText(`${number}`)
+      return () => { }
+    }
+  )
 
   return (<TextInput {...textInputProps} keyboardType='decimal-pad' value={text} onChangeText={onChangeText} />)
 

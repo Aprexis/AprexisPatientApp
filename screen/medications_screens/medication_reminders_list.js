@@ -81,6 +81,8 @@ function MedicationRemindersList(props) {
       if (patientMedicationHelper.id(patientMedication) != patientMedicationHelper.id(state.patientMedication)) {
         dispatch({ type: 'NEW-PATIENT-MEDICATION', patientMedication })
       }
+
+      return () => { }
     },
     [patientMedication]
   )
