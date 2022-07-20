@@ -60,15 +60,15 @@ const patientMedicationKeys = [
   "type"
 ]
 
-const iconMap = {
-  'Capsule': 'capsules',
-  'Tablet': 'tablets',
-  'Syringe': 'syringe',
-  'Needle': 'syringe',
-  'Topical spray': 'spray-can',
+const medicationLabelMap = {
+  'capsule': 'capsules',
+  'tablet': 'tablets',
+  'syringe': 'syringe',
+  'needle': 'syringe',
+  'topical spray': 'spray-can',
   'drops': 'eye-dropper',
-  'Pressurized inhalation': 'inhaler',
-  'for Compounding': 'mortar-pestle'
+  'pressurized inhalation': 'inhaler',
+  'for compounding': 'mortar-pestle'
 }
 
 function additionalInformation(patientMedication) {
@@ -204,10 +204,10 @@ function medicationId(patientMedication) {
 }
 
 function medicationIcon(patientMedication) {
-  const icon = patientMedicationHelper.medicationLabel(patientMedication)
-  const iconKey = Object.keys(iconMap).find((key) => icon.includes(key))
-  if (valueHelper.isStringValue(iconKey)) {
-    return iconMap[iconKey]
+  const medicationLabel = patientMedicationHelper.medicationLabel(patientMedication).toLowerCase()
+  const medicationLabelKey = Object.keys(medicationLabelMap).find((key) => medicationLabel.includes(key))
+  if (valueHelper.isStringValue(medicationLabelKey)) {
+    return medicationLabelMap[medicationLabelKey]
   }
   return 'prescription'
 }
