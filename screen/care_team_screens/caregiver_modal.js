@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Text, View } from 'react-native'
 import { Button, Menu, TextInput } from 'react-native-paper'
-import { AddressInput, AprexisModal, ContactInput } from '../components'
+import { AddressInput, AprexisModal, ContactInput, NameInput } from '../components'
 import { caregiverApi } from '../../api'
 import { valueHelper, alertHelper, caregiverHelper, currentUserHelper, patientHelper } from "../../helpers"
 import { relationships } from "../../types"
@@ -47,23 +47,7 @@ function CaregiverModal(props) {
   function displayModel(model, _changedModel, _fields, inlineStyles, changeValue, _setField) {
     return (
       <View style={inlineStyles.infoArea}>
-        <View style={inlineStyles.profileFieldView}>
-          <Text style={inlineStyles.profileFieldName}>First Name</Text>
-          <TextInput
-            style={styles.inputField}
-            onChangeText={(firstName) => { changeValue('first_name', firstName) }}
-            value={caregiverHelper.firstName(model)}
-          />
-        </View>
-
-        <View style={inlineStyles.profileFieldView}>
-          <Text style={inlineStyles.profileFieldName}>Last Name</Text>
-          <TextInput
-            style={styles.inputField}
-            onChangeText={(lastName) => { changeValue('last_name', lastName) }}
-            value={caregiverHelper.lastName(model)}
-          />
-        </View>
+        <NameHelper named={model} onChangeValue={changeValue} />
 
         <View style={inlineStyles.profileFieldView}>
           <Text style={inlineStyles.profileFieldName}>Relationship</Text>
@@ -83,7 +67,7 @@ function CaregiverModal(props) {
         </View>
 
         <AddressInput addressable={model} onChangeValue={changeValue} />
-        <ContactInput contactable={model} onChangeValue={changeValue} />
+        <ContactInput allowPhoneExtension={true} contactable={model} onChangeValue={changeValue} />
       </View>
     )
 

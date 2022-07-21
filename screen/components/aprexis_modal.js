@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer } from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { Button, Modal, Portal } from 'react-native-paper'
-import { valueHelper } from '../../helpers'
+import { alertHelper, valueHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
 
 function AprexisModal(props) {
@@ -96,11 +96,20 @@ function AprexisModal(props) {
     const { action, buildNewModel, loadEditModel } = props
 
     if (action == 'ADD') {
-      buildNewModel((newModel, changedNewModel) => { dispatch({ type: 'LOAD-DATA', model: newModel, changedModel: changedNewModel }) })
+      if (valueHelper.isFunction(buildNewModel)) {
+        buildNewModel((newModel, changedNewModel) => { dispatch({ type: 'LOAD-DATA', model: newModel, changedModel: changedNewModel }) })
+        return
+      }
+
+      alertHelper.error('Adding is not supported')
       return
     }
 
-    loadEditModel((loadedModel) => { dispatch({ type: 'LOAD-DATA', model: loadedModel, changedModel: undefined }) })
+    if (valueHelper.isFunction(loadEditModel)) {
+      loadEditModel((loadedModel) => { dispatch({ type: 'LOAD-DATA', model: loadedModel, changedModel: undefined }) })
+    }
+
+    alertHelper.error('Editing is not supported')
   }
 
   function ok() {

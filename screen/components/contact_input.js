@@ -1,11 +1,11 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { TextInput } from 'react-native-paper'
-import { contactHelper } from '../../helpers'
+import { contactHelper, valueHelper } from '../../helpers'
 import { NumberInput } from './number_input'
 import { styles } from '../../assets/styles'
 
-function ContactInput({ contactable, onChangeValue }) {
+function ContactInput({ allowPhoneExtension, contactable, onChangeValue }) {
   return (
     <View>
       <View style={inlineStyles.contactFieldView}>
@@ -15,12 +15,17 @@ function ContactInput({ contactable, onChangeValue }) {
           onChangeText={(phone) => { onChangeValue('phone', phone) }}
           value={contactHelper.phone(contactable)}
         />
-        <Text style={inlineStyles.contactFieldName}>Ext.</Text>
-        <TextInput
-          style={styles.inputField}
-          onChangeText={(phoneExtension) => { onChangeValue('phone_extension', phoneExtension) }}
-          value={contactHelper.phoneExtension(contactable)}
-        />
+        {
+          valueHelper.isSet(allowPhoneExtension) &&
+          <View>
+            <Text style={inlineStyles.contactFieldName}>Ext.</Text>
+            <TextInput
+              style={styles.inputField}
+              onChangeText={(phoneExtension) => { onChangeValue('phone_extension', phoneExtension) }}
+              value={contactHelper.phoneExtension(contactable)}
+            />
+          </View>
+        }
       </View>
 
       <View style={inlineStyles.contactFieldView}>
