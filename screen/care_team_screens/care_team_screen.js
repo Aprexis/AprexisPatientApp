@@ -1,86 +1,67 @@
-import React from 'react'
-import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
+import React, { useReducer } from 'react'
+import { Dimensions } from 'react-native'
+import { TabView } from 'react-native-tab-view'
 import { CaregiversList } from './caregivers_list'
 import { HcpsList } from './hcps_list'
 import { PharmacistsList } from './pharmacists_list'
-import { currentUserHelper } from '../../helpers'
+import { LazyPlaceholder } from '../components'
+import { currentUserHelper, valueHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
 
-const Stack = createNativeStackNavigator()
-const Tab = createMaterialTopTabNavigator()
-
-function CaregiversScreenStack(props) {
-  const { currentUser, currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
-
-  return (
-    <Stack.Navigator
-      screenOptions={
-        {
-          headerStyle: { backgroundColor: '#E0EBF1', height: 35 },
-          headerTitleStyle: { color: '#003949' },
-          headerShadowVisible: false
-        }
-      }
-    >
-      <Stack.Screen
-        name="CaregiversList"
-        options={{ headerShown: false }}
-      >
-        {(props) => <CaregiversList {...props} currentUser={currentUser} currentPatient={currentPatient} userCredentials={userCredentials} />}
-      </Stack.Screen>
-    </Stack.Navigator>
-  )
+const screens = {
+  hcps: HcpsList,
+  caregivers: CaregiversList,
+  pharmacists: PharmacistsList
 }
 
+const routes = [
+  { key: 'hcps', title: 'HCPs' },
+  { key: 'caregivers', title: 'Caregivers' },
+  { key: 'pharmacists', title: 'Pharmacists' }
+]
+
 function CareTeamScreen(props) {
-  const { currentUser, currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
+  const [state, dispatch] = useReducer(updateState, { index: 0, routes })
+  const { currentPatient, currentUser, userCredentials } = currentUserHelper.getCurrentProps(props)
 
   return (
-    <SafeAreaView style={styles.mainBody}>
-      <View style={[styles.row, { justifyContent: 'flex-end' }]}>
-        <View style={{ flex: .6, textAlign: 'center' }}>
-          <Text style={inlineStyles.titleText}>CARE TEAM</Text>
-        </View>
-      </View>
-      <View style={{ flex: 1, padding: 8, paddingTop: 0 }}>
-        <Tab.Navigator
-          style={{ marginBottom: 12, textAlign: 'center' }}
-          screenOptions={{
-            tabBarLabelStyle: { fontSize: 13, fontWeight: '600' },
-            tabBarStyle: { backgroundColor: '#E1EBF1', marginBottom: 14 },
-            tabBarIndicatorStyle: { backgroundColor: '#03718D' },
-          }}
-        >
-          <Tab.Screen
-            name="HCPs"
-            style={{ padding: 8, fontWeight: '700' }}
-            options={{ headerShown: false }}>
-            {(props) => <HcpsList {...props} currentUser={currentUser} currentPatient={currentPatient} userCredentials={userCredentials} />}
-          </Tab.Screen>
-          <Tab.Screen
-            name="Caregivers"
-            options={{ headerShown: false }}>
-            {(props) => <CaregiversScreenStack {...props} currentUser={currentUser} currentPatient={currentPatient} userCredentials={userCredentials} />}
-          </Tab.Screen>
-          <Tab.Screen
-            name="Pharmacists"
-            options={{ headerShown: false }}>
-            {(props) => <PharmacistsList {...props} currentUser={currentUser} currentPatient={currentPatient} userCredentials={userCredentials} />}
-          </Tab.Screen>
-        </Tab.Navigator>
-      </View>
-    </SafeAreaView>
+    <TabView
+      lazy
+      navigationState={state}
+      renderScene={renderScene}
+      renderLazyPlaceholder={renderLazyPlaceholder}
+      onIndexChange={handleIndexChange}
+      initialLayout={{ width: Dimensions.get('window').width }}
+      style={styles.mainBody}
+    />
   )
+
+  function handleIndexChange(index) {
+    dispatch({ type: 'INDEX-CHANGE', index })
+  }
+
+  function renderLazyPlaceholder({ route }) {
+    return (<LazyPlaceholder route={route} />)
+  }
+
+  function renderScene({ jumpTo, route }) {
+    const Screen = screens[route.key]
+    if (!valueHelper.isValue(Screen)) {
+      return null
+    }
+
+    return <Screen currentPatient={currentPatient} currentUser={currentUser} jumpTo={jumpTo} route={route} userCredentials={userCredentials} />
+  }
+
+  function updateState(oldState, action) {
+    switch (action.type) {
+      case 'INDEX-CHANGE':
+        return { ...oldState, index: action.index }
+
+      default:
+        return oldState
+    }
+  }
 }
 
 export { CareTeamScreen }
-
-const inlineStyles = StyleSheet.create(
-  {
-    titleView: { flexDirection: "row", justifyContent: "center", alignContent: "center", marginTop: 10 },
-    titleText: { fontSize: 18, fontWeight: "bold", color: "#112B37" /*, margin: '0 auto'*/ }
-  }
-)
-

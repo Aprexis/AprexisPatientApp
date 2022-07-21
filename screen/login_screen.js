@@ -15,7 +15,7 @@ import { Loader } from './components'
 import { alertHelper, userCredentialsHelper, currentUserHelper } from '../helpers'
 import { styles } from '../assets/styles'
 
-function LoginScreen({ navigation }) {
+function LoginScreen({ setStackScreen, setCurrent }) {
   const [userEmail, setUserEmail] = useState('')
   const [userPassword, setUserPassword] = useState('')
   const [loading, setLoading] = useState(false)
@@ -41,10 +41,11 @@ function LoginScreen({ navigation }) {
         userCredentialsHelper.storeUserCredentials(
           userCredentials,
           () => {
-            currentUserHelper.loadCurrentUser(userCredentials, (currentUser, currentPatient) => { gotoPatient(navigation, currentUser, currentPatient) })
+            currentUserHelper.loadCurrentUser(userCredentials, (currentUser, currentPatient) => { gotoPatient(currentUser, currentPatient) })
 
-            function gotoPatient(navigation, currentUser, currentPatient) {
-              navigation.navigate('PatientScreen', { currentUser, currentPatient })
+            function gotoPatient(currentUser, currentPatient) {
+              setCurrent(currentUser, currentPatient)
+              setStackScreen('patient')
             }
           })
       },

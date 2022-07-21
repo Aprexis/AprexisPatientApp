@@ -6,7 +6,7 @@ function HeaderLeft(props) {
   const { currentPatient } = currentUserHelper.getCurrentProps(props)
 
   return (
-    <View style={{ flexDirection: "row", justifyContent: 'center', alignItems: 'center', paddingLeft: 10 }}>
+    <View style={{ flexDirection: "row", justifyContent: 'flex-start', alignItems: 'center', paddingLeft: 10 }}>
       <TouchableOpacity
         style={{
           alignItems: 'center',

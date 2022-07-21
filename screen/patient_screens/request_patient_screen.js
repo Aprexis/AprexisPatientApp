@@ -6,39 +6,9 @@ import { alertHelper, currentUserHelper, valueHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
 
 function RequestPatientScreen(props) {
-  const { navigation } = props
-  const { currentUser, userCredentials } = currentUserHelper.getCurrentProps(props)
+  const { nextScreen, setCurrentPatient, setStackScreen } = props
+  const { userCredentials } = currentUserHelper.getCurrentProps(props)
   const [patientName, setPatientName] = useState('')
-
-  const handleSubmitPress = () => {
-    if (!patientName) {
-      alertHelper.warning('Please fill Patient Name')
-      return
-    }
-    if (!valueHelper.isValue(userCredentials)) {
-      return
-    }
-
-    patientApi.index(
-      userCredentials,
-      { for_name: patientName },
-      (patients, _patientHeaders) => {
-        if (patients.length == 0) {
-          alertHelper.warning('No matching patient found')
-          return
-        }
-        if (patients.length > 1) {
-          alertHelper.warning('Multiple matching patients found')
-          return
-        }
-
-        const currentPatient = patients[0]
-        navigation.replace('PatientScreen', { currentUser, currentPatient, userCredentials })
-      },
-      alertHelper.handleError
-    )
-  }
-
 
   return (
     <SafeAreaView style={styles.mainBody}>
@@ -76,6 +46,37 @@ function RequestPatientScreen(props) {
       </ScrollView>
     </SafeAreaView>
   )
+
+  function handleSubmitPress() {
+    if (!patientName) {
+      alertHelper.warning('Please fill Patient Name')
+      return
+    }
+    if (!valueHelper.isValue(userCredentials)) {
+      return
+    }
+
+    patientApi.index(
+      userCredentials,
+      { for_name: patientName },
+      (patients, _patientHeaders) => {
+        if (patients.length == 0) {
+          alertHelper.warning('No matching patient found')
+          return
+        }
+        if (patients.length > 1) {
+          alertHelper.warning('Multiple matching patients found')
+          return
+        }
+
+        const currentPatient = patients[0]
+        setCurrentPatient(currentPatient)
+        setStackScreen(nextScreen)
+      },
+      alertHelper.handleError
+    )
+  }
+
 }
 
 export { RequestPatientScreen }

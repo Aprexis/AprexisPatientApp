@@ -34,7 +34,9 @@ function PatientAllergyModal(props) {
       currentPatient.id,
       (model) => {
         const changedModel = patientAllergyHelper.buildNewChanged(model)
-        onSuccess(model, changedModel)
+        const updated = patientAllergyHelper.changeField(model, changedModel, 'allergy_type', allergyType)
+        console.log(`Updated: ${JSON.stringify(updated, null, 2)}`)
+        onSuccess(getModelFrom(updated), getChangedModelFrom(updated))
       },
       alertHelper.handleError
     )
@@ -50,6 +52,7 @@ function PatientAllergyModal(props) {
     if (!valueHelper.isNumberValue(year)) {
       year = 0
     }
+    const modelAllergyType = patientAllergyHelper.allergyType(model)
 
     return (
       <View style={inlineStyles.infoArea}>
@@ -66,7 +69,7 @@ function PatientAllergyModal(props) {
         <View style={inlineStyles.profileFieldView}>
           <Text style={inlineStyles.profileFieldName}>Type</Text>
           <Menu
-            anchor={<Button disabled={valueHelper.isStringValue(allergyType)} onPress={openMenu}>{allergyType}</Button>}
+            anchor={<Button disabled={valueHelper.isStringValue(modelAllergyType)} onPress={openMenu}>{modelAllergyType}</Button>}
             onDismiss={closeMenu}
             style={[styles.inputField, { fontSize: 15 }]}
             visible={valueHelper.isSet(allergyTypeVisible)}>

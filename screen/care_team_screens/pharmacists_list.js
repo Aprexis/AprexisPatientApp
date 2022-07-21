@@ -64,7 +64,8 @@ function PharmacistsList(props) {
   }
 }
 
-export { PharmacistsList }
+const MemoizedPharmacistsList = React.memo(PharmacistsList)
+export { MemoizedPharmacistsList as PharmacistsList }
 
 const inlineStyles = StyleSheet.create(
   {
