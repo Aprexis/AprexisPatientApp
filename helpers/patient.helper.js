@@ -10,6 +10,7 @@ import { contactMethods } from "../types"
 export const patientHelper = {
   buildChanged,
   buildNewChanged,
+  changeField,
   cognitiveImpairmentDetermined,
   cognitivelyImpaired,
   coverageEffectiveDate,
@@ -24,6 +25,7 @@ export const patientHelper = {
   hasUser,
   healthPlan,
   healthPlanName,
+  healthPlanNumber,
   id,
   initials,
   lastName,
@@ -110,6 +112,10 @@ function buildNewChanged(patient) {
   }
 }
 
+function changeField(patient, changedPatient, name, value) {
+  return fieldHelper.changeField('patient', patient, changedPatient, name, value, patientHelper.buildChanged)
+}
+
 function cognitiveImpairmentDetermined(patient) {
   return fieldHelper.getField(patient, "cognitive_impairment_determined")
 }
@@ -191,6 +197,15 @@ function healthPlan(patient) {
 
 function healthPlanName(patient) {
   return healthPlanHelper.name(patientHelper.healthPlan(patient))
+}
+
+function healthPlanNumber(patient) {
+  let number = patientHelper.memberNumber(patient)
+  if (!valueHelper.isSet(healthPlanHelper.requiresPersonNumber(patientHelper.healthPlan(patient)))) {
+    return number
+  }
+
+  return `${number}-${patientHelper.personNumber(patient)}`
 }
 
 function id(patient) {

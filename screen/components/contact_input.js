@@ -1,13 +1,71 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import { TextInput } from 'react-native-paper'
+import { Button, Menu, TextInput } from 'react-native-paper'
 import { contactHelper, valueHelper } from '../../helpers'
 import { NumberInput } from './number_input'
+import { contactMethods } from '../../types'
 import { styles } from '../../assets/styles'
 
-function ContactInput({ allowPhoneExtension, contactable, onChangeValue }) {
+function PhoneExtension({ allowPhoneExtension, contactable, onChangeValue }) {
+  if (!valueHelper.isSet(allowPhoneExtension)) {
+    return null
+  }
+
   return (
     <View>
+      <Text style={inlineStyles.contactFieldName}>Ext.</Text>
+      <TextInput
+        style={styles.inputField}
+        onChangeText={(phoneExtension) => { onChangeValue('phone_extension', phoneExtension) }}
+        value={contactHelper.phoneExtension(contactable)}
+      />
+    </View>
+  )
+}
+
+function PreferredContactMethod({ allowPreferredMethod, contactable, onChangeValue }) {
+  if (!valueHelper.isSet(allowPreferredMethod)) {
+    return null
+  }
+
+  const [menuVisible, setMenuVisible] = useState(false)
+
+  return (
+    <React.Fragment>
+      <Text style={inlineStyles.contactFieldName}>Preferred Contact</Text>
+      <Menu
+        anchor={<Button onPress={openMenu}>{contactHelper.preferredContactMethod(contactable)}</Button>}
+        onDismiss={closeMenu}
+        style={[styles.inputField, { fontSize: 15 }]}
+        visible={valueHelper.isSet(menuVisible)}>
+        {
+          contactMethods.map(
+            (contactMethod) => {
+              const { label, value } = contactMethod
+              return (<Menu.Item key={`contact-method-${value}`} title={label} onPress={() => { closeActionMenu(); onChangeValue('preferred_contact_method', contactMethod) }} />)
+            }
+          )
+        }
+      </Menu>
+    </React.Fragment>
+  )
+
+  function closeMenu() {
+    setMenuVisible(false)
+  }
+
+  function openMenu() {
+    setMenuVisible(true)
+  }
+}
+
+function ContactInput({ allowPhoneExtension, allowPreferredMethod, contactable, onChangeValue }) {
+  return (
+    <React.Fragment>
+      <View style={inlineStyles.contactFieldView}>
+        <PreferredContactMethod allowPreferredMethod={allowPreferredMethod} contactable={contactable} onChangeValue={onChangeValue} />
+      </View>
+
       <View style={inlineStyles.contactFieldView}>
         <Text style={inlineStyles.contactFieldName}>Phone</Text>
         <NumberInput
@@ -15,17 +73,7 @@ function ContactInput({ allowPhoneExtension, contactable, onChangeValue }) {
           onChangeText={(phone) => { onChangeValue('phone', phone) }}
           value={contactHelper.phone(contactable)}
         />
-        {
-          valueHelper.isSet(allowPhoneExtension) &&
-          <View>
-            <Text style={inlineStyles.contactFieldName}>Ext.</Text>
-            <TextInput
-              style={styles.inputField}
-              onChangeText={(phoneExtension) => { onChangeValue('phone_extension', phoneExtension) }}
-              value={contactHelper.phoneExtension(contactable)}
-            />
-          </View>
-        }
+        <PhoneExtension allowPhoneExtension={allowPhoneExtension} contactable={contactable} onChangeValue={onChangeValue} />
       </View>
 
       <View style={inlineStyles.contactFieldView}>
@@ -45,7 +93,7 @@ function ContactInput({ allowPhoneExtension, contactable, onChangeValue }) {
           value={contactHelper.email(contactable)}
         />
       </View>
-    </View>
+    </React.Fragment>
   )
 }
 

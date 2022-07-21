@@ -2,6 +2,7 @@ import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { TextInput } from 'react-native-paper'
 import { valueHelper, nameHelper } from '../../helpers'
+import { styles } from '../../assets/styles'
 
 function NameInput({ allowMiddleName, named, onChangeValue }) {
   return (

@@ -6,7 +6,7 @@ import { styles } from '../../assets/styles'
 
 function AddressInput({ addressable, onChangeValue }) {
   return (
-    <View>
+    <React.Fragment>
       <View style={inlineStyles.addressFieldView}>
         <Text style={inlineStyles.addressFieldName}>Address</Text>
         <TextInput
@@ -32,9 +32,7 @@ function AddressInput({ addressable, onChangeValue }) {
           onChangeText={(state) => { onChangeValue('state', state) }}
           value={addressHelper.state(addressable)}
         />
-      </View>
 
-      <View style={inlineStyles.addressFieldView}>
         <Text style={inlineStyles.addressFieldName}>ZIP Code</Text>
         <TextInput
           style={styles.inputField}
@@ -42,7 +40,7 @@ function AddressInput({ addressable, onChangeValue }) {
           value={addressHelper.zipCode(addressable)}
         />
       </View>
-    </View>
+    </React.Fragment>
   )
 }
 

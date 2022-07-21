@@ -12,7 +12,8 @@ export const contactHelper = {
   person,
   phone,
   phoneExtension,
-  phoneWithExtension
+  phoneWithExtension,
+  preferredContactMethod
 }
 
 const contactKeys = [
@@ -85,4 +86,8 @@ function phoneWithExtension(contact, prefix) {
   }
 
   return `${phone} Ext. ${extension}`
+}
+
+function preferredContactMethod(contact, prefix) {
+  return fieldHelper.getField(contact, 'preferred_contact_method', prefix)
 }

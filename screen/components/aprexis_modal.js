@@ -107,6 +107,7 @@ function AprexisModal(props) {
 
     if (valueHelper.isFunction(loadEditModel)) {
       loadEditModel((loadedModel) => { dispatch({ type: 'LOAD-DATA', model: loadedModel, changedModel: undefined }) })
+      return
     }
 
     alertHelper.error('Editing is not supported')

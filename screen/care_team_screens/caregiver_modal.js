@@ -47,7 +47,7 @@ function CaregiverModal(props) {
   function displayModel(model, _changedModel, _fields, inlineStyles, changeValue, _setField) {
     return (
       <View style={inlineStyles.infoArea}>
-        <NameHelper named={model} onChangeValue={changeValue} />
+        <NameInput named={model} onChangeValue={changeValue} />
 
         <View style={inlineStyles.profileFieldView}>
           <Text style={inlineStyles.profileFieldName}>Relationship</Text>

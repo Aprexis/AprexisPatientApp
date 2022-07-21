@@ -6,7 +6,6 @@ import { authenticationApi } from '../../api'
 import { valueHelper, userCredentialsHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
 
-
 function HeaderRight({ onProfile, performLogout }) {
   const [menuVisible, setMenuVisible] = useState(false)
 
