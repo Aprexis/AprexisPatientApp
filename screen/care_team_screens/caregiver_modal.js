@@ -5,7 +5,7 @@ import { AddressInput, AprexisModal, ContactInput } from '../components'
 import { caregiverApi } from '../../api'
 import { valueHelper, alertHelper, caregiverHelper, currentUserHelper, patientHelper } from "../../helpers"
 import { relationships } from "../../types"
-import { styles } from '../../assets/styles'
+import { themeColor, styles } from '../../assets/styles'
 
 function CaregiverModal(props) {
   const { action, onClose, visible } = props
@@ -47,30 +47,42 @@ function CaregiverModal(props) {
   function displayModel(model, _changedModel, _fields, inlineStyles, changeValue, _setField) {
     return (
       <View style={inlineStyles.infoArea}>
+        
         <View style={inlineStyles.profileFieldView}>
-          <Text style={inlineStyles.profileFieldName}>First Name</Text>
+          <Text style={{ fontSize:20, fontWeight:'600' }}>Add/Edit Caregiver</Text>
+        </View>
+
+        <View style={inlineStyles.profileFieldView}>
           <TextInput
             style={styles.inputField}
             onChangeText={(firstName) => { changeValue('first_name', firstName) }}
             value={caregiverHelper.firstName(model)}
+            label="First Name"
+            mode="outlined"
+            dense='true'
+            style={styles.textInput}
+            activeOutlineColor={themeColor.lightBlue}   
           />
         </View>
 
         <View style={inlineStyles.profileFieldView}>
-          <Text style={inlineStyles.profileFieldName}>Last Name</Text>
           <TextInput
             style={styles.inputField}
             onChangeText={(lastName) => { changeValue('last_name', lastName) }}
             value={caregiverHelper.lastName(model)}
+            label="Last Name"
+            mode="outlined"
+            dense='true'
+            style={styles.textInput}
+            activeOutlineColor={themeColor.lightBlue} 
           />
         </View>
 
         <View style={inlineStyles.profileFieldView}>
           <Text style={inlineStyles.profileFieldName}>Relationship</Text>
           <Menu
-            anchor={<Button onPress={openMenu}>{caregiverHelper.relationship(model)}</Button>}
+            anchor={<Button onPress={openMenu} style={{backgroundColor:'#fff', color:'#ccc', borderWidth:1, borderColor:'#707070'}}>{caregiverHelper.relationship(model)}</Button>}
             onDismiss={closeMenu}
-            style={[styles.inputField, { fontSize: 15 }]}
             visible={valueHelper.isSet(relationshipVisible)}>
             {
               relationships.map(

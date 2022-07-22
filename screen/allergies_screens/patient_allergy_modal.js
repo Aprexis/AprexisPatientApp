@@ -58,7 +58,7 @@ function PatientAllergyModal(props) {
       <View style={{ display:'flex', width:'100%' }}>
 
         <View style={inlineStyles.profileFieldView}>
-          <Text style={{ fontSize:20, fontWeight:'600' }}>Record an Allergic Reaction</Text>
+          <Text style={{ fontSize:20, fontWeight:'600' }}>Add/Edit Allergic Reaction</Text>
         </View>
 
         <View style={inlineStyles.profileFieldView}>

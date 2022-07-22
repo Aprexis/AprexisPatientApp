@@ -3,6 +3,7 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { Button, Modal, Portal } from 'react-native-paper'
 import { valueHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
+import tw from 'twrnc'
 
 function AprexisModal(props) {
   const [state, dispatch] = useReducer(updateState, initialState())
@@ -19,11 +20,11 @@ function AprexisModal(props) {
 
   return (
     <Portal>
-      <Modal visible={visible} onDismiss={cancel} contentContainerStyle={{ backgroundColor:'rgba(255,255,255),.75' }} style={{ padding:20 }}>
+      <Modal visible={visible} onDismiss={cancel} style={{ padding:20 }}>
         <ScrollView
-          contentContainerStyle={[styles.scrollView, { alignItems: 'center', padding:10 }]}
+          contentContainerStyle={[styles.scrollView, { alignItems: 'center', padding:10, borderStyle:'solid', borderRadius:5 }]}
           keyboardShouldPersistTaps="handled">
-          <View style={{ display:'flex', alignItems: 'center', width:'100%', paddingTop:10, paddingBottom:20 }}>
+          <View style={{ display:'flex', alignItems: 'center', width:'100%', padding:20, paddingTop:10 }}>
             {displayModel(model, changedModel, fields, inlineStyles, changeValue, setField)}
           </View>
 

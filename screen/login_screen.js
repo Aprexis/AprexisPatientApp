@@ -75,7 +75,7 @@ function LoginScreen({ setStackScreen, setCurrent }) {
           }>
           <View>
             <KeyboardAvoidingView enabled>
-              <View style={{ alignItems: 'center' }}>
+              <View>
                 <Image
                   source={require('../assets/logo.svg')}
                   style={{
@@ -85,7 +85,7 @@ function LoginScreen({ setStackScreen, setCurrent }) {
                   }}
                 />
               </View>
-              <View>
+              <View style={{ width:'80%', alignSelf:'center' }}>
                 <TextInput
                   onChangeText={(userEmail) => setUserEmail(userEmail)}
                   placeholder="Enter Username"
@@ -103,7 +103,7 @@ function LoginScreen({ setStackScreen, setCurrent }) {
                   activeOutlineColor={themeColor.brightBlue}
                 />
               </View>
-              <View>
+              <View style={{ width:'80%', alignSelf:'center' }}>
                 <TextInput
                   onChangeText={(userPassword) => setUserPassword(userPassword)}
                   placeholder='Enter Password'
@@ -119,7 +119,7 @@ function LoginScreen({ setStackScreen, setCurrent }) {
                 />
               </View>
               <TouchableOpacity
-                style={styles.buttonStyle}
+                style={[styles.buttonStyle, { width:'80%', alignSelf:'center'}]}
                 activeOpacity={0.5}
                 onPress={handleSubmitPress}>
                 <Text style={styles.buttonTextStyle}>Login</Text>

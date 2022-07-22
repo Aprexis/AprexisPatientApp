@@ -40,7 +40,11 @@ export const styles = StyleSheet.create(
       flexDirection: 'row',
       alignItems: 'center',
       marginTop: 6,
-      marginBottom: 6,
+      marginBottom: 6
+    },
+    column: {
+      display: 'flex',
+      flexDirection: 'column',
     },
     sectionStyle: {
       flexDirection: 'row',
@@ -85,7 +89,7 @@ export const styles = StyleSheet.create(
       alignSelf: 'center',
     },
     textInput: {
-      width:'80%',
+      width:'100%',
       alignSelf:'center'
     },
     inputField: {

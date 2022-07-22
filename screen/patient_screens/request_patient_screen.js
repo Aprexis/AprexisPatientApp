@@ -22,8 +22,8 @@ function RequestPatientScreen(props) {
           }
         }>
         <View>
-          <KeyboardAvoidingView enabled>
-            <View>
+          <KeyboardAvoidingView enabled >
+            <View style={{ width:'80%', alignSelf:'center' }}>
               <TextInput
                 onChangeText={(patientName) => setPatientName(patientName)}
                 label='Enter Patient Name'
