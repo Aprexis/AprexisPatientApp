@@ -50,10 +50,19 @@ function DateOfBirthInput({ model, inlineStyles, onChangeValue }) {
 
 function ShowHealthPlan({ inlineStyles, model }) {
   return (
-    <View style={inlineStyles.profileFieldView}>
-      <Text style={inlineStyles.profileFieldName}>{patientHelper.healthPlanName(model)}</Text>
-      <Text style={inlineStyles.profileFieldName}>{patientHelper.healthPlanNumber(model)}</Text>
-    </View>
+    <React.Fragment>
+      <View style={inlineStyles.profileFieldView}>
+        <Text style={inlineStyles.profileFieldName}>{patientHelper.healthPlanName(model)}</Text>
+        <Text style={inlineStyles.profileFieldName}>{patientHelper.healthPlanNumber(model)}</Text>
+      </View>
+
+      <View style={inlineStyles.profileFieldView}>
+        <Text style={inlineStyles.profileFieldName}>Coverage Dates</Text>
+        <Text style={inlineStyles.profileFieldName}>
+          {dateHelper.displayDate(patientHelper.coverageEffectiveDate(model))} - {dateHelper.displayDate(patientHelper.coverageEndDate(model))}
+        </Text>
+      </View>
+    </React.Fragment>
   )
 }
 
