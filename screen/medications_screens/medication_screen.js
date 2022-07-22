@@ -6,10 +6,12 @@ import { MedicationAdherence } from './medication_adherence'
 import { MedicationInfo } from "./medication_info"
 import { MedicationInteractions } from './medication_interactions'
 import { MedicationRemindersList } from './medication_reminders_list'
+import { PharmacyClaimsList } from '../pharmacy_claims'
 import { valueHelper, currentUserHelper, patientMedicationHelper } from "../../helpers"
 
 const screens = {
   info: MedicationInfo,
+  pharmacyClaims: PharmacyClaimsList,
   interactions: MedicationInteractions,
   adherence: MedicationAdherence,
   reminders: MedicationRemindersList
@@ -17,6 +19,7 @@ const screens = {
 
 const routes = [
   { key: 'info', title: 'Info' },
+  { key: 'pharmacyClaims', title: 'Rx Claims' },
   { key: 'interactions', title: 'Interactions' },
   { key: 'adherence', title: 'Adherence' },
   { key: 'reminders', title: 'Reminders' }

@@ -60,17 +60,6 @@ const patientMedicationKeys = [
   "type"
 ]
 
-const medicationLabelMap = {
-  'capsule': 'capsules',
-  'tablet': 'tablets',
-  'syringe': 'syringe',
-  'needle': 'syringe',
-  'topical spray': 'spray-can',
-  'drops': 'eye-dropper',
-  'pressurized inhalation': 'inhaler',
-  'for compounding': 'mortar-pestle'
-}
-
 function additionalInformation(patientMedication) {
   return fieldHelper.getField(patientMedication, "additional_information")
 }
@@ -204,16 +193,7 @@ function medicationId(patientMedication) {
 }
 
 function medicationIcon(patientMedication) {
-  if (!valueHelper.isValue(patientMedication)) {
-    return null
-  }
-
-  const medicationLabel = patientMedicationHelper.medicationLabel(patientMedication).toLowerCase()
-  const medicationLabelKey = Object.keys(medicationLabelMap).find((key) => medicationLabel.includes(key))
-  if (valueHelper.isStringValue(medicationLabelKey)) {
-    return medicationLabelMap[medicationLabelKey]
-  }
-  return 'prescription'
+  return medicationHelper.icon(patientMedicationHelper.medication(patientMedication))
 }
 
 function medicationLabel(patientMedication) {
