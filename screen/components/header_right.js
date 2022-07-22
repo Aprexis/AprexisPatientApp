@@ -2,15 +2,15 @@ import React from 'react'
 import { Alert, TouchableOpacity, View } from 'react-native'
 import { FontAwesome5Icon } from './font_awesome5_icon'
 import { authenticationApi } from '../../api'
-import { currentUserHelper, userCredentialsHelper, userHelper } from '../../helpers'
+import { valueHelper, currentUserHelper, userCredentialsHelper, userHelper } from '../../helpers'
 
-function LogoutButton(props,) {
+function LogoutButton(props) {
   const { currentUser } = currentUserHelper.getCurrentProps(props)
   if (userHelper.hasRole(currentUser, 'patient_user_role')) {
     return
   }
 
-  const { navigation } = props
+  const { performLogout } = props
   return (
     <TouchableOpacity
       activeOpacity={0.5}
@@ -30,9 +30,7 @@ function LogoutButton(props,) {
                   (userCredentials) => {
                     authenticationApi.signOut(
                       userCredentials,
-                      () => {
-                        userCredentialsHelper.removeUserCredentials(() => { navigation.replace('LoginScreen') })
-                      }
+                      () => { userCredentialsHelper.removeUserCredentials(performLogout) }
                     )
                   }
                 )
@@ -43,15 +41,15 @@ function LogoutButton(props,) {
         )
       }
       }>
-      <FontAwesome5Icon size={25} name="cog" color="#fff" />
+      <FontAwesome5Icon size={25} name="cog" />
     </TouchableOpacity>
   )
 }
 
 function HeaderRight(props) {
   return (
-    <View style={{ flexDirection: "row", justifyContent: 'center', alignItems: 'center', marginRight:10 }}>
-      {LogoutButton(props)}
+    <View style={{ flexDirection: "row", justifyContent: 'flex-end', alignItems: 'center', marginRight: 10 }}>
+      <LogoutButton {...props} />
     </View >
   )
 }

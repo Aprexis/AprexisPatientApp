@@ -204,6 +204,10 @@ function medicationId(patientMedication) {
 }
 
 function medicationIcon(patientMedication) {
+  if (!valueHelper.isValue(patientMedication)) {
+    return null
+  }
+
   const medicationLabel = patientMedicationHelper.medicationLabel(patientMedication).toLowerCase()
   const medicationLabelKey = Object.keys(medicationLabelMap).find((key) => medicationLabel.includes(key))
   if (valueHelper.isStringValue(medicationLabelKey)) {

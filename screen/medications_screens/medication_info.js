@@ -53,7 +53,8 @@ function MedicationInfo(props) {
   )
 }
 
-export { MedicationInfo }
+const MemoizedMedcicationInfo = React.memo(MedicationInfo)
+export { MemoizedMedcicationInfo as MedicationInfo }
 
 const styles = StyleSheet.create(
   {

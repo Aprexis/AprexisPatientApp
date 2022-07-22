@@ -7,10 +7,10 @@ import { RefreshView } from '../containers/refresh_view'
 import { valueHelper, pageHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
 
-function ListView({ addEditModal, forceUpdate, label, navigation, onLoadPage, onPresentItem, pageSize, pluralLabel, timeout }) {
+function ListView({ addEditModal, forceUpdate, label, onLoadPage, onPresentItem, pageSize, pluralLabel, timeout }) {
   const workingPageSize = valueHelper.isNumberValue(pageSize) ? pageSize : 20
   const [state, dispatch] = useReducer(updateState, workingPageSize, initialState)
-  const { contentOffset, isMounted, lastPage } = state
+  const { contentOffset, lastPage } = state
 
   useEffect(() => {
     if (valueHelper.isSet(forceUpdate) && !valueHelper.isSet(state.needLoad)) {
@@ -22,30 +22,6 @@ function ListView({ addEditModal, forceUpdate, label, navigation, onLoadPage, on
     loadData()
     return () => { }
   })
-  useEffect(() => {
-    const unsubscribe = navigation.addListener(
-      'focus',
-      () => {
-        dispatch({ type: 'MOUNT' })
-      }
-    )
-
-    return unsubscribe;
-  }, [navigation])
-  useEffect(() => {
-    const unsubscribe = navigation.addListener
-      ('blur',
-        () => {
-          dispatch({ type: 'UNMOUNT' })
-        }
-      )
-
-    return unsubscribe;
-  }, [navigation])
-
-  if (!valueHelper.isSet(state.isMounted)) {
-    return null
-  }
 
   return (
     <RefreshView onIdle={() => { dispatch({ type: 'NEED-LOAD' }) }} timeout={timeout}>
@@ -132,11 +108,7 @@ function ListView({ addEditModal, forceUpdate, label, navigation, onLoadPage, on
   }
 
   function loadData() {
-    const { isMounted, lastPage, needLoad, scrolling } = state
-    if (!valueHelper.isSet(isMounted)) {
-      return
-    }
-
+    const { lastPage, needLoad, scrolling } = state
     if (!valueHelper.isSet(needLoad) && !valueHelper.isSet(scrolling)) {
       return
     }
@@ -255,22 +227,16 @@ function ListView({ addEditModal, forceUpdate, label, navigation, onLoadPage, on
         return { ...oldState, ...action.data, needLoad: false, scrolling: false }
 
       case 'NEED-LOAD':
-        return { ...oldState, needLoad: isMounted, lastPage: { number: 1, pageSize: workingPageSize, total: -1 } }
-
-      case 'MOUNT':
-        return { ...oldState, isMounted: true, needLoad: true }
+        return { ...oldState, needLoad: true, lastPage: { number: 1, pageSize: workingPageSize, total: -1 } }
 
       case 'RELOAD':
-        return { ...oldState, needLoad: isMounted }
+        return { ...oldState, needLoad: true }
 
       case 'SCROLL-START':
         return { ...oldState, needLoad: false, scrolling: true }
 
       case 'SCROLL-STOP':
         return { ...oldState, needLoad: false, scrolling: false }
-
-      case 'UNMOUNT':
-        return { ...oldState, isMounted: false, needLoad: false }
 
 
       default:

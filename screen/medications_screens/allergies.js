@@ -1,31 +1,16 @@
 import React from 'react'
-import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import { currentUserHelper } from '../../helpers'
 import { PatientAllergiesList } from '../allergies_screens'
-
-const Stack = createNativeStackNavigator()
 
 function Allergies(props) {
   const { allergyType } = props
   const { currentUser, currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
 
   return (
-    <Stack.Navigator
-      screenOptions={
-        {
-          headerStyle: { backgroundColor: '#E0EBF1', height: 35 },
-          headerTitleStyle: { color: '#003949' },
-          headerShadowVisible: false
-        }
-      }
-    >
-      <Stack.Screen
-        name="PatientAllergiesList"
-        options={{ title: "Allergies", headerShown: false }}>
-        {(props) => <PatientAllergiesList {...props} allergyType={allergyType} currentUser={currentUser} currentPatient={currentPatient} userCredentials={userCredentials} />}
-      </Stack.Screen>
-    </Stack.Navigator>
+    <PatientAllergiesList {...props} allergyType={allergyType} currentUser={currentUser} currentPatient={currentPatient} userCredentials={userCredentials} />
   )
 }
 
-export { Allergies }
+const MemoizedAllergies = React.memo(Allergies)
+export { MemoizedAllergies as Allergies }
+

@@ -20,6 +20,8 @@ function SelectId({ id, optionId, optionLabel, matchString, search, changeId }) 
       } else {
         dispatch('SEARCHED', [])
       }
+
+      return () => { }
     }
   )
 

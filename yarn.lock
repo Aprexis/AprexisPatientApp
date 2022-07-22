@@ -1690,43 +1690,6 @@
     query-string "^7.0.0"
     react-is "^16.13.0"
 
-"@react-navigation/drawer@^6.4.1":
-  version "6.4.1"
-  resolved "https://registry.yarnpkg.com/@react-navigation/drawer/-/drawer-6.4.1.tgz#de488b8fa6f18a75318aa0f0edd9efea8be46285"
-  integrity sha512-CTVkiyhytUr4hUvWH8mEEGZ2BLcbFfWCHhanKisMBdq6qXMOIXoMX7AzOvjP8ojI1pvJZenvs8fopembGwUNUA==
-  dependencies:
-    "@react-navigation/elements" "^1.3.3"
-    color "^3.1.3"
-    warn-once "^0.1.0"
-
-"@react-navigation/elements@^1.3.3":
-  version "1.3.3"
-  resolved "https://registry.yarnpkg.com/@react-navigation/elements/-/elements-1.3.3.tgz#9f56b650a9a1a8263a271628be7342c8121d1788"
-  integrity sha512-Lv2lR7si5gNME8dRsqz57d54m4FJtrwHRjNQLOyQO546ZxO+g864cSvoLC6hQedQU0+IJnPTsZiEI2hHqfpEpw==
-
-"@react-navigation/material-bottom-tabs@^6.2.1":
-  version "6.2.1"
-  resolved "https://registry.yarnpkg.com/@react-navigation/material-bottom-tabs/-/material-bottom-tabs-6.2.1.tgz#5c1aad33e339554f098835208f836183ff87213c"
-  integrity sha512-+0YsLaluzi+lHyBUOm1CELWy9GuFN1yYiTWNhCd6LSckqC7u/OiXiY7QNPX6knOr5Bc6XrdYPvvF/iZW8Hl/Pg==
-  dependencies:
-    "@react-navigation/elements" "^1.3.3"
-
-"@react-navigation/material-top-tabs@^6.2.1":
-  version "6.2.1"
-  resolved "https://registry.yarnpkg.com/@react-navigation/material-top-tabs/-/material-top-tabs-6.2.1.tgz#747d17bd0138a7d50c791e9cce1adc350904f67d"
-  integrity sha512-fGy2+/7cUAyrZUPUhzKUttA4avK5Z2FrNk0LRI04hRlAVqs5DYpnaQGkegGeOGwKmnxaVCjCVPr+KoEroyqduw==
-  dependencies:
-    color "^3.1.3"
-    warn-once "^0.1.0"
-
-"@react-navigation/native-stack@^6.6.2":
-  version "6.6.2"
-  resolved "https://registry.yarnpkg.com/@react-navigation/native-stack/-/native-stack-6.6.2.tgz#09e696ad72299872f4c5c1e5b1ad309869853628"
-  integrity sha512-pFMuzhxbPml5MBvJVAzHWoaUkQaefAOKpuUnAs/AxNQuHQwwnxRmDit1PQLuIPo7g7DlfwFXagDHE1R0tbnS8Q==
-  dependencies:
-    "@react-navigation/elements" "^1.3.3"
-    warn-once "^0.1.0"
-
 "@react-navigation/native@^6.0.10":
   version "6.0.10"
   resolved "https://registry.yarnpkg.com/@react-navigation/native/-/native-6.0.10.tgz#c58aa176eb0e63f3641c83a65c509faf253e4385"
@@ -2592,7 +2555,7 @@ color-string@^1.6.0:
     color-name "^1.0.0"
     simple-swizzle "^0.2.2"
 
-color@^3.1.2, color@^3.1.3:
+color@^3.1.2:
   version "3.2.1"
   resolved "https://registry.yarnpkg.com/color/-/color-3.2.1.tgz#3544dc198caf4490c3ecc9a790b54fe9ff45e164"
   integrity sha512-aBl7dZI9ENN6fUGC7mWpMTPNHmWUSNan9tuWN6ahh5ZLNk9baLJOnSMlrQkHcrfFgz2/RigjUVAjdx36VcemKA==

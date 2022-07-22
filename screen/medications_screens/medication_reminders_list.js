@@ -72,7 +72,6 @@ function MedicationReminder(props) {
 }
 
 function MedicationRemindersList(props) {
-  const { navigation } = props
   const { currentPatient, currentUser, userCredentials } = currentUserHelper.getCurrentProps(props)
   const { patientMedication } = props
   const [state, dispatch] = useReducer(updateState, initialState())
@@ -82,6 +81,8 @@ function MedicationRemindersList(props) {
       if (patientMedicationHelper.id(patientMedication) != patientMedicationHelper.id(state.patientMedication)) {
         dispatch({ type: 'NEW-PATIENT-MEDICATION', patientMedication })
       }
+
+      return () => { }
     },
     [patientMedication]
   )
@@ -92,7 +93,6 @@ function MedicationRemindersList(props) {
         addEditModal={addEditModal}
         forceUpdate={patientMedicationHelper.id(patientMedication) != patientMedicationHelper.id(state.patientMedication)}
         label='Medication Reminders'
-        navigation={navigation}
         onLoadPage={loadPage}
         onPresentItem={presentItem}
         pageSize={20}
@@ -152,7 +152,8 @@ function MedicationRemindersList(props) {
   }
 }
 
-export { MedicationRemindersList }
+const MemoizedMedicationRemindersList = React.memo(MedicationRemindersList)
+export { MemoizedMedicationRemindersList as MedicationRemindersList }
 
 const inlineStyles = StyleSheet.create(
   {
