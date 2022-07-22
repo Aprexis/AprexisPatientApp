@@ -4,7 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { TabBar, TabView } from 'react-native-tab-view'
 import { CareTeamScreen } from './care_team_screens'
 import { FontAwesome5Icon, StackScreen } from './components'
-import { HomeScreen, MedicationsScreen, RequestPatientScreen } from "./patient_screens"
+import { HomeScreen, MedicationsScreen, PatientProfileModal, RequestPatientScreen } from "./patient_screens"
 import { HeaderLeft, HeaderRight, LazyPlaceholder } from "./components"
 import { valueHelper, patientHelper, currentUserHelper, userCredentialsHelper } from "../helpers"
 import { styles } from '../assets/styles'
@@ -45,7 +45,7 @@ const routeList = [
 
 function PatientScreen(props) {
   const [state, dispatch] = useReducer(updateState, { index: 0, routes: routes(props.currentPatient) })
-  const { currentPatient, userCredentials } = state
+  const { currentPatient, patientModalVisible, userCredentials } = state
   const { currentUser } = currentUserHelper.getCurrentProps(props)
 
   useEffect(
@@ -74,6 +74,14 @@ function PatientScreen(props) {
     <View style={{ flex: 1 }}>
       {header()}
 
+      <PatientProfileModal
+        currentPatient={currentPatient}
+        currentUser={currentUser}
+        onClose={closePatientModal}
+        userCredentials={userCredentials}
+        visible={patientModalVisible}
+      />
+
       <TabView
         lazy
         navigationState={state}
@@ -87,6 +95,14 @@ function PatientScreen(props) {
       />
     </View>
   )
+
+  function closePatientModal(patient) {
+    dispatch({ type: 'CLOSE-PATIENT-MODAL', patient })
+  }
+
+  function editPatient() {
+    dispatch({ type: 'EDIT-PATIENT' })
+  }
 
   function handleIndexChange(index) {
     dispatch({ type: 'INDEX-CHANGE', index })
@@ -112,6 +128,7 @@ function PatientScreen(props) {
           <HeaderRight
             currentUser={currentUser}
             currentPatient={currentPatient}
+            onProfile={editPatient}
             performLogout={() => { setStackScreen('login') }}
             userCredentials={userCredentials}
           />
@@ -183,6 +200,12 @@ function PatientScreen(props) {
 
   function updateState(oldState, action) {
     switch (action.type) {
+      case 'CLOSE-PATIENT-MODAL':
+        return { ...oldState, currentPatient: action.patient, patientModalVisible: false }
+
+      case 'EDIT-PATIENT':
+        return { ...oldState, patientModalVisible: true }
+
       case 'INDEX-CHANGE':
         return { ...oldState, index: action.index }
 
