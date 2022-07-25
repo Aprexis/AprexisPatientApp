@@ -94,6 +94,5 @@ export { MemoizedCaregiversList as CaregiversList }
 const inlineStyles = StyleSheet.create(
   {
     text: { color: "#112B37", fontSize: 18, fontWeight: "500", marginLeft: 5 },
-    medIcon: { marginRight: 5 }
   }
 )

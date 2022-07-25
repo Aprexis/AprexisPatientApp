@@ -1,12 +1,12 @@
-import React, { useEffect, useReducer } from "react"
-import { Dimensions, StyleSheet, Text, View } from "react-native"
+import React, { useEffect, useReducer } from 'react'
+import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { TabBar, TabView } from 'react-native-tab-view'
 import { CareTeamScreen } from './care_team_screens'
 import { FontAwesome5Icon, StackScreen } from './components'
-import { HomeScreen, MedicationsScreen, PatientProfileModal, RequestPatientScreen } from "./patient_screens"
-import { HeaderLeft, HeaderRight, LazyPlaceholder } from "./components"
-import { valueHelper, patientHelper, currentUserHelper, userCredentialsHelper } from "../helpers"
+import { HomeScreen, MedicationsScreen, PatientProfileModal, RequestPatientScreen, StatsScreen } from './patient_screens'
+import { HeaderLeft, HeaderRight, LazyPlaceholder } from './components'
+import { valueHelper, patientHelper, currentUserHelper, userCredentialsHelper } from '../helpers'
 import { styles } from '../assets/styles'
 
 function HomeScreenStack(props) {
@@ -34,13 +34,15 @@ const Home = React.memo(HomeScreenStack)
 const screens = {
   home: Home,
   medications: MedicationsScreen,
-  care_team: CareTeamScreen
+  care_team: CareTeamScreen,
+  stats: StatsScreen
 }
 
 const routeList = [
   { key: 'home', title: 'Home' },
   { key: 'medications', title: 'Medications' },
-  { key: 'care_team', title: 'Care Team' }
+  { key: 'care_team', title: 'Care Team' },
+  { key: 'stats', title: 'Stats' }
 ]
 
 function PatientScreen(props) {
@@ -144,13 +146,16 @@ function PatientScreen(props) {
   function renderIcon({ route, color }) {
     switch (route.key) {
       case 'care_team':
-        return (<FontAwesome5Icon name="hand-holding-medical" color={color} size={28} style={{ marginTop: -4 }} />)
+        return (<FontAwesome5Icon name='hand-holding-medical' color={color} size={28} style={{ marginTop: -4 }} />)
 
       case 'home':
-        return (<FontAwesome5Icon name="home" color={color} size={27} style={{ marginTop: -4 }} />)
+        return (<FontAwesome5Icon name='home' color={color} size={27} style={{ marginTop: -4 }} />)
 
       case 'medications':
-        return (<FontAwesome5Icon name="pills" color={color} size={28} style={{ marginTop: -4 }} />)
+        return (<FontAwesome5Icon name='pills' color={color} size={28} style={{ marginTop: -4 }} />)
+
+      case 'stats':
+        return (<FontAwesome5Icon name='heartbeat' color={color} size={28} styles={{ marginTop: -4 }} />)
 
       default:
         return null
