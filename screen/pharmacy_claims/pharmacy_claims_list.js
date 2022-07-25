@@ -11,12 +11,13 @@ function PharmacyClaim(props) {
   return (
     <View>
       <View style={styles.row}>
-        <Text style={inlineStyles.text}>{pharmacyClaimHelper.claimNumber(pharmacyClaim)}</Text>
+        <Text style={inlineStyles.text}>#{pharmacyClaimHelper.claimNumber(pharmacyClaim)}</Text>
         <Text style={inlineStyles.text}>{pharmacyClaimHelper.displayFillDate(pharmacyClaim)}</Text>
+        <Text style={inlineStyles.text}>{pharmacyClaimHelper.daysSupply(pharmacyClaim)} Days</Text>
       </View>
       <View style={styles.row}>
         <FontAwesome5Icon size={40} style={styles.icon} name={pharmacyClaimHelper.medicationIcon(pharmacyClaim)} />
-        <Text style={inlineStyles.text}>{pharmacyClaimHelper.medicationLabel(pharmacyClaim)} ({pharmacyClaimHelper.ndc(pharmacyClaim)}</Text>
+        <Text style={inlineStyles.text}>{pharmacyClaimHelper.medicationLabel(pharmacyClaim)} ({pharmacyClaimHelper.ndc(pharmacyClaim)})</Text>
       </View>
       <View style={styles.row}>
         <Text style={inlineStyles.text}>{pharmacyClaimHelper.pharmacyStoreIdentification(pharmacyClaim)}</Text>
