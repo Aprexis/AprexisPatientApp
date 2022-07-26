@@ -17,7 +17,9 @@ export const patientMedicationHelper = {
   directions,
   displayFilledAt,
   displayFilledOn,
+  displayHasPreviousFill,
   filledAt,
+  hasPreviousFill,
   healthPlanId,
   id,
   indication,
@@ -25,6 +27,7 @@ export const patientMedicationHelper = {
   medicationIcon,
   medicationId,
   medicationLabel,
+  mpr,
   patient,
   patientName,
   pharmacyStore,
@@ -168,8 +171,16 @@ function displayFilledOn(patientMedication) {
   return dateHelper.displayDate(filledAt)
 }
 
+function displayHasPreviousFill(patientMedication) {
+  return valueHelper.yesNo(patientMedicationHelper.hasPreviousFill(patientMedication))
+}
+
 function filledAt(patientMedication) {
   return fieldHelper.getField(patientMedication, "filled_at")
+}
+
+function hasPreviousFill(patientMedication) {
+  return fieldHelper.getField(patientMedication, 'has_previous_fill')
 }
 
 function healthPlanId(patientMedication) {
@@ -198,6 +209,10 @@ function medicationIcon(patientMedication) {
 
 function medicationLabel(patientMedication) {
   return medicationHelper.label(patientMedicationHelper.medication(patientMedication))
+}
+
+function mpr(patientMedication) {
+  return fieldHelper.getField(patientMedication, 'mpr')
 }
 
 function patient(patientMedication) {

@@ -45,6 +45,16 @@ function MedicationInfo(props) {
         </View>
 
         <View style={styles.medicationInfo.profileFieldView}>
+          <Text style={styles.medicationInfo.profileFieldName}>Refill?</Text>
+          <Text style={styles.medicationInfo.profileFieldValue}>{patientMedicationHelper.displayHasPreviousFill(patientMedication)}</Text>
+        </View>
+
+        <View style={styles.medicationInfo.profileFieldView}>
+          <Text style={styles.medicationInfo.profileFieldName}>MPR</Text>
+          <Text style={styles.medicationInfo.profileFieldValue}>{patientMedicationHelper.mpr(patientMedication)}</Text>
+        </View>
+
+        <View style={styles.medicationInfo.profileFieldView}>
           <Text style={styles.medicationInfo.profileFieldName}>Prescribed By</Text>
           <Text style={styles.medicationInfo.profileFieldValue}>{physicianName}</Text>
         </View>
