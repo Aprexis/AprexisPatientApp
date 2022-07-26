@@ -11,6 +11,7 @@ export const medicationHelper = {
   dosageFormName,
   endMarketingDate,
   goldStandardProductId,
+  icon,
   id,
   label,
   labelerName,
@@ -32,6 +33,17 @@ export const medicationHelper = {
   superset,
   supersetId,
   supersetLabel
+}
+
+const medicationLabelMap = {
+  'capsule': 'capsules',
+  'tablet': 'tablets',
+  'syringe': 'syringe',
+  'needle': 'syringe',
+  'topical spray': 'spray-can',
+  'drops': 'eye-dropper',
+  'pressurized inhalation': 'inhaler',
+  'for compounding': 'mortar-pestle'
 }
 
 function activeIngredUnit(medication) {
@@ -70,6 +82,19 @@ function goldStandardProductId(medication) {
   return fieldHelper.getField(medication, "gold_standard_product_id")
 }
 
+function icon(medication) {
+  if (!valueHelper.isValue(medication)) {
+    return null
+  }
+
+  const medicationLabel = medicationHelper.label(medication).toLowerCase()
+  const medicationLabelKey = Object.keys(medicationLabelMap).find((key) => medicationLabel.includes(key))
+  if (valueHelper.isStringValue(medicationLabelKey)) {
+    return medicationLabelMap[medicationLabelKey]
+  }
+
+  return 'prescription'
+}
 function id(medication) {
   return fieldHelper.getField(medication, "id")
 }

@@ -17,7 +17,9 @@ export const patientMedicationHelper = {
   directions,
   displayFilledAt,
   displayFilledOn,
+  displayHasPreviousFill,
   filledAt,
+  hasPreviousFill,
   healthPlanId,
   id,
   indication,
@@ -25,6 +27,7 @@ export const patientMedicationHelper = {
   medicationIcon,
   medicationId,
   medicationLabel,
+  mpr,
   patient,
   patientName,
   pharmacyStore,
@@ -59,17 +62,6 @@ const patientMedicationKeys = [
   "strength_units",
   "type"
 ]
-
-const medicationLabelMap = {
-  'capsule': 'capsules',
-  'tablet': 'tablets',
-  'syringe': 'syringe',
-  'needle': 'syringe',
-  'topical spray': 'spray-can',
-  'drops': 'eye-dropper',
-  'pressurized inhalation': 'inhaler',
-  'for compounding': 'mortar-pestle'
-}
 
 function additionalInformation(patientMedication) {
   return fieldHelper.getField(patientMedication, "additional_information")
@@ -179,8 +171,16 @@ function displayFilledOn(patientMedication) {
   return dateHelper.displayDate(filledAt)
 }
 
+function displayHasPreviousFill(patientMedication) {
+  return valueHelper.yesNo(patientMedicationHelper.hasPreviousFill(patientMedication))
+}
+
 function filledAt(patientMedication) {
   return fieldHelper.getField(patientMedication, "filled_at")
+}
+
+function hasPreviousFill(patientMedication) {
+  return fieldHelper.getField(patientMedication, 'has_previous_fill')
 }
 
 function healthPlanId(patientMedication) {
@@ -204,20 +204,15 @@ function medicationId(patientMedication) {
 }
 
 function medicationIcon(patientMedication) {
-  if (!valueHelper.isValue(patientMedication)) {
-    return null
-  }
-
-  const medicationLabel = patientMedicationHelper.medicationLabel(patientMedication).toLowerCase()
-  const medicationLabelKey = Object.keys(medicationLabelMap).find((key) => medicationLabel.includes(key))
-  if (valueHelper.isStringValue(medicationLabelKey)) {
-    return medicationLabelMap[medicationLabelKey]
-  }
-  return 'prescription'
+  return medicationHelper.icon(patientMedicationHelper.medication(patientMedication))
 }
 
 function medicationLabel(patientMedication) {
   return medicationHelper.label(patientMedicationHelper.medication(patientMedication))
+}
+
+function mpr(patientMedication) {
+  return fieldHelper.getField(patientMedication, 'mpr')
 }
 
 function patient(patientMedication) {
