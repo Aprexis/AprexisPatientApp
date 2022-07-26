@@ -7,6 +7,7 @@ import { pharmacyStoreHelper } from "./pharmacy_store.helper"
 import { programHelper } from "./program.helper"
 import { userHelper } from "./user.helper"
 import { diagnosisCodeHelper, placeOfServiceHelper } from "./admin"
+import { dateHelper } from "./date.helper"
 
 export const interventionHelper = {
   billLater,
@@ -27,9 +28,11 @@ export const interventionHelper = {
   diagnosisCode,
   diagnosisCodeLongDescription,
   displayConsentObtainedFrom,
+  displayDateOfServce,
   dryRunProgramPatientAssignmentId,
   faxBypassed,
   healthPlanName,
+  id,
   identification,
   medicarePaymentAmount,
   medicarePaymentStatus,
@@ -140,6 +143,10 @@ function displayConsentObtainedFrom(intervention) {
   return caregiverHelper.displayCaregiverAndRelationship(consenter)
 }
 
+function displayDateOfServce(intervention) {
+  return dateHelper.displayDate(interventionHelper.dateOfService(intervention))
+}
+
 function dryRunProgramPatientAssignmentId(intervention) {
   return fieldHelper.getField(intervention, "dry_run_program_patient_id")
 }
@@ -150,6 +157,10 @@ function faxBypassed(intervention) {
 
 function healthPlanName(intervention) {
   return healthPlanHelper.name(fieldHelper.getField(intervention, "health_plan"))
+}
+
+function id(intervention) {
+  return fieldHelper.getField(intervention, 'id')
 }
 
 function identification(intervention) {

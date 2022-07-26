@@ -1,4 +1,4 @@
-import React, { useEffect, useReducer, useRef } from 'react'
+import React, { useEffect, useReducer, } from 'react'
 import { View } from 'react-native'
 import { ScrollView } from 'react-native'
 import { AddButton } from './add_button'
