@@ -3,8 +3,8 @@ import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { TabBar, TabView } from 'react-native-tab-view'
 import { CareTeamScreen } from './care_team_screens'
-import { FontAwesome5Icon, StackScreen } from './components'
-import { HomeScreen, MedicationsScreen, PatientProfileModal, RequestPatientScreen, StatsScreen } from './patient_screens'
+import { FontAwesome5Icon, MaterialCommunityIcon, StackScreen } from './components'
+import { HomeScreen, InterventionsScreen, MedicationsScreen, PatientProfileModal, RequestPatientScreen, StatsScreen } from './patient_screens'
 import { HeaderLeft, HeaderRight, LazyPlaceholder } from './components'
 import { valueHelper, patientHelper, currentUserHelper, userCredentialsHelper } from '../helpers'
 import { styles } from '../assets/styles'
@@ -33,6 +33,7 @@ const Home = React.memo(HomeScreenStack)
 
 const screens = {
   home: Home,
+  interventions: InterventionsScreen,
   medications: MedicationsScreen,
   care_team: CareTeamScreen,
   stats: StatsScreen
@@ -40,6 +41,7 @@ const screens = {
 
 const routeList = [
   { key: 'home', title: 'Home' },
+  { key: 'interventions', title: 'Interventions' },
   { key: 'medications', title: 'Medications' },
   { key: 'care_team', title: 'Care Team' },
   { key: 'stats', title: 'Stats' }
@@ -150,6 +152,9 @@ function PatientScreen(props) {
 
       case 'home':
         return (<FontAwesome5Icon name='home' color={color} size={27} style={{ marginTop: -4 }} />)
+
+      case 'interventions':
+        return (<MaterialCommunityIcon name='file-chart' color={color} size={28} style={{ marginTop: -4 }} />)
 
       case 'medications':
         return (<FontAwesome5Icon name='pills' color={color} size={28} style={{ marginTop: -4 }} />)

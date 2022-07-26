@@ -141,8 +141,6 @@ function handleError(method, path, error, onFailure, optional = {}) {
 function perform(method, path, queryString, userCredentials, body, onSuccess, onFailure, optional = {}) {
   let workingPath = path
 
-  console.log(`Root: ${railsUrlRoot}`)
-
   // If the incoming path includes the Rails relative URL root, remove it.
   if (valueHelper.isStringValue(railsUrlRoot) && railsUrlRoot != "/" && path.startsWith(railsUrlRoot)) {
     workingPath = path.substring(railsUrlRoot.length)
