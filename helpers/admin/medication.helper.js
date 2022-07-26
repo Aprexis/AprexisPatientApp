@@ -1,5 +1,5 @@
-import { valueHelper } from "../value.helper"
-import { fieldHelper } from "../field.helper"
+import { valueHelper } from '../value.helper'
+import { fieldHelper } from '../field.helper'
 
 export const medicationHelper = {
   activeIngredUnit,
@@ -47,23 +47,23 @@ const medicationLabelMap = {
 }
 
 function activeIngredUnit(medication) {
-  return fieldHelper.getField(medication, "active_ingred_unit")
+  return fieldHelper.getField(medication, 'active_ingred_unit')
 }
 
 function activeNumeratorStrength(medication) {
-  return fieldHelper.getField(medication, "active_numerator_strength")
+  return fieldHelper.getField(medication, 'active_numerator_strength')
 }
 
 function applicationNumber(medication) {
-  return fieldHelper.getField(medication, "applicationnumber")
+  return fieldHelper.getField(medication, 'applicationnumber')
 }
 
 function deaSchedule(medication) {
-  return fieldHelper.getField(medication, "deaschedule")
+  return fieldHelper.getField(medication, 'deaschedule')
 }
 
 function din(medication) {
-  return fieldHelper.getField(medication, "din")
+  return fieldHelper.getField(medication, 'din')
 }
 
 function displayMedicationSuperset(medication) {
@@ -71,15 +71,15 @@ function displayMedicationSuperset(medication) {
 }
 
 function dosageFormName(medication) {
-  return fieldHelper.getField(medication, "dosageformname")
+  return fieldHelper.getField(medication, 'dosageformname')
 }
 
 function endMarketingDate(medication) {
-  return fieldHelper.getField(medication, "endmarketingdate")
+  return fieldHelper.getField(medication, 'endmarketingdate')
 }
 
 function goldStandardProductId(medication) {
-  return fieldHelper.getField(medication, "gold_standard_product_id")
+  return fieldHelper.getField(medication, 'gold_standard_product_id')
 }
 
 function icon(medication) {
@@ -96,83 +96,83 @@ function icon(medication) {
   return 'prescription'
 }
 function id(medication) {
-  return fieldHelper.getField(medication, "id")
+  return fieldHelper.getField(medication, 'id')
 }
 
 function label(medication) {
-  return fieldHelper.getField(medication, "label")
+  return fieldHelper.getField(medication, 'label')
 }
 
 function labelerName(medication) {
-  return fieldHelper.getField(medication, "labelername")
+  return fieldHelper.getField(medication, 'labelername')
 }
 
 function marketingCategoryName(medication) {
-  return fieldHelper.getField(medication, "marketingcategoryname")
+  return fieldHelper.getField(medication, 'marketingcategoryname')
 }
 
 function medicationSuperset(medication) {
-  return fieldHelper.getField(medication, "medication_superset")
+  return fieldHelper.getField(medication, 'medication_superset')
 }
 
 function name(medication) {
-  return fieldHelper.getField(medication, "name")
+  return fieldHelper.getField(medication, 'name')
 }
 
 function ndc11Codes(medication) {
-  return fieldHelper.getField(medication, "ndc11_codes")
+  return fieldHelper.getField(medication, 'ndc11_codes')
 }
 
 function ndcLabelerCode(medication) {
-  return fieldHelper.getField(medication, "ndc_labeler_code")
+  return fieldHelper.getField(medication, 'ndc_labeler_code')
 }
 
 function ndcProductCode(medication) {
-  return fieldHelper.getField(medication, "ndc_product_code")
+  return fieldHelper.getField(medication, 'ndc_product_code')
 }
 
 function nonProprietaryName(medication) {
-  return fieldHelper.getField(medication, "nonproprietaryname")
+  return fieldHelper.getField(medication, 'nonproprietaryname')
 }
 
 function pharmClasses(medication) {
-  return fieldHelper.getField(medication, "pharm_classes")
+  return fieldHelper.getField(medication, 'pharm_classes')
 }
 
 function productNdc(medication) {
-  return fieldHelper.getField(medication, "productndc")
+  return fieldHelper.getField(medication, 'productndc')
 }
 
 function productTypeName(medication) {
-  return fieldHelper.getField(medication, "producttypename")
+  return fieldHelper.getField(medication, 'producttypename')
 }
 
 function proprietaryName(medication) {
-  return fieldHelper.getField(medication, "proprietaryname")
+  return fieldHelper.getField(medication, 'proprietaryname')
 }
 
 function proprietaryNameSuffix(medication) {
-  return fieldHelper.getField(medication, "proprietarynamesuffix")
+  return fieldHelper.getField(medication, 'proprietarynamesuffix')
 }
 
 function routeName(medication) {
-  return fieldHelper.getField(medication, "routename")
+  return fieldHelper.getField(medication, 'routename')
 }
 
 function substanceName(medication) {
-  return fieldHelper.getField(medication, "substancename")
+  return fieldHelper.getField(medication, 'substancename')
 }
 
 function startMarketingDate(medication) {
-  return fieldHelper.getField(medication, "startmarketingdate")
+  return fieldHelper.getField(medication, 'startmarketingdate')
 }
 
 function superset(medication) {
-  return fieldHelper.getField(medication, "superset")
+  return fieldHelper.getField(medication, 'superset')
 }
 
 function supersetId(medication) {
-  return fieldHelper.getField(medication, "superset_id")
+  return fieldHelper.getField(medication, 'superset_id')
 }
 
 function supersetLabel(medication) {
