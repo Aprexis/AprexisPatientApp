@@ -33,7 +33,6 @@ const screens = {
 
 const routes = [
   { key: 'interventions', title: 'Interventions' },
-  { key: 'intervention', title: 'Intervention' }
 ]
 
 function InterventionsScreen(props) {
