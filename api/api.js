@@ -1,6 +1,7 @@
+import Constants from 'expo-constants'
+import { Platform } from 'react-native'
 import { alertHelper } from "../helpers/alert.helper"
 import { valueHelper } from "../helpers/value.helper"
-import { Platform } from 'react-native'
 //const FileSaver = require('file-saver')
 
 export const API = {
@@ -10,16 +11,8 @@ export const API = {
   validateId
 }
 
-let baseApiUrl
-
-if (Platform.OS === 'android') {
-  /*(process.env.REACT_APP_APREXIS_API*/
-  baseApiUrl = 'http://10.0.2.2:3250'
-} else {
-  baseApiUrl = 'http://localhost:3250'
-}
-
-const railsUrlRoot = baseApiUrl /*new URL(baseApiUrl).pathname*/
+const baseApiUrl = determineApi()
+const railsUrlRoot = baseApiUrl
 const knownHeaders = {
   "X-Page": "lastPage.number",
   "X-Per-Page": "lastPage.size",
@@ -84,6 +77,26 @@ function buildQueryString(params) {
   }
 }
 
+function determineApi() {
+  if (valueHelper.isStringValue(Constants.manifest.extra.api.environment)) {
+    return Constants.manifest.api.environment
+  }
+
+  if (__DEV__) {
+    if (Platform.OS === 'android') {
+      return Constants.manifest.extra.api.development.android
+    }
+
+    return Constants.manifest.extra.api.development.other
+  }
+
+  if (process.env.MY_ENVIRONMENT === 'staging') {
+    return Constants.manifest.extra.api.staging
+  }
+
+  return Constants.manifest.extra.api.production
+}
+
 function handleError(method, path, error, onFailure, optional = {}) {
   if (error.message.includes("You need to sign in or sign up before continuing.")) {
     onFailure("You are not signed in. You may have been signed out due to lack of activity or your username may have been changed by another user. Please sign in.")
@@ -127,6 +140,8 @@ function handleError(method, path, error, onFailure, optional = {}) {
 
 function perform(method, path, queryString, userCredentials, body, onSuccess, onFailure, optional = {}) {
   let workingPath = path
+
+  console.log(`Root: ${railsUrlRoot}`)
 
   // If the incoming path includes the Rails relative URL root, remove it.
   if (valueHelper.isStringValue(railsUrlRoot) && railsUrlRoot != "/" && path.startsWith(railsUrlRoot)) {
