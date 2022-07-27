@@ -23,6 +23,7 @@ export const userHelper = {
   pharmacyStores,
   phone,
   role,
+  roleLabel,
   rolesToOptions,
   setCurrentUser,
   state,
@@ -123,6 +124,12 @@ function phone(user) {
 
 function role(user) {
   return fieldHelper.getField(user, "role")
+}
+
+function roleLabel(user) {
+  const role = userHelper.role(user)
+
+  return valueHelper.capitalizeWords(valueHelper.humanize(role))
 }
 
 function rolesToOptions() {

@@ -2,15 +2,18 @@ import React, { useReducer } from 'react'
 import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { TabView } from 'react-native-tab-view'
 import { FontAwesome5Icon, LazyPlaceholder, MaterialCommunityIcon } from '../components'
-import { InterventionInfo } from "./intervention_info"
-import { valueHelper, currentUserHelper, interventionHelper } from "../../helpers"
+import { InterventionInfo } from './intervention_info'
+import { InterventionDocumentsList } from '../intervention_documents_screens'
+import { valueHelper, currentUserHelper, interventionHelper } from '../../helpers'
 
 const screens = {
   info: InterventionInfo,
+  documents: InterventionDocumentsList
 }
 
 const routes = [
   { key: 'info', title: 'Info' },
+  { key: 'documents', title: 'Documents' }
 ]
 
 function BackButton({ goBack }) {
@@ -88,9 +91,9 @@ export { InterventionScreen }
 const styles = StyleSheet.create(
   {
     sectionView: { flex: 4 },
-    titleView: { flex: 1, flexDirection: "row", justifyContent: "center", alignItems: "center", backgroundColor: '#03718D', color: '#fff' },
-    titleIcon: { color: "#fff" },
-    titleText: { fontSize: 20, fontWeight: "bold", color: '#fff' },
+    titleView: { flex: 1, flexDirection: 'row', justifyContent: 'center', alignItems: 'center', backgroundColor: '#03718D', color: '#fff' },
+    titleIcon: { color: '#fff' },
+    titleText: { fontSize: 20, fontWeight: 'bold', color: '#fff' },
     view: { flex: 1 }
   }
 )
