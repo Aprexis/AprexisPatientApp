@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import { StyleSheet, Text, View } from 'react-native'
+import { View } from 'react-native'
+import { DisplayField } from '../components'
 import { patientMedicationApi } from '../../api'
-import { valueHelper, alertHelper, patientMedicationHelper, currentUserHelper } from "../../helpers"
+import { alertHelper, patientMedicationHelper, currentUserHelper } from "../../helpers"
 
 function MedicationInfo(props) {
   const { userCredentials } = currentUserHelper.getCurrentProps(props)
   const [patientMedication, setPatientMedication] = useState(props.patientMedication)
   const [needLoad, setNeedLoad] = useState(true)
-  const physicianName = valueHelper.isValue(patientMedicationHelper.physician(patientMedication)) ? patientMedicationHelper.physicianName(patientMedication) : ""
 
   useEffect(
     () => {
@@ -32,32 +32,13 @@ function MedicationInfo(props) {
   )
 
   return (
-    <View style={styles.medicationInfo.view}>
-      <View style={styles.medicationInfo.infoArea}>
-        <View style={styles.medicationInfo.profileFieldView}>
-          <Text style={styles.medicationInfo.profileFieldName}>Instructions</Text>
-          <Text style={styles.medicationInfo.profileFieldValue}>{patientMedicationHelper.directions(patientMedication)}</Text>
-        </View>
-
-        <View style={styles.medicationInfo.profileFieldView}>
-          <Text style={styles.medicationInfo.profileFieldName}>Last Filled</Text>
-          <Text style={styles.medicationInfo.profileFieldValue}>{patientMedicationHelper.displayFilledOn(patientMedication)}</Text>
-        </View>
-
-        <View style={styles.medicationInfo.profileFieldView}>
-          <Text style={styles.medicationInfo.profileFieldName}>Refill?</Text>
-          <Text style={styles.medicationInfo.profileFieldValue}>{patientMedicationHelper.displayHasPreviousFill(patientMedication)}</Text>
-        </View>
-
-        <View style={styles.medicationInfo.profileFieldView}>
-          <Text style={styles.medicationInfo.profileFieldName}>MPR</Text>
-          <Text style={styles.medicationInfo.profileFieldValue}>{patientMedicationHelper.mpr(patientMedication)}</Text>
-        </View>
-
-        <View style={styles.medicationInfo.profileFieldView}>
-          <Text style={styles.medicationInfo.profileFieldName}>Prescribed By</Text>
-          <Text style={styles.medicationInfo.profileFieldValue}>{physicianName}</Text>
-        </View>
+    <View >
+      <View style={{ flexDirection: 'column' }}>
+        <DisplayField fieldName='Instructions' fieldType='string' method={patientMedicationHelper.directions} model={patientMedication} />
+        <DisplayField checkMethod={patientMedicationHelper.filledAt} fieldName='Last Filled' fieldType='datetime' method={patientMedicationHelper.displayFilledOn} model={patientMedication} />
+        <DisplayField fieldName='Refill?' method={patientMedicationHelper.displayHasPreviousFill} model={patientMedication} />
+        <DisplayField fieldName='MPR' fieldType='string' method={patientMedicationHelper.mpr} model={patientMedication} />
+        <DisplayField checkMethod={patientMedicationHelper.physician} fieldName='Prescribed By' method={patientMedicationHelper.physicianName} model={patientMedication} />
       </View>
     </View>
   )
@@ -65,15 +46,3 @@ function MedicationInfo(props) {
 
 const MemoizedMedcicationInfo = React.memo(MedicationInfo)
 export { MemoizedMedcicationInfo as MedicationInfo }
-
-const styles = StyleSheet.create(
-  {
-    medicationInfo: {
-      view: {},
-      infoArea: { flexDirection: "column" },
-      profileFieldView: { flexDirection: "row", margin: 5 },
-      profileFieldName: { fontWeight: "bold", marginRight: 5 },
-      profileFieldValue: {}
-    }
-  }
-)

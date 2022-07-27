@@ -2,11 +2,13 @@ import { valueHelper } from "./value.helper"
 import { fieldHelper } from "./field.helper"
 import { addressHelper } from "./address.helper"
 import { contactHelper } from "./contact.helper"
+import { pharmacyChainHelper } from "./pharmacy_chain.helper"
 
 export const pharmacyStoreHelper = {
   address,
   ccdCode,
   city,
+  display,
   einNumber,
   fullAddress,
   id,
@@ -41,6 +43,15 @@ function ccdCode(pharmacyStore) {
 
 function city(pharmacyStore) {
   return addressHelper.city(pharmacyStore)
+}
+
+function display(pharmacyStore) {
+  if (!valueHelper.isValue(pharmacyStore)) {
+    return "(no pharmacy store)"
+  }
+
+  const pharmacyChainName = pharmacyChainHelper.name(fieldHelper.getField(pharmacyStore, "pharmacy"))
+  return `${pharmacyChainName} - ${identification(pharmacyStore)}`
 }
 
 function einNumber(pharmacyStore) {
