@@ -49,7 +49,7 @@ function modelName() {
 }
 
 function name(program) {
-  return valueHelper.titleize(fieldHelper.getField(program, "name")).replace('C M R/ A', 'CMR/A')
+  return valueHelper.titleize(fieldHelper.getField(program, "name")).replace('C M R/ A', 'CMR/A').replace('C M R ', 'CMR').replace('Cmr', 'CMR')
 }
 
 function startDate(program) {

@@ -15,7 +15,7 @@ function Pharmacist(props) {
       <View style={{ flexDirection: 'column', alignItems: 'center', width: '95%' }}>
         <View style={{ flexDirection: "row" }}>
           <Image style={{ ...valueHelper.filterHash(styles.icon, { exclude: ['color'] }), width: 23, height: 20 }} source={require('../../assets/pharmacist.jpg')} />
-          <Text style={inlineStyles.text}>{patientPharmacistHelper.name(pharmacist)} ({patientPharmacistHelper.roleLabel(pharmacist)})</Text>
+          <Text style={inlineStyles.text}>{patientPharmacistHelper.fullName(pharmacist)} ({patientPharmacistHelper.roleLabel(pharmacist)})</Text>
         </View>
         <Text style={inlineStyles.text}>NPI: {patientPharmacistHelper.pharmacistNpi(pharmacist)}</Text>
       </View>
