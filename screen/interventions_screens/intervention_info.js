@@ -41,6 +41,10 @@ function InterventionInfo(props) {
         <DisplayField checkMethod={interventionHelper.pendingUntil} fieldName='Pending Until' fieldType='date' method={interventionHelper.displayPendingUntil} model={intervention} />
         <DisplayField fieldName='Place of Service' fieldType='string' method={interventionHelper.serviceLocation} model={intervention} />
         <DisplayField fieldName='Venue' fieldType='string' method={interventionHelper.venue} model={intervention} />
+        <DisplayField checkMethod={interventionHelper.consentFormInitiatedAt} fieldName='Consent Initiated' fieldType='datetime' method={interventionHelper.displayConsentFormInitiatedAt} model={intervention} />
+        <DisplayField fieldName='Consent Initiated By' fieldType='string' method={interventionHelper.consentFormInitiator} model={intervention} />
+        <DisplayField checkMethod={interventionHelper.consentObtainedFrom} fieldName='Consent Obtained From' method={interventionHelper.displayConsentObtainedFrom} model={intervention} />
+        <DisplayField fieldName='Consent Via' fieldType='string' method={interventionHelper.consentVia} model={intervention} />
         <DisplayField checkMethod={intervention.userStarted} fieldName='User Started' fieldType='datetime' method={interventionHelper.displayUserStarted} model={intervention} />
         <DisplayField checkMethod={interventionHelper.consultStarted} fieldName='Consult Started' fieldType='date' method={interventionHelper.displayConsultStarted} model={intervention} />
         <DisplayField fieldName='Consult Session Duration' method={interventionHelper.consultSessionDuration} model={intervention} suffix='minutes' />
@@ -52,6 +56,7 @@ function InterventionInfo(props) {
         <DisplayField fieldName='Diagnosis' fieldType='string' method={interventionHelper.diagnosisCodeLongDescription} model={intervention} />
         <DisplayField fieldName='Closed Reason' fieldType='string' humanize={true} method={interventionHelper.closedReason} model={intervention} />
         <DisplayField fieldName='Reason Detail' fieldType='string' method={interventionHelper.closedReasonDetail} model={intervention} />
+        <DisplayField fieldName='Pharmacy Claim Tracking Number' fieldType='string' method={interventionHelper.pharmacyClaimTrackingNumber} model={intervention} />
       </View>
     </View>
   )

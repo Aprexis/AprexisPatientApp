@@ -27,6 +27,7 @@ export const interventionHelper = {
   dateOfService,
   diagnosisCode,
   diagnosisCodeLongDescription,
+  displayConsentFormInitiatedAt,
   displayConsentObtainedFrom,
   displayConsultEnded,
   displayConsultStarted,
@@ -136,6 +137,10 @@ function diagnosisCode(intervention) {
 
 function diagnosisCodeLongDescription(intervention) {
   return diagnosisCodeHelper.longDescription(fieldHelper.getField(intervention, 'diagnosis_code'))
+}
+
+function displayConsentFormInitiatedAt(intervention) {
+  return dateHelper.displayDateTime(interventionHelper.consentFormInitiatedAt(intervention))
 }
 
 function displayConsentObtainedFrom(intervention) {
