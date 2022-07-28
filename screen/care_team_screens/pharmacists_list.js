@@ -24,14 +24,12 @@ function Pharmacist(props) {
 }
 
 function PharmacistsList(props) {
-  const { navigation } = props
   const { currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
 
   return (
     <View style={styles.mainBody}>
       <ListView
         label='Pharmacist'
-        navigation={navigation}
         onLoadPage={loadPage}
         onPresentItem={presentItem}
         pageSize={20}

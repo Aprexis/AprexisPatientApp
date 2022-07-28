@@ -7,14 +7,12 @@ import { labTestNonVitals } from '../../types'
 import { styles } from '../../assets/styles'
 
 function LabsList(props) {
-  const { navigation } = props
   const { currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
 
   return (
     <View style={styles.mainBody}>
       <ListView
         label='Lab'
-        navigation={navigation}
         onLoadPage={loadPage}
         onPresentItem={presentItem}
         pageSize={20}

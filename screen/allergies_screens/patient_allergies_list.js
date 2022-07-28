@@ -23,7 +23,7 @@ function PatientAllergy(props) {
 }
 
 function PatientAllergiesList(props) {
-  const { navigation, allergyType } = props
+  const { allergyType } = props
   const { currentPatient, currentUser, userCredentials } = currentUserHelper.getCurrentProps(props)
 
   return (
@@ -31,7 +31,6 @@ function PatientAllergiesList(props) {
       <ListView
         addEditModal={addEditModal}
         label='Patient Allergy'
-        navigation={navigation}
         onLoadPage={loadPage}
         onPresentItem={presentItem}
         pageSize={20}
