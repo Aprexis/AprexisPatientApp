@@ -34,7 +34,10 @@ function ListView({ addEditModal, forceUpdate, label, onLoadPage, onPresentItem,
         onScroll={onScroll}>
         {buildList()}
       </ScrollView>
-      <ListCount label={label} lastPage={lastPage} listLength={workingPageSize * 2} pluralLabel={pluralLabel} />
+      {
+        valueHelper.isStringValue(label) &&
+        <ListCount label={label} lastPage={lastPage} listLength={workingPageSize * 2} pluralLabel={pluralLabel} />
+      }
     </RefreshView>
   )
 

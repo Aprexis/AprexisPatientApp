@@ -23,7 +23,6 @@ function Caregiver(props) {
 }
 
 function CaregiversList(props) {
-  const { navigation } = props
   const { currentUser, currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
 
   return (
@@ -31,7 +30,6 @@ function CaregiversList(props) {
       <ListView
         addEditModal={addEditModal}
         label='Caregiver'
-        navigation={navigation}
         onLoadPage={loadPage}
         onPresentItem={presentItem}
         pageSize={20}

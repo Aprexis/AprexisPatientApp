@@ -35,7 +35,6 @@ function PatientAllergyModal(props) {
       (model) => {
         const changedModel = patientAllergyHelper.buildNewChanged(model)
         const updated = patientAllergyHelper.changeField(model, changedModel, 'allergy_type', allergyType)
-        console.log(`Updated: ${JSON.stringify(updated, null, 2)}`)
         onSuccess(getModelFrom(updated), getChangedModelFrom(updated))
       },
       alertHelper.handleError

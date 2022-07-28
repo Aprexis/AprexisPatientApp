@@ -32,7 +32,6 @@ function PatientHcp(props) {
 }
 
 function HcpsList(props) {
-  const { navigation } = props
   const { currentPatient, currentUser, userCredentials } = currentUserHelper.getCurrentProps(props)
 
   return (
@@ -40,7 +39,6 @@ function HcpsList(props) {
       <ListView
         addEditModal={addEditModal}
         label='HCP'
-        navigation={navigation}
         onLoadPage={loadPage}
         onPresentItem={presentItem}
         pageSize={20}
