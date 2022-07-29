@@ -1,9 +1,94 @@
 import React from 'react'
 import { Text, View } from 'react-native'
 import { patientMedicationApi } from '../../api'
-import { AprexisModal, SelectHcpId, SelectMedicationId, SelectPharmacyStoreId } from '../components'
-import { valueHelper, alertHelper, patientMedicationHelper, currentUserHelper, patientHelper, userHelper } from "../../helpers"
+import { AprexisModal, DateInput, SelectHcpId, SelectMedicationId, SelectPharmacyStoreId } from '../components'
+import { valueHelper, alertHelper, dateHelper, patientMedicationHelper, currentUserHelper, patientHelper, userHelper } from "../../helpers"
 import { styles } from '../../assets/styles'
+
+function FilledAt({ changeDate, fields, fullyEditable, inlineStyles, model, pressDate }) {
+  return (
+    <View style={inlineStyles.profileFieldView}>
+      <DateInput
+        disabled={!fullyEditable}
+        field='filled_at'
+        label='Filled At'
+        onChange={changeDate}
+        onPress={pressDate}
+        showPicker={valueHelper.isSet(fields.showFilledAtPicker)}
+        value={dateHelper.makeDate(patientMedicationHelper.filledAt(model))}
+      />
+    </View>
+  )
+}
+
+function Hcp({ fullyEditable, inlineStyles, model, updateHcp, userCredentials }) {
+  return (
+    <React.Fragment>
+      <View style={inlineStyles.profileFieldView}>
+        <Text style={inlineStyles.profileFieldName}>HCP</Text>
+        <Text style={inlineStyles.profileFieldName}>{patientMedicationHelper.physicianNameAndNpi(model)}</Text>
+      </View>
+
+      {
+        fullyEditable &&
+        <SelectHcpId
+          hcp={patientMedicationHelper.physician(model)}
+          updateHcp={updateHcp}
+          userCredentials={userCredentials}
+        />
+      }
+    </React.Fragment>
+  )
+}
+
+function Medication({ fullyEditable, inlineStyles, model, updateMedication, userCredentials }) {
+  return (
+    <React.Fragment>
+      <View style={inlineStyles.profileFieldView}>
+        <Text style={inlineStyles.profileFieldName}>Medication</Text>
+        <Text style={styles.inputField}>{patientMedicationHelper.medicationLabel(model)}</Text>
+      </View>
+
+      {
+        fullyEditable &&
+        <SelectMedicationId
+          medication={patientMedicationHelper.medication(model)}
+          updateMedication={updateMedication}
+          userCredentials={userCredentials}
+        />
+      }
+    </React.Fragment>
+  )
+}
+
+function PharmacyStore({ fullyEditable, inlineStyles, model, updatePharmacyStore, userCredentials }) {
+  return (
+    <React.Fragment>
+      <View style={inlineStyles.profileFieldView}>
+        <Text style={inlineStyles.profileFieldName}>Pharmacy Store</Text>
+        <Text style={inlineStyles.profileFieldName}>{pharmacyStoreIdentification()}</Text>
+      </View>
+
+      {
+        fullyEditable &&
+        <SelectPharmacyStoreId
+          pharmacyStore={patientMedicationHelper.pharmacyStore(model)}
+          updatePharmacyStore={updatePharmacyStore}
+          userCredentials={userCredentials}
+        />
+      }
+    </React.Fragment>
+  )
+
+  function pharmacyStoreIdentification() {
+    if (!valueHelper.isValue(patientMedicationHelper.pharmacyStore(model))) {
+      return 'No pharmacy store'
+    }
+
+    return patientMedicationHelper.pharmacyStoreIdentification(model)
+  }
+
+}
 
 function PatientMedicationModal(props) {
   const { action, onClose, visible } = props
@@ -42,54 +127,27 @@ function PatientMedicationModal(props) {
     patientMedicationApi.create(changedModel, onSuccess, alertHelper.handleError)
   }
 
-  function displayModel(model, _changedModel, _fields, inlineStyles, changeValue, _setField) {
+  function displayModel(model, _changedModel, fields, inlineStyles, changeValue, setField) {
     const fullyEditable = isFullyEditable()
 
     return (
       <View style={inlineStyles.infoArea}>
-        <View style={inlineStyles.profileFieldView}>
-          <Text style={inlineStyles.profileFieldName}>Medication</Text>
-          <Text style={styles.inputField}>{patientMedicationHelper.medicationLabel(model)}</Text>
-        </View>
-
-        {
-          fullyEditable &&
-          <SelectMedicationId
-            medication={patientMedicationHelper.medication(model)}
-            updateMedication={updateMedication}
-            userCredentials={userCredentials}
-          />
-        }
-
-        <View style={inlineStyles.profileFieldView}>
-          <Text style={inlineStyles.profileFieldName}>Pharmacy Store</Text>
-          <Text style={inlineStyles.profileFieldName}>{pharmacyStoreIdentification()}</Text>
-        </View>
-
-        {
-          fullyEditable &&
-          <SelectPharmacyStoreId
-            pharmacyStore={patientMedicationHelper.pharmacyStore(model)}
-            updatePharmacyStore={updatePharmacyStore}
-            userCredentials={userCredentials}
-          />
-        }
-
-        <View style={inlineStyles.profileFieldView}>
-          <Text style={inlineStyles.profileFieldName}>HCP</Text>
-          <Text style={inlineStyles.profileFieldName}>{patientMedicationHelper.physicianNameAndNpi(model)}</Text>
-        </View>
-
-        {
-          fullyEditable &&
-          <SelectHcpId
-            hcp={patientMedicationHelper.physician(model)}
-            updateHcp={updateHcp}
-            userCredentials={userCredentials}
-          />
-        }
+        <Medication fullyEditable={fullyEditable} inlineStyles={inlineStyles} model={model} updateMedication={updateMedication} userCredentials={userCredentials} />
+        <PharmacyStore fullyEditable={fullyEditable} inlineStyles={inlineStyles} model={model} updatePharmacyStore={updatePharmacyStore} userCredentials={userCredentials} />
+        <Hcp fullyEditable={fullyEditable} inlineStyles={inlineStyles} model={model} updateHcp={updateHcp} userCredentials={userCredentials} />
+        <FilledAt changeDate={changeDate} fields={fields} fullyEditable={fullyEditable} inlineStyles={inlineStyles} model={model} pressDate={pressDate} />
       </View>
     )
+
+    function changeDate(field, newDate) {
+      changeValue(field, dateHelper.formatDate(newDate, 'yyyy-MM-dd'))
+      switch (field) {
+        case 'filled_at':
+          setField('showFilledAtPicker', false)
+        default:
+          break
+      }
+    }
 
     function isFullyEditable() {
       if (action == 'ADD') {
@@ -103,16 +161,17 @@ function PatientMedicationModal(props) {
       return userHelper.id(currentUser) === patientMedicationHelper.userId(model)
     }
 
-    function updateHcp(id, hcp) {
-      changeValue(['physician_id', 'physician'], [id, hcp])
+    function pressDate(field) {
+      switch (field) {
+        case 'filled_at':
+          setField('showFilledAtPicker', true)
+        default:
+          break
+      }
     }
 
-    function pharmacyStoreIdentification() {
-      if (!valueHelper.isValue(patientMedicationHelper.pharmacyStore(model))) {
-        return 'No pharmacy store'
-      }
-
-      return patientMedicationHelper.pharmacyStoreIdentification(model)
+    function updateHcp(id, hcp) {
+      changeValue(['physician_id', 'physician'], [id, hcp])
     }
 
     function updateMedication(id, medication) {
