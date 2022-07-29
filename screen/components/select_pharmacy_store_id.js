@@ -4,24 +4,16 @@ import { pharmacyStoreApi } from '../../api'
 import { alertHelper, pharmacyStoreHelper, patientHelper, currentUserHelper, valueHelper } from '../../helpers'
 
 function SelectPharmacyStoreId(props) {
-  const { pharmacyStore, updatePharmacyStore } = props
-  const { currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
-
-  if (!valueHelper.isValue(pharmacyStore)) {
-    return null
-  }
-
-  console.log(`PS: ${JSON.stringify(pharmacyStore, null, 2)}`)
-  console.log(`ID: ${pharmacyStoreHelper.id(pharmacyStore)}`)
-  console.log(`Identification: ${pharmacyStoreHelper.identification(pharmacyStore)}`)
+  const { patient, pharmacyStore, updatePharmacyStore } = props
+  const { userCredentials } = currentUserHelper.getCurrentProps(props)
 
   return (
     <SelectId
       changeId={changeId}
       id={pharmacyStoreHelper.id(pharmacyStore)}
-      matchString={pharmacyStoreHelper.identification(pharmacyStore)}
+      matchString={label(pharmacyStore)}
       optionId={pharmacyStoreHelper.id}
-      optionLabel={pharmacyStoreHelper.identification}
+      optionLabel={label}
       search={search}
       selectType='Pharmacy Store'
       selectTypePlural='Pharmacy Stores'
@@ -32,13 +24,25 @@ function SelectPharmacyStoreId(props) {
     pharmacyStoreApi.show(userCredentials, id, (pharmacyStore) => { updatePharmacyStore(id, pharmacyStore) }, alertHelper.handleError)
   }
 
+  function label(store) {
+    if (!valueHelper.isValue(store)) {
+      return ''
+    }
+
+    return pharmacyStoreHelper.identification(store)
+  }
+
   function search(matchString, onSuccess) {
     const params = {
       for_store: matchString,
-      for_health_plan: patientHelper.healthPlanId(currentPatient),
       page: { number: 1, size: 10 },
       sort: 'name,store_number,id'
     }
+
+    if (!valueHelper.isValue(patient)) {
+      params.for_health_plan = patientHelper.healthPlanId(patient)
+    }
+
     pharmacyStoreApi.search(
       userCredentials,
       params,

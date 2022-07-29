@@ -1,46 +1,10 @@
 import React from 'react'
 import { Text, View } from 'react-native'
 import Checkbox from 'expo-checkbox'
-import { AprexisModal, SelectId } from '../components'
-import { hcpApi, patientHcpApi } from '../../api'
-import { valueHelper, alertHelper, patientHcpHelper, currentUserHelper, patientHelper, hcpHelper } from "../../helpers"
+import { AprexisModal, SelectHcpId } from '../components'
+import { patientHcpApi } from '../../api'
+import { valueHelper, alertHelper, patientHcpHelper, currentUserHelper, patientHelper } from "../../helpers"
 import { themeColor } from '../../assets/styles'
-
-function SelectHcpId(props) {
-  const { hcp, updateHcp } = props
-  const { userCredentials } = currentUserHelper.getCurrentProps(props)
-
-  return (
-    <SelectId
-      changeId={changeId}
-      id={hcpHelper.id(hcp)}
-      matchString={hcpHelper.name(hcp)}
-      optionId={hcpHelper.id}
-      optionLabel={hcpHelper.label}
-      search={search}
-      selectType='HCP'
-      selectTypePlural='HCPs'
-    />
-  )
-
-  function changeId(id) {
-    hcpApi.show(userCredentials, id, (hcp) => { updateHcp(id, hcp) }, alertHelper.handleError)
-  }
-
-  function search(matchString, onSuccess) {
-    const params = {
-      for_physician: matchString,
-      page: { number: 1, size: 10 },
-      sort: 'last_name,first_name,middle_name,npi,city,state'
-    }
-    hcpApi.search(
-      userCredentials,
-      params,
-      (physicians, _pageHeaders) => { onSuccess(physicians) },
-      alertHelper.handleError
-    )
-  }
-}
 
 function PatientHcpModal(props) {
   const { action, onClose, visible } = props

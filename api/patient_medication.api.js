@@ -24,12 +24,11 @@ function buildNew(userCredentials, patient_id, pharmacy_store_id, onSuccess, onF
     return
   }
 
-  if (!API.validateId('pharmacy store ID', pharmacy_store_id, onFailure, true)) {
-    return
-  }
-
   let queryString = ''
   if (valueHelper.isValue(pharmacy_store_id)) {
+    if (!API.validateId('pharmacy store ID', pharmacy_store_id, onFailure, true)) {
+      return
+    }
     queryString = API.buildQueryString({ pharmacy_store_id })
   }
 
