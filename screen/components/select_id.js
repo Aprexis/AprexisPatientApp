@@ -3,7 +3,7 @@ import { View } from 'react-native'
 import { Button, Menu, Searchbar } from 'react-native-paper'
 import { valueHelper } from '../../helpers'
 
-function SelectId({ id, optionId, optionLabel, matchString, search, changeId }) {
+function SelectId({ changeId, id, optionId, optionLabel, matchString, search, selectType, selectTypePlural }) {
   const [state, dispatch] = useReducer(updateState, initialState())
   const lastMatchString = useRef(valueHelper.isStringValue(matchString) ? matchString : '')
   const haveMatches = valueHelper.isStringValue(state.matchString) && (state.matchString.length >= 3) && (state.matchString == lastMatchString.current) && valueHelper.isValue(state.matches)
@@ -27,11 +27,11 @@ function SelectId({ id, optionId, optionLabel, matchString, search, changeId }) 
 
   return (
     <View styles={{ flexDirection: 'column' }}>
-      <Searchbar placeholder='Search HCPs' onChangeText={changeMatchString} value={state.matchString} />
+      <Searchbar placeholder={`Search ${selectTypePlural}`} onChangeText={changeMatchString} value={state.matchString} />
       <Menu
-        visible={valueHelper.isSet(state.hcpMenuVisible)}
+        visible={valueHelper.isSet(state.menuVisible)}
         onDismiss={closeMenu}
-        anchor={<Button disabled={!haveMatches} onPress={openMenu}>Select HCP</Button>}>
+        anchor={<Button disabled={!haveMatches} onPress={openMenu}>Select {selectType}</Button>}>
         {searchableOptions()}
       </Menu>
     </View>
@@ -42,20 +42,20 @@ function SelectId({ id, optionId, optionLabel, matchString, search, changeId }) 
   }
 
   function closeMenu() {
-    dispatch({ type: 'CLOSE-HCP-MENU' })
+    dispatch({ type: `CLOSE-MENU` })
   }
 
   function initialState() {
-    return { id: valueHelper.isNumberValue(id) ? id : 0, matchString: valueHelper.isStringValue(matchString) ? matchString : '', hcpMenuVisible: false }
+    return { id: valueHelper.isNumberValue(id) ? id : 0, matchString: valueHelper.isStringValue(matchString) ? matchString : '', menuVisible: false }
   }
 
   function openMenu() {
-    dispatch({ type: 'OPEN-HCP-MENU' })
+    dispatch({ type: 'OPEN-MENU' })
   }
 
   function searchableOptions() {
     if (!valueHelper.isValue(state.matches) || state.matches.length === 0) {
-      return [<Menu.Item key='select-match-none' title='No HCPs Matched' onPress={() => { }} />]
+      return [<Menu.Item key='select-match-none' title={`No ${selectTypePlural} Matched`} onPress={() => { }} />]
     }
 
     return state.matches.map(
@@ -82,11 +82,11 @@ function SelectId({ id, optionId, optionLabel, matchString, search, changeId }) 
 
   function updateState(oldState, action) {
     switch (action.type) {
-      case 'CLOSE-HCP-MENU':
-        return { ...oldState, hcpMenuVisible: false }
+      case 'CLOSE-MENU':
+        return { ...oldState, menuVisible: false }
 
-      case 'OPEN-HCP-MENU':
-        return { ...oldState, hcpMenuVisible: true }
+      case 'OPEN-MENU':
+        return { ...oldState, menuVisible: true }
 
       case 'SEARCH':
         return { ...oldState, matchString: action.matchString, matches: undefined }

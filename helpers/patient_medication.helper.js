@@ -5,14 +5,13 @@ import { apiHelper } from "./api.helper"
 import { patientHelper } from "./patient.helper"
 import { pharmacyStoreHelper } from "./pharmacy_store.helper"
 import { medicationHelper, physicianHelper } from "./admin"
+import { userHelper } from "./user.helper"
 
 export const patientMedicationHelper = {
   additionalInformation,
   buildChanged,
   buildNewChanged,
-  changeMedication,
-  changePharmacyStore,
-  changePhysician,
+  changeField,
   daysSupply,
   directions,
   displayFilledAt,
@@ -32,6 +31,7 @@ export const patientMedicationHelper = {
   patientName,
   pharmacyStore,
   pharmacyStoreId,
+  pharmacyStoreIdentification,
   pharmacyStoreName,
   physician,
   physicianId,
@@ -43,7 +43,8 @@ export const patientMedicationHelper = {
   toJSON,
   type,
   uploadExternalMedical,
-  user
+  user,
+  userId
 }
 
 const patientMedicationKeys = [
@@ -94,55 +95,8 @@ function buildNewChanged(patientMedication) {
   }
 }
 
-function changeMedication(patientMedication, changedPatientMedication, medication) {
-  const myChangedPatientMedication = this.buildChanged(patientMedication, changedPatientMedication)
-
-  return {
-    patientMedication: {
-      ...patientMedication,
-      medication_id: medication.id,
-      medication
-    },
-    changedPatientMedication: {
-      ...myChangedPatientMedication,
-      medication_id: medication.id,
-      medication
-    }
-  }
-}
-
-function changePharmacyStore(patientMedication, changedPatientMedication, pharmacyStore) {
-  const myChangedPatientMedication = this.buildChanged(patientMedication, changedPatientMedication)
-
-  return {
-    patientMedication: {
-      ...patientMedication,
-      pharmacy_store_id: pharmacyStore.id,
-      pharmacyStore
-    },
-    changedPatientMedication: {
-      ...myChangedPatientMedication,
-      pharmacy_store_id: pharmacyStore.id,
-      pharmacyStore
-    }
-  }
-}
-
-function changePhysician(patientMedication, changedPatientMedication, physician) {
-  const myChangedPatientMedication = this.buildChanged(patientMedication, changedPatientMedication)
-
-  return {
-    patientMedication: {
-      ...patientMedication,
-      physician_id: physician.id,
-      physician
-    },
-    changedPatientMedication: {
-      ...myChangedPatientMedication,
-      physician_id: physician.id,
-      physician
-    }
-  }
+function changeField(patientMedication, changedPatientMedication, name, value) {
+  return fieldHelper.changeField('patientMedication', patientMedication, changedPatientMedication, name, value, patientMedicationHelper.buildChanged)
 }
 
 function daysSupply(patientMedication) {
@@ -231,6 +185,10 @@ function pharmacyStoreId(patientMedication) {
   return fieldHelper.getField(patientMedication, "pharmacy_store_id")
 }
 
+function pharmacyStoreIdentification(patientMedication) {
+  return pharmacyStoreHelper.identification(patientMedicationHelper.pharmacyStore(patientMedication))
+}
+
 function pharmacyStoreName(patientMedication) {
   return pharmacyStoreHelper.name(patientMedicationHelper.pharmacyStore(patientMedication))
 }
@@ -277,4 +235,8 @@ function uploadExternalMedical(patientMedication) {
 
 function user(patientMedication) {
   return fieldHelper.getField(patientMedication, "user")
+}
+
+function userId(patientMedication) {
+  return userHelper.id(patientMedicationHelper.user(patientMedication))
 }

@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { MaterialCommunityIcon, ListView } from '../components'
+import { FontAwesome5Icon, MaterialCommunityIcon, ListView } from '../components'
 import { patientAllergyApi } from "../../api"
 import { alertHelper, patientHelper, currentUserHelper, patientAllergyHelper, valueHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
@@ -16,6 +16,7 @@ function PatientAllergy(props) {
       onPress={() => { onEdit(patientAllergy) }}>
       <View style={{ flexDirection: "row", alignItems: 'center', width: '95%' }}>
         <MaterialCommunityIcon size={40} style={styles.icon} name="allergy" />
+        <FontAwesome5Icon size={18} name='edit' style={[styles.icon, { marginLeft: 2 }]} />
         <Text style={inlineStyles.text}>{valueHelper.capitalizeWords(patientAllergyHelper.allergyName(patientAllergy))}</Text>
       </View>
     </TouchableOpacity>

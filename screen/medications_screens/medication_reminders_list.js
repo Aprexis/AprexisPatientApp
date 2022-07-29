@@ -1,8 +1,8 @@
 import React, { useEffect, useReducer } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { FontAwesome5Icon, ListView } from '../components'
-import { reminderApi } from "../../api"
-import { valueHelper, alertHelper, currentUserHelper, patientHelper, patientMedicationHelper, reminderHelper } from "../../helpers"
+import { reminderApi } from '../../api'
+import { valueHelper, alertHelper, currentUserHelper, patientHelper, patientMedicationHelper, reminderHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
 import { ReminderModal } from '../reminders_screens'
 
@@ -14,8 +14,9 @@ function MedicationReminder(props) {
       activeOpacity={0.5}
       style={styles.listButton}
       onPress={() => { onEdit(medicationReminder) }}>
-      <View style={{ flexDirection: "row", alignItems: 'center', width: '95%' }}>
-        <FontAwesome5Icon size={27} name="clock" style={[styles.icon, inlineStyles.medIcon]} />
+      <View style={{ flexDirection: 'row', alignItems: 'center', width: '95%' }}>
+        <FontAwesome5Icon size={27} name='clock' style={[styles.icon, inlineStyles.medIcon]} />
+        <FontAwesome5Icon size={18} name='edit' style={[styles.icon, { marginLeft: 2 }]} />
         <Text style={inlineStyles.text}>{reminderHelper.displayAction(medicationReminder)}</Text>
         <Text style={inlineStyles.text}>{reminderDates(medicationReminder)}</Text>
       </View>
@@ -31,11 +32,11 @@ function MedicationReminder(props) {
       case 'MonthlyReminder':
         return `On Day ${reminderHelper.dayOfMonth(medicationReminder)}`
       default:
-        return ""
+        return ''
     }
 
     function selectedDaysOfWeek(medicationReminder) {
-      let daysOfWeek = ""
+      let daysOfWeek = ''
       let prefix = ''
       if (valueHelper.isSet(reminderHelper.sunday(medicationReminder))) {
         daysOfWeek = `${daysOfWeek}${prefix}S`
@@ -157,8 +158,8 @@ export { MemoizedMedicationRemindersList as MedicationRemindersList }
 
 const inlineStyles = StyleSheet.create(
   {
-    view: { flex: 1, flexDirection: "row", height: 50, margin: 5, backgroundColor: "#F3F6F9" },
-    text: { color: "#112B37", fontSize: 18, fontWeight: "500", marginLeft: 5 },
+    view: { flex: 1, flexDirection: 'row', height: 50, margin: 5, backgroundColor: '#F3F6F9' },
+    text: { color: '#112B37', fontSize: 18, fontWeight: '500', marginLeft: 5 },
     item: { whiteSpace: 'wrap' },
     medIcon: { marginRight: 5 }
   }

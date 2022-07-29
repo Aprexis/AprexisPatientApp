@@ -8,8 +8,8 @@ function DateInput({ disabled, field, fieldProps, label, labelProps, onChange, o
   const formattedDate = dateValue()
 
   return (
-    <View {...viewProps} style={{ flexDirection: 'row', alignItems:'center', display:'flex' }}>
-      <Text {...labelProps} style={[styles.inlineLabel, { margin:2 }]}>{label}</Text>
+    <View {...viewProps} style={{ flexDirection: 'row', alignItems: 'center', display: 'flex' }}>
+      <Text {...labelProps} style={[styles.inlineLabel, { margin: 2 }]}>{label}</Text>
       <Text
         {...fieldProps}
         style={styles.picker}
@@ -23,7 +23,7 @@ function DateInput({ disabled, field, fieldProps, label, labelProps, onChange, o
         {formattedDate}
       </Text>
       {
-        valueHelper.isSet(showPicker) &&
+        !valueHelper.isSet(disabled) && valueHelper.isSet(showPicker) &&
         <DateTimePicker
           mode='date'
           {...pickerProps}
