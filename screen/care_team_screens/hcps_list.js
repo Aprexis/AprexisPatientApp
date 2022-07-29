@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import { ListView, MaterialCommunityIcon } from '../components'
+import { FontAwesome5Icon, ListView, MaterialCommunityIcon } from '../components'
 import { PatientHcpModal } from './patient_hcp_modal'
 import { patientHcpApi } from "../../api"
 import { alertHelper, patientHelper, currentUserHelper, patientHcpHelper, valueHelper } from '../../helpers'
@@ -19,6 +19,7 @@ function PatientHcp(props) {
     >
       <View style={{ flexDirection: "row", alignItems: 'center', width: '95%' }}>
         <MaterialCommunityIcon size={27} style={styles.icon} name="doctor" solid />
+        <FontAwesome5Icon size={18} name='edit' style={[styles.icon, { marginLeft: 2 }]} />
         <Text style={inlineStyles.text}>{patientHcpHelper.hcpName(patientHcp)}</Text>
         <Text style={inlineStyles.text}>{primaryText}</Text>
       </View>

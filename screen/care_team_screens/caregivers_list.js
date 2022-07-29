@@ -16,6 +16,7 @@ function Caregiver(props) {
       onPress={() => { onEdit(caregiver) }}>
       <View style={{ flexDirection: "row", alignItems: 'center', width: '95%' }}>
         <FontAwesome5Icon size={27} style={styles.icon} name="user" solid />
+        <FontAwesome5Icon size={18} name='edit' style={[styles.icon, { marginLeft: 2 }]} />
         <Text style={inlineStyles.text}>{caregiverHelper.name(caregiver)} ({caregiverHelper.relationship(caregiver)})</Text>
       </View>
     </TouchableOpacity>

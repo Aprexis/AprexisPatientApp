@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Text, View } from 'react-native'
-import { Button, Menu, TextInput } from 'react-native-paper'
+import { Button, Menu } from 'react-native-paper'
 import { AddressInput, AprexisModal, ContactInput, NameInput } from '../components'
 import { caregiverApi } from '../../api'
 import { valueHelper, alertHelper, caregiverHelper, currentUserHelper, patientHelper } from "../../helpers"

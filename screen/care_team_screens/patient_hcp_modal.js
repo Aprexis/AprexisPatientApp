@@ -18,6 +18,8 @@ function SelectHcpId(props) {
       optionId={hcpHelper.id}
       optionLabel={hcpHelper.label}
       search={search}
+      selectType='HCP'
+      selectTypePlural='HCPs'
     />
   )
 
@@ -91,7 +93,7 @@ function PatientHcpModal(props) {
         {
           !valueHelper.isNumberValue(patientHcpHelper.id(model)) &&
           <SelectHcpId
-            hcp={patientHcpHelper.hcp(hcpHelper)}
+            hcp={patientHcpHelper.hcp(model)}
             updateHcp={updateHcp}
             userCredentials={userCredentials}
           />

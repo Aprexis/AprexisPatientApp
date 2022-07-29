@@ -32,6 +32,7 @@ export const patientMedicationHelper = {
   patientName,
   pharmacyStore,
   pharmacyStoreId,
+  pharmacyStoreIdentification,
   pharmacyStoreName,
   physician,
   physicianId,
@@ -229,6 +230,10 @@ function pharmacyStore(patientMedication) {
 
 function pharmacyStoreId(patientMedication) {
   return fieldHelper.getField(patientMedication, "pharmacy_store_id")
+}
+
+function pharmacyStoreIdentification(patientMedication) {
+  return pharmacyStoreHelper.identification(patientMedicationHelper.pharmacyStore(patientMedication))
 }
 
 function pharmacyStoreName(patientMedication) {

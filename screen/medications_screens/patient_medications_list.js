@@ -1,43 +1,51 @@
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { PatientMedicationModal } from './patient_medication_modal'
 import { FontAwesome5Icon, ListView } from '../components'
 import { patientMedicationApi } from "../../api"
 import { alertHelper, patientHelper, currentUserHelper, patientMedicationHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
 
 function PatientMedication(props) {
-  const { patientMedication, setPatientMedication, setStackScreen } = props
+  const { onEdit, patientMedication, setPatientMedication, setStackScreen } = props
 
   return (
-    <TouchableOpacity
-      activeOpacity={0.5}
-      style={styles.listButton}
-      onPress={
-        () => {
-          setPatientMedication(patientMedication)
-          setStackScreen('medication')
-        }
-      }>
-      <View style={{ flexDirection: "row", alignItems: 'center', width: 50 }}>
+    <View style={{ flexDirection: 'row', justifyContent: 'flex-start' }}>
+      <TouchableOpacity
+        activeOpacity={0.5}
+        style={inlineStyles.listButton}
+        onPress={() => { onEdit(patientMedication) }}>
         <FontAwesome5Icon size={35} style={styles.icon} name={patientMedicationHelper.medicationIcon(patientMedication)} />
-      </View>
+        <FontAwesome5Icon size={18} name='edit' style={[styles.icon, { marginLeft: 2 }]} />
+      </TouchableOpacity>
 
-      <View style={{ flexDirection: "row", alignItems: 'center', width: '80%', }}>
-        <Text style={inlineStyles.text}>{patientMedicationHelper.medicationLabel(patientMedication)}</Text>
-      </View>
-      <View style={{ flexDirection: "row", alignItems: 'center', width: 20 }}>
-        <FontAwesome5Icon size={30} name="angle-right" style={[styles.icon, inlineStyles.medIcon]} />
-      </View>
-    </TouchableOpacity>
+      <TouchableOpacity
+        activeOpacity={0.5}
+        style={inlineStyles.listButton}
+        onPress={
+          () => {
+            setPatientMedication(patientMedication)
+            setStackScreen('medication')
+          }
+        }>
+        <View style={{ flexDirection: "row", alignItems: 'center', width: '80%', }}>
+          <Text style={inlineStyles.text}>{patientMedicationHelper.medicationLabel(patientMedication)}</Text>
+        </View>
+        <View style={{ flexDirection: "row", alignItems: 'center', width: 20 }}>
+          <FontAwesome5Icon size={30} name="angle-right" style={[styles.icon, inlineStyles.medIcon]} />
+        </View>
+      </TouchableOpacity>
+    </View >
   )
 }
 
 function PatientMedicationsList(props) {
   const { setPatientMedication } = props
-  const { currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
+  const { currentPatient, currentUser, userCredentials } = currentUserHelper.getCurrentProps(props)
 
   return (
     <ListView
+      addEditModal={addEditModal}
       label='Patient Medication'
       onLoadPage={loadPage}
       onPresentItem={presentItem}
@@ -45,6 +53,20 @@ function PatientMedicationsList(props) {
       pluralLabel='Patient Medications'
     />
   )
+
+  function addEditModal(patientMedication, action, visible, closeModal) {
+    return (
+      <PatientMedicationModal
+        action={action}
+        currentPatient={currentPatient}
+        currentUser={currentUser}
+        onClose={closeModal}
+        patientMedication={patientMedication}
+        userCredentials={userCredentials}
+        visible={visible}
+      />
+    )
+  }
 
   function loadPage(number, size, onSuccess) {
     patientMedicationApi.listForPatient(
@@ -56,11 +78,12 @@ function PatientMedicationsList(props) {
     )
   }
 
-  function presentItem(patientMedication, patientMedicationIdx, _editPatientMedication) {
+  function presentItem(patientMedication, patientMedicationIdx, editPatientMedication) {
     return (
       <PatientMedication
         {...props}
         key={`patient-medication-${patientMedicationHelper.id(patientMedication)}-${patientMedicationIdx}`}
+        onEdit={editPatientMedication}
         patientMedication={patientMedication}
         setPatientMedication={setPatientMedication}
       />
@@ -72,6 +95,13 @@ export { PatientMedicationsList }
 
 const inlineStyles = StyleSheet.create(
   {
+    listButton: {
+      borderRadius: 5,
+      backgroundColor: '#E0EBF1',
+      flexDirection: "row",
+      alignItems: 'center',
+      alignSelf: 'center',
+    },
     text: { color: "#112B37", fontSize: 17, fontWeight: "500", marginLeft: 5, display: 'flex', flex: 1 },
     medIcon: { marginRight: 5 }
   }
