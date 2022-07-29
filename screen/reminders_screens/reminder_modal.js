@@ -82,6 +82,7 @@ function ReminderModal(props) {
   const hasMobilePhone = valueHelper.isStringValue(patientHelper.mobilePhone(currentPatient))
   const [actionVisible, setActionVisible] = useState(false)
   const [reminderTypeVisible, setReminderTypeVisible] = useState(false)
+  const [forceUpdate, setForceUpdate] = useState(0)
 
   return (
     <AprexisModal
@@ -217,7 +218,7 @@ function ReminderModal(props) {
             label='Start Date'
             onChange={changeReminderDate}
             onPress={pressReminderDate}
-            showPiucker={valueHelper.isSet(fields.showStartPicker)}
+            showPicker={valueHelper.isSet(fields.showStartPicker)}
             value={dateHelper.makeDate(reminderHelper.recurFrom(model))}
           />
         </View>
@@ -237,15 +238,18 @@ function ReminderModal(props) {
     )
 
     function changeReminderDate(field, newDate) {
-      changeValue(field, dateHelper.formatDate(newDate, 'yyyy-MM-dd'))
       switch (field) {
         case 'recur_from':
           setField('showStartPicker', false)
+          break
         case 'recur_to':
           setField('showEndPicker', false)
+          break
         default:
           break
       }
+      changeValue(field, dateHelper.formatDate(newDate, 'yyyy-MM-dd'))
+      setForceUpdate(forceUpdate + 1)
     }
 
     function closeActionMenu() {
@@ -268,11 +272,14 @@ function ReminderModal(props) {
       switch (field) {
         case 'recur_from':
           setField('showStartPicker', true)
+          break
         case 'recur_to':
           setField('showEndPicker', true)
+          break
         default:
           break
       }
+      setForceUpdate(forceUpdate + 1)
     }
   }
 

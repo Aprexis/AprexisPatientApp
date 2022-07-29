@@ -1,7 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Text, View } from 'react-native'
+import { TextInput } from 'react-native-paper'
 import { patientMedicationApi } from '../../api'
-import { AprexisModal, DateInput, SelectHcpId, SelectMedicationId, SelectPharmacyStoreId } from '../components'
+import { AprexisModal, DateInput, NumberInput, SelectHcpId, SelectMedicationId, SelectPharmacyStoreId } from '../components'
 import { valueHelper, alertHelper, dateHelper, patientMedicationHelper, currentUserHelper, patientHelper, userHelper } from "../../helpers"
 import { styles } from '../../assets/styles'
 
@@ -61,6 +62,22 @@ function Medication({ fullyEditable, inlineStyles, model, updateMedication, user
   )
 }
 
+function StartDate({ changeDate, fields, fullyEditable, inlineStyles, model, pressDate }) {
+  return (
+    <View style={inlineStyles.profileFieldView}>
+      <DateInput
+        disabled={!fullyEditable}
+        field='start_date'
+        label='Start Date'
+        onChange={changeDate}
+        onPress={pressDate}
+        showPicker={valueHelper.isSet(fields.showStartDatePicker)}
+        value={dateHelper.makeDate(patientMedicationHelper.startDate(model))}
+      />
+    </View>
+  )
+}
+
 function PharmacyStore({ fullyEditable, inlineStyles, model, updatePharmacyStore, userCredentials }) {
   return (
     <React.Fragment>
@@ -93,6 +110,8 @@ function PharmacyStore({ fullyEditable, inlineStyles, model, updatePharmacyStore
 function PatientMedicationModal(props) {
   const { action, onClose, visible } = props
   const { currentPatient, currentUser, userCredentials } = currentUserHelper.getCurrentProps(props)
+  const [forceUpdate, setForceUpdate] = useState(0)
+
 
   return (
     <AprexisModal
@@ -136,17 +155,39 @@ function PatientMedicationModal(props) {
         <PharmacyStore fullyEditable={fullyEditable} inlineStyles={inlineStyles} model={model} updatePharmacyStore={updatePharmacyStore} userCredentials={userCredentials} />
         <Hcp fullyEditable={fullyEditable} inlineStyles={inlineStyles} model={model} updateHcp={updateHcp} userCredentials={userCredentials} />
         <FilledAt changeDate={changeDate} fields={fields} fullyEditable={fullyEditable} inlineStyles={inlineStyles} model={model} pressDate={pressDate} />
+        <StartDate changeDate={changeDate} fields={fields} fullyEditable={fullyEditable} inlineStyles={inlineStyles} model={model} pressDate={pressDate} />
+        <View style={inlineStyles.profileFieldView}>
+          <Text style={inlineStyles.profileFieldName}>Days Supply</Text>
+          <NumberInput style={styles.inputField} value={`${patientMedicationHelper.daysSupply(model)}`} onChangeText={(value) => changeValue('days_supply', value)} />
+        </View>
+        <View style={inlineStyles.profileFieldView}>
+          <Text style={inlineStyles.profileFieldName}>Indication</Text>
+          <TextInput style={styles.inputField} multiple={true} numberLines={2} value={patientMedicationHelper.indication(model)} onChangeText={(value) => changeValue('indication', value)} />
+        </View>
+        <View style={inlineStyles.profileFieldView}>
+          <Text style={inlineStyles.profileFieldName}>Directions</Text>
+          <TextInput style={styles.inputField} multiple={true} numberLines={3} value={patientMedicationHelper.directions(model)} onChangeText={(value) => changeValue('directions', value)} />
+        </View>
+        <View style={inlineStyles.profileFieldView}>
+          <Text style={inlineStyles.profileFieldName}>Additional Information</Text>
+          <TextInput style={styles.inputField} multiple={true} numberLines={3} value={patientMedicationHelper.additionalInformation(model)} onChangeText={(value) => changeValue('additional_information', value)} />
+        </View>
       </View>
     )
 
     function changeDate(field, newDate) {
-      changeValue(field, dateHelper.formatDate(newDate, 'yyyy-MM-dd'))
       switch (field) {
         case 'filled_at':
           setField('showFilledAtPicker', false)
+          break
+        case 'start_date':
+          setField('showStartDatePicker', false)
+          break
         default:
           break
       }
+      changeValue(field, dateHelper.formatDate(newDate, 'yyyy-MM-dd'))
+      setForceUpdate(forceUpdate + 1)
     }
 
     function isFullyEditable() {
@@ -165,9 +206,15 @@ function PatientMedicationModal(props) {
       switch (field) {
         case 'filled_at':
           setField('showFilledAtPicker', true)
+          break
+        case 'start_date':
+          setField('showStartDatePicker', true)
+          break
         default:
           break
       }
+      setForceUpdate(forceUpdate + 1)
+
     }
 
     function updateHcp(id, hcp) {
