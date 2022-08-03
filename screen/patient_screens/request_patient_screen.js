@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
 import { Keyboard, KeyboardAvoidingView, SafeAreaView, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import { TextInput } from 'react-native-paper'
-import { patientApi } from '../../api'
-import { alertHelper, currentUserHelper, valueHelper } from '../../helpers'
+import { patientApi, valueHelper } from '@aprexis/aprexis-api-utility'
+import { alertHelper, apiEnvironmentHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
 
 function RequestPatientScreen(props) {
-  const { nextScreen, setCurrentPatient, setStackScreen } = props
-  const { userCredentials } = currentUserHelper.getCurrentProps(props)
+  const { userCredentials, nextScreen, setCurrentPatient, setStackScreen } = props
   const [patientName, setPatientName] = useState('')
 
   return (
@@ -57,7 +56,7 @@ function RequestPatientScreen(props) {
     }
 
     patientApi.index(
-      userCredentials,
+      apiEnvironmentHelper.apiEnvironment(userCredentials),
       { for_name: patientName },
       (patients, _patientHeaders) => {
         if (patients.length == 0) {

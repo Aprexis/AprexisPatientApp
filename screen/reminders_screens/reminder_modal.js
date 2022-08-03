@@ -2,10 +2,9 @@ import React, { useState } from 'react'
 import { Text, View } from 'react-native'
 import Checkbox from 'expo-checkbox'
 import { Button, Menu } from 'react-native-paper'
-import { reminderApi } from '../../api'
 import { AprexisModal, DateInput, NumberInput } from '../components'
-import { valueHelper, alertHelper, dateHelper, reminderHelper, patientHelper, currentUserHelper } from "../../helpers"
-import { reminderActions, reminderTypes } from '../../types'
+import { reminderApi, valueHelper, dateHelper, reminderHelper, patientHelper, reminderActions, reminderTypes } from '@aprexis/aprexis-api-utility'
+import { alertHelper, apiEnvironmentHelper } from '../../helpers'
 import { themeColor, styles } from '../../assets/styles'
 
 const daysOfWeek = {
@@ -74,8 +73,7 @@ function DayOfMonthPicker({ reminder, onDayOfMonthChange }) {
 }
 
 function ReminderModal(props) {
-  const { currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
-  const { action, onClose, visible } = props
+  const { currentPatient, userCredentials, action, onClose, visible } = props
   const isNewReminder = action == 'ADD'
   const hasPhone = valueHelper.isStringValue(patientHelper.phone(currentPatient))
   const hasEmail = valueHelper.isStringValue(patientHelper.email(currentPatient))
@@ -103,7 +101,7 @@ function ReminderModal(props) {
   function buildNewModel(onSuccess) {
     const { patientMedication } = props
     reminderApi.buildNew(
-      userCredentials,
+      apiEnvironmentHelper.apiEnvironment(userCredentials),
       currentPatient.id,
       (model) => {
         const changedModel = reminderHelper.buildNewChanged(model)
@@ -119,7 +117,7 @@ function ReminderModal(props) {
   }
 
   function createModel(changedModel, onSuccess) {
-    reminderApi.create(userCredentials, changedModel, onSuccess, alertHelper.handleError)
+    reminderApi.create(apiEnvironmentHelper.apiEnvironment(userCredentials), changedModel, onSuccess, alertHelper.handleError)
   }
 
   function displayModel(model, _changedModel, fields, inlineStyles, changeValue, setField) {
@@ -142,7 +140,7 @@ function ReminderModal(props) {
 
         <View style={styles.formRow}>
           <Text style={styles.fieldLabel}>Delivery Method</Text>
-          <View style={{ flexDirection: "row", marginLeft: 6 }}>
+          <View style={{ flexDirection: 'row', marginLeft: 6 }}>
             <View style={{ flexDirection: 'row', margin: 5, alignItems: 'center' }}>
               <Checkbox
                 color={themeColor.lightBlue}
@@ -295,7 +293,7 @@ function ReminderModal(props) {
 
   function loadEditModel(onSuccess) {
     const reminder = getModelFrom(props)
-    reminderApi.edit(userCredentials, reminderHelper.id(reminder), onSuccess, alertHelper.handleError)
+    reminderApi.edit(apiEnvironmentHelper.apiEnvironment(userCredentials), reminderHelper.id(reminder), onSuccess, alertHelper.handleError)
   }
 
   function updateModel(changedModel, onSuccess) {
@@ -304,7 +302,7 @@ function ReminderModal(props) {
       return
     }
 
-    reminderApi.update(userCredentials, changedModel, onSuccess, alertHelper.handleError)
+    reminderApi.update(apiEnvironmentHelper.apiEnvironment(userCredentials), changedModel, onSuccess, alertHelper.handleError)
   }
 }
 

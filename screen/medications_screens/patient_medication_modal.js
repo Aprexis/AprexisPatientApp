@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { Text, View } from 'react-native'
 import { TextInput } from 'react-native-paper'
-import { patientMedicationApi } from '../../api'
 import { AprexisModal, DateInput, NumberInput, SelectHcpId, SelectMedicationId, SelectPharmacyStoreId } from '../components'
-import { valueHelper, alertHelper, dateHelper, patientMedicationHelper, currentUserHelper, patientHelper, userHelper } from "../../helpers"
+import { patientMedicationApi, valueHelper, dateHelper, patientMedicationHelper, patientHelper, userHelper } from "@aprexis/aprexis-api-utility"
+import { alertHelper, apiEnvironmentHelper } from "../../helpers"
 import { styles } from '../../assets/styles'
 
 function FilledAt({ changeDate, fields, fullyEditable, inlineStyles, model, pressDate }) {
@@ -108,8 +108,7 @@ function PharmacyStore({ fullyEditable, inlineStyles, model, updatePharmacyStore
 }
 
 function PatientMedicationModal(props) {
-  const { action, onClose, visible } = props
-  const { currentPatient, currentUser, userCredentials } = currentUserHelper.getCurrentProps(props)
+  const { action, currentPatient, currentUser, userCredentials, onClose, visible } = props
   const [forceUpdate, setForceUpdate] = useState(0)
 
 
@@ -131,7 +130,7 @@ function PatientMedicationModal(props) {
 
   function buildNewModel(onSuccess) {
     patientMedicationApi.buildNew(
-      userCredentials,
+      apiEnvironmentHelper.apiEnvironment(userCredentials),
       patientHelper.id(currentPatient),
       undefined,
       (model) => {
@@ -143,7 +142,7 @@ function PatientMedicationModal(props) {
   }
 
   function createModel(changedModel, onSuccess) {
-    patientMedicationApi.create(changedModel, onSuccess, alertHelper.handleError)
+    patientMedicationApi.create(apiEnvironmentHelper.apiEnvironment(userCredentials), changedModel, onSuccess, alertHelper.handleError)
   }
 
   function displayModel(model, _changedModel, fields, inlineStyles, changeValue, setField) {
@@ -242,7 +241,7 @@ function PatientMedicationModal(props) {
 
   function loadEditModel(onSuccess) {
     const patientMedication = getModelFrom(props)
-    patientMedicationApi.edit(userCredentials, patientMedicationHelper.id(patientMedication), onSuccess, alertHelper.handleError)
+    patientMedicationApi.edit(apiEnvironmentHelper.apiEnvironment(userCredentials), patientMedicationHelper.id(patientMedication), onSuccess, alertHelper.handleError)
   }
 
   function updateModel(changedModel, onSuccess) {
@@ -251,7 +250,7 @@ function PatientMedicationModal(props) {
       return
     }
 
-    patientMedicationApi.update(userCredentials, changedModel, onSuccess, alertHelper.handleError)
+    patientMedicationApi.update(apiEnvironmentHelper.apiEnvironment(userCredentials), changedModel, onSuccess, alertHelper.handleError)
   }
 }
 

@@ -4,7 +4,7 @@ import { ScrollView } from 'react-native'
 import { AddButton } from './add_button'
 import { ListCount } from './list_count'
 import { RefreshView } from '../containers/refresh_view'
-import { valueHelper, pageHelper } from '../../helpers'
+import { valueHelper, pageHelper } from '@aprexis/aprexis-api-utility'
 import { styles } from '../../assets/styles'
 
 function ListView({ addEditModal, forceUpdate, label, onLoadPage, onPresentItem, pageSize, pluralLabel, timeout }) {

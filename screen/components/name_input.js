@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { TextInput } from 'react-native-paper'
-import { valueHelper, nameHelper } from '../../helpers'
+import { valueHelper, nameHelper } from '@aprexis/aprexis-api-utility'
 import { styles } from '../../assets/styles'
 
 function NameInput({ allowMiddleName, named, onChangeValue }) {

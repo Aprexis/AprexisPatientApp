@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { View } from 'react-native'
 import UserInactivity from 'react-native-user-inactivity'
-import { valueHelper } from '../../helpers'
+import { valueHelper } from '@aprexis/aprexis-api-utility'
 
 function RefreshView({ children, onIdle, timeout }) {
   const [active, setActive] = useState(true);

@@ -7,7 +7,8 @@ import { MedicationInfo } from "./medication_info"
 import { MedicationInteractions } from './medication_interactions'
 import { MedicationRemindersList } from './medication_reminders_list'
 import { PharmacyClaimsList } from '../pharmacy_claims'
-import { valueHelper, currentUserHelper, patientMedicationHelper } from "../../helpers"
+import { valueHelper, patientMedicationHelper } from "@aprexis/aprexis-api-utility"
+import { iconHelper } from '../../helpers'
 
 const screens = {
   info: MedicationInfo,
@@ -37,9 +38,8 @@ function BackButton({ goBack }) {
 }
 
 function MedicationScreen(props) {
-  const { patientMedication, setPatientMedication, setStackScreen } = props
+  const { currentUser, currentPatient, userCredentials, patientMedication, setPatientMedication, setStackScreen } = props
   const [state, dispatch] = useReducer(updateState, { index: 0, routes })
-  const { currentUser, currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
 
   if (!valueHelper.isValue(patientMedication)) {
     return null
@@ -50,7 +50,7 @@ function MedicationScreen(props) {
       <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
         <BackButton goBack={() => { setPatientMedication(); setStackScreen('medications') }} />
         <View style={styles.titleView}>
-          <FontAwesome5Icon size={30} style={styles.titleIcon} name={patientMedicationHelper.medicationIcon(patientMedication)} />
+          <FontAwesome5Icon size={30} style={styles.titleIcon} name={iconHelper.patientMedicationIcon(patientMedication)} />
           <Text style={styles.titleText}>{patientMedicationHelper.medicationLabel(patientMedication)}</Text>
         </View>
       </View>

@@ -1,8 +1,8 @@
 import React from 'react'
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { ListView } from '../components'
-import { patientPharmacistApi } from "../../api"
-import { valueHelper, alertHelper, patientHelper, currentUserHelper, patientPharmacistHelper } from '../../helpers'
+import { patientPharmacistApi, valueHelper, patientHelper, userHelper } from '@aprexis/aprexis-api-utility'
+import { alertHelper, apiEnvironmentHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
 
 function Pharmacist(props) {
@@ -15,16 +15,16 @@ function Pharmacist(props) {
       <View style={{ flexDirection: 'column', alignItems: 'center', width: '95%' }}>
         <View style={{ flexDirection: "row" }}>
           <Image style={{ ...valueHelper.filterHash(styles.icon, { exclude: ['color'] }), width: 23, height: 20 }} source={require('../../assets/pharmacist.jpg')} />
-          <Text style={inlineStyles.text}>{patientPharmacistHelper.fullName(pharmacist)} ({patientPharmacistHelper.roleLabel(pharmacist)})</Text>
+          <Text style={inlineStyles.text}>{userHelper.fullName(pharmacist)} ({valueHelper.capitalizeWords(valueHelper.humanize(userHelper.role(pharmacist)))})</Text>
         </View>
-        <Text style={inlineStyles.text}>NPI: {patientPharmacistHelper.pharmacistNpi(pharmacist)}</Text>
+        <Text style={inlineStyles.text}>NPI: {userHelper.pharmacistNPI(pharmacist)}</Text>
       </View>
     </TouchableOpacity>
   )
 }
 
 function PharmacistsList(props) {
-  const { currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
+  const { currentPatient, userCredentials } = props
 
   return (
     <View style={styles.mainBody}>
@@ -41,7 +41,7 @@ function PharmacistsList(props) {
   function loadPage(number, size, onSuccess) {
     // TODO: may want to consider filtering the results, including allowing for inactive users.
     patientPharmacistApi.listForPatient(
-      userCredentials,
+      apiEnvironmentHelper.apiEnvironment(userCredentials),
       patientHelper.id(currentPatient),
       { for_active: true, page: { number, size, total: 0 }, sort: 'last_name,first_name' },
       onSuccess,
@@ -52,7 +52,7 @@ function PharmacistsList(props) {
   function presentItem(pharmacist, pharmacistIdx, editPharmacist) {
     return (
       <Pharmacist
-        key={`pharmacist-${patientPharmacistHelper.id(pharmacist)}-${pharmacistIdx}`}
+        key={`pharmacist-${userHelper.id(pharmacist)}-${pharmacistIdx}`}
         pharmacist={pharmacist}
         //onDelete={deletePharmacist}
         onEdit={editPharmacist}

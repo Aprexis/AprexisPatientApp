@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import { Alert } from 'react-native'
 import { Button, Menu } from 'react-native-paper'
 import { FontAwesome5Icon } from './font_awesome5_icon'
-import { authenticationApi } from '../../api'
-import { valueHelper, userCredentialsHelper } from '../../helpers'
+import { authenticationApi, valueHelper } from '@aprexis/aprexis-api-utility'
+import { apiEnvironmentHelper, userCredentialsHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
 
 function HeaderRight({ onProfile, performLogout }) {
@@ -39,7 +39,7 @@ function HeaderRight({ onProfile, performLogout }) {
             userCredentialsHelper.getUserCredentials(
               (userCredentials) => {
                 authenticationApi.signOut(
-                  userCredentials,
+                  apiEnvironmentHelper.apiEnvironment(userCredentials),
                   () => { userCredentialsHelper.removeUserCredentials(performLogout) }
                 )
               }

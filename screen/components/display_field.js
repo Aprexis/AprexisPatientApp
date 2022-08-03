@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
-import { dateHelper, valueHelper } from '../../helpers'
+import { dateHelper, valueHelper } from '@aprexis/aprexis-api-utility'
 
 function DisplayField({ checkMethod, fieldName, fieldType, humanize, method, model, suffix }) {
   if (!checkField(checkMethod, fieldType, method, model)) {

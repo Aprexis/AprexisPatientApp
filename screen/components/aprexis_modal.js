@@ -1,7 +1,8 @@
 import React, { useEffect, useReducer } from 'react'
 import { ScrollView, StyleSheet, Text, View } from 'react-native'
 import { Button, Modal, Portal } from 'react-native-paper'
-import { alertHelper, valueHelper } from '../../helpers'
+import { valueHelper } from '@aprexis/aprexis-api-utility'
+import { alertHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
 
 function AprexisModal(props) {

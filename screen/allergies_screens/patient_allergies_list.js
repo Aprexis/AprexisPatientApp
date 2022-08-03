@@ -1,8 +1,8 @@
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { FontAwesome5Icon, MaterialCommunityIcon, ListView } from '../components'
-import { patientAllergyApi } from "../../api"
-import { alertHelper, patientHelper, currentUserHelper, patientAllergyHelper, valueHelper } from '../../helpers'
+import { patientAllergyApi, patientHelper, patientAllergyHelper, valueHelper } from '@aprexis/aprexis-api-utility'
+import { alertHelper, apiEnvironmentHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
 import { PatientAllergyModal } from './patient_allergy_modal'
 
@@ -24,8 +24,7 @@ function PatientAllergy(props) {
 }
 
 function PatientAllergiesList(props) {
-  const { allergyType } = props
-  const { currentPatient, currentUser, userCredentials } = currentUserHelper.getCurrentProps(props)
+  const { allergyType, currentPatient, currentUser, userCredentials } = props
 
   return (
     <View style={{ flex: 1 }}>
@@ -58,7 +57,7 @@ function PatientAllergiesList(props) {
   /* Providing delete handling should be done by the list view with a callback to this component.
   function deletePatientAllergy(patientAllergy) {
     patientAllergyApi.destroy(
-      userCredentials,
+      apiEnvironmentHelper.apiEnvironment(userCredentials),
       patientAllergyHelper.id(patientAllergy),
       () => { dispatch('FORCE_UPDATE') },
       alertHelper.handleError
@@ -77,7 +76,7 @@ function PatientAllergiesList(props) {
     }
 
     patientAllergyApi.listForPatient(
-      userCredentials,
+      apiEnvironmentHelper.apiEnvironment(userCredentials),
       patientHelper.id(currentPatient),
       params,
       onSuccess,

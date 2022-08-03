@@ -2,13 +2,12 @@ import React from 'react'
 import { Text, View } from 'react-native'
 import Checkbox from 'expo-checkbox'
 import { AprexisModal, SelectHcpId } from '../components'
-import { patientHcpApi } from '../../api'
-import { valueHelper, alertHelper, patientHcpHelper, currentUserHelper, patientHelper } from "../../helpers"
+import { patientPhysicianApi, valueHelper, patientPhysicianHelper, patientHelper } from '@aprexis/aprexis-api-utility'
+import { alertHelper, apiEnvironmentHelper } from '../../helpers'
 import { themeColor } from '../../assets/styles'
 
 function PatientHcpModal(props) {
-  const { action, onClose, visible } = props
-  const { currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
+  const { action, currentPatient, userCredentials, onClose, visible } = props
 
   return (
     <AprexisModal
@@ -18,7 +17,7 @@ function PatientHcpModal(props) {
       displayModel={displayModel}
       getChangedModelFrom={getChangedModelFrom}
       getModelFrom={getModelFrom}
-      helper={patientHcpHelper}
+      helper={patientPhysicianHelper}
       loadEditModel={loadEditModel}
       onClose={onClose}
       updateModel={updateModel}
@@ -31,11 +30,11 @@ function PatientHcpModal(props) {
       return
     }
 
-    patientHcpApi.buildNew(
-      userCredentials,
+    patientPhysicianApi.buildNew(
+      apiEnvironmentHelper.apiEnvironment(userCredentials),
       patientHelper.id(currentPatient),
       (model) => {
-        const changedModel = patientHcpHelper.buildNewChanged(model)
+        const changedModel = patientPhysicianHelper.buildNewChanged(model)
         onSuccess(model, changedModel)
       },
       alertHelper.handleError
@@ -43,7 +42,7 @@ function PatientHcpModal(props) {
   }
 
   function createModel(changedModel, onSuccess) {
-    patientHcpApi.create(userCredentials, changedModel, onSuccess, alertHelper.handleError)
+    patientPhysicianApi.create(apiEnvironmentHelper.apiEnvironment(userCredentials), changedModel, onSuccess, alertHelper.handleError)
   }
 
   function displayModel(model, _changedModel, _fields, inlineStyles, changeValue, _setField) {
@@ -51,13 +50,13 @@ function PatientHcpModal(props) {
       <View style={inlineStyles.infoArea}>
         <View style={inlineStyles.profileFieldView}>
           <Text style={inlineStyles.profileFieldName}>HCP</Text>
-          <Text style={inlineStyles.profileFieldName}>{patientHcpHelper.hcpLabel(model)}</Text>
+          <Text style={inlineStyles.profileFieldName}>{patientPhysicianHelper.physicianLabel(model)}</Text>
         </View>
 
         {
-          !valueHelper.isNumberValue(patientHcpHelper.id(model)) &&
+          !valueHelper.isNumberValue(patientPhysicianHelper.id(model)) &&
           <SelectHcpId
-            hcp={patientHcpHelper.hcp(model)}
+            hcp={patientPhysicianHelper.physician(model)}
             updateHcp={updateHcp}
             userCredentials={userCredentials}
           />
@@ -68,7 +67,7 @@ function PatientHcpModal(props) {
           <Checkbox
             color={themeColor.lightBlue}
             style={{ height: 20, width: 20 }}
-            value={valueHelper.isSet(patientHcpHelper.primary(model))}
+            value={valueHelper.isSet(patientPhysicianHelper.primary(model))}
             onValueChange={changeValue}
           />
         </View>
@@ -96,7 +95,7 @@ function PatientHcpModal(props) {
       return
     }
 
-    patientHcpApi.edit(userCredentials, patientHcpHelper.id(patientHcp), onSuccess, alertHelper.handleError)
+    patientPhysicianApi.edit(apiEnvironmentHelper.apiEnvironment(userCredentials), patientPhysicianHelper.id(patientHcp), onSuccess, alertHelper.handleError)
   }
 
   function updateModel(changedModel, onSuccess) {
@@ -105,7 +104,7 @@ function PatientHcpModal(props) {
       return
     }
 
-    patientHcpApi.update(userCredentials, changedModel, onSuccess, alertHelper.handleError)
+    patientPhysicianApi.update(apiEnvironmentHelper.apiEnvironment(userCredentials), changedModel, onSuccess, alertHelper.handleError)
   }
 }
 

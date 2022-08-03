@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'
 import { DisplayField } from '../components'
-import { interventionApi } from '../../api'
-import { alertHelper, interventionHelper, currentUserHelper } from "../../helpers"
+import { interventionApi, interventionHelper } from "@aprexis/aprexis-api-utility"
+import { alertHelper, apiEnvironmentHelper } from "../../helpers"
 
 function InterventionInfo(props) {
-  const { userCredentials } = currentUserHelper.getCurrentProps(props)
+  const { userCredentials } = props
   const [intervention, setIntervention] = useState(props.intervention)
   const [needLoad, setNeedLoad] = useState(true)
 
@@ -16,7 +16,7 @@ function InterventionInfo(props) {
       }
 
       interventionApi.profile(
-        userCredentials,
+        apiEnvironmentHelper.apiEnvironment(userCredentials),
         intervention.id,
         (interventionProfile) => {
           setNeedLoad(false)

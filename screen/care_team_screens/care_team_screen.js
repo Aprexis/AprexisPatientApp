@@ -5,7 +5,7 @@ import { CaregiversList } from './caregivers_list'
 import { HcpsList } from './hcps_list'
 import { PharmacistsList } from './pharmacists_list'
 import { LazyPlaceholder } from '../components'
-import { currentUserHelper, valueHelper } from '../../helpers'
+import { valueHelper } from '@aprexis/aprexis-api-utility'
 import { styles } from '../../assets/styles'
 
 const screens = {
@@ -21,8 +21,8 @@ const routes = [
 ]
 
 function CareTeamScreen(props) {
+  const { currentPatient, currentUser, userCredentials } = props
   const [state, dispatch] = useReducer(updateState, { index: 0, routes })
-  const { currentPatient, currentUser, userCredentials } = currentUserHelper.getCurrentProps(props)
 
   return (
     <TabView

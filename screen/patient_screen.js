@@ -6,7 +6,8 @@ import { CareTeamScreen } from './care_team_screens'
 import { FontAwesome5Icon, MaterialCommunityIcon, StackScreen } from './components'
 import { HomeScreen, InterventionsScreen, MedicationsScreen, PatientProfileModal, RequestPatientScreen, StatsScreen } from './patient_screens'
 import { HeaderLeft, HeaderRight, LazyPlaceholder } from './components'
-import { valueHelper, patientHelper, currentUserHelper, userCredentialsHelper } from '../helpers'
+import { valueHelper, patientHelper } from '@aprexis/aprexis-api-utility'
+import { userCredentialsHelper } from '../helpers'
 import { styles } from '../assets/styles'
 
 function HomeScreenStack(props) {
@@ -48,9 +49,9 @@ const routeList = [
 ]
 
 function PatientScreen(props) {
+  const { currentUser } = props
   const [state, dispatch] = useReducer(updateState, { index: 0, routes: routes(props.currentPatient) })
   const { currentPatient, patientModalVisible, userCredentials } = state
-  const { currentUser } = currentUserHelper.getCurrentProps(props)
 
   useEffect(
     () => {

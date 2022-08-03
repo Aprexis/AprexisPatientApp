@@ -2,13 +2,13 @@ import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { FontAwesome5Icon, ListView, MaterialCommunityIcon } from '../components'
 import { PatientHcpModal } from './patient_hcp_modal'
-import { patientHcpApi } from "../../api"
-import { alertHelper, patientHelper, currentUserHelper, patientHcpHelper, valueHelper } from '../../helpers'
+import { patientPhysicianApi, patientHelper, patientPhysicianHelper, valueHelper } from '@aprexis/aprexis-api-utility'
+import { alertHelper, apiEnvironmentHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
 
 function PatientHcp(props) {
   const { patientHcp, onEdit } = props
-  const primary = patientHcpHelper.primary(patientHcp)
+  const primary = patientPhysicianHelper.primary(patientHcp)
   const primaryText = valueHelper.isSet(primary) ? '(primary)' : ''
 
   return (
@@ -17,15 +17,15 @@ function PatientHcp(props) {
       style={styles.listButton}
       onPress={() => { onEdit(patientHcp) }}
     >
-      <View style={{ flexDirection: "row", alignItems: 'center', width: '95%' }}>
-        <MaterialCommunityIcon size={27} style={styles.icon} name="doctor" solid />
+      <View style={{ flexDirection: 'row', alignItems: 'center', width: '95%' }}>
+        <MaterialCommunityIcon size={27} style={styles.icon} name='doctor' solid />
         <FontAwesome5Icon size={18} name='edit' style={[styles.icon, { marginLeft: 2 }]} />
-        <Text style={inlineStyles.text}>{patientHcpHelper.hcpName(patientHcp)}</Text>
+        <Text style={inlineStyles.text}>{patientPhysicianHelper.physicianName(patientHcp)}</Text>
         <Text style={inlineStyles.text}>{primaryText}</Text>
       </View>
       {/*
       <View>
-        <FontAwesome5Icon size={30} name="angle-right" style={[styles.icon, inlineStyles.medIcon]} />
+        <FontAwesome5Icon size={30} name='angle-right' style={[styles.icon, inlineStyles.medIcon]} />
       </View>
       */}
     </TouchableOpacity>
@@ -33,7 +33,7 @@ function PatientHcp(props) {
 }
 
 function HcpsList(props) {
-  const { currentPatient, currentUser, userCredentials } = currentUserHelper.getCurrentProps(props)
+  const { currentPatient, currentUser, userCredentials } = props
 
   return (
     <View style={styles.mainBody}>
@@ -64,9 +64,9 @@ function HcpsList(props) {
 
   /* Providing delete handling should be done by the list view with a callback to this component.
   function deleteHcp(patientHcp) {
-    patientHcpApi.destroy(
-      userCredentials,
-      patientHcpHelper.id(patientHcp),
+    patientPhysicianApi.destroy(
+      apiEnvironmentHelper.apiEnvironment(userCredentials),
+      patientPhysicianHelper.id(patientHcp),
       () => { dispatch('FORCE_UPDATE') },
       alertHelper.handleError
     )
@@ -74,8 +74,8 @@ function HcpsList(props) {
   */
 
   function loadPage(number, size, onSuccess) {
-    patientHcpApi.listForPatient(
-      userCredentials,
+    patientPhysicianApi.listForPatient(
+      apiEnvironmentHelper.apiEnvironment(userCredentials),
       patientHelper.id(currentPatient),
       { for_active: true, page: { number, size, total: 0 }, sort: 'physician.last_name,physician.first_name' },
       onSuccess,
@@ -86,7 +86,7 @@ function HcpsList(props) {
   function presentItem(patientHcp, patientHcpIdx, editPatientHcp) {
     return (
       <PatientHcp
-        key={`hcp-${patientHcpHelper.id(patientHcp)}-${patientHcpIdx}`}
+        key={`hcp-${patientPhysicianHelper.id(patientHcp)}-${patientHcpIdx}`}
         patientHcp={patientHcp}
         //onDelete={deletePatientHcp}
         onEdit={editPatientHcp}
@@ -101,6 +101,6 @@ export { MemoizedHcpsList as HcpsList }
 
 const inlineStyles = StyleSheet.create(
   {
-    text: { color: "#112B37", fontSize: 18, fontWeight: "500", marginLeft: 5 },
+    text: { color: '#112B37', fontSize: 18, fontWeight: '500', marginLeft: 5 },
   }
 )

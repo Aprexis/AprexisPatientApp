@@ -1,6 +1,6 @@
 import React from 'react'
 import { Text, View } from 'react-native'
-import { valueHelper } from '../../helpers'
+import { valueHelper } from '@aprexis/aprexis-api-utility'
 
 function ListCount({ label, lastPage, listLength, pluralLabel }) {
   return (

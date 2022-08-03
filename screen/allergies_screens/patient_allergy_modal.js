@@ -1,15 +1,13 @@
 import React, { useState } from 'react'
 import { Text, View } from 'react-native'
 import { Button, Menu, TextInput } from 'react-native-paper'
-import { AprexisModal, NumberInput } from "../components"
-import { patientAllergyApi } from '../../api'
-import { valueHelper, alertHelper, currentUserHelper, patientAllergyHelper } from "../../helpers"
-import { allergyCategories } from '../../types'
+import { AprexisModal, NumberInput } from '../components'
+import { patientAllergyApi, valueHelper, allergyCategories, patientAllergyHelper } from '@aprexis/aprexis-api-utility'
+import { alertHelper, apiEnvironmentHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
 
 function PatientAllergyModal(props) {
-  const { action, allergyType, onClose, visible } = props
-  const { currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
+  const { action, allergyType, currentPatient, userCredentials, onClose, visible } = props
   const [allergyTypeVisible, setAllergyTypeVisible] = useState(false)
 
   return (
@@ -30,7 +28,7 @@ function PatientAllergyModal(props) {
 
   function buildNewModel(onSuccess) {
     patientAllergyApi.buildNew(
-      userCredentials,
+      apiEnvironmentHelper.apiEnvironment(userCredentials),
       currentPatient.id,
       (model) => {
         const changedModel = patientAllergyHelper.buildNewChanged(model)
@@ -42,7 +40,7 @@ function PatientAllergyModal(props) {
   }
 
   function createModel(changedModel, onSuccess) {
-    patientAllergyApi.create(userCredentials, changedModel, onSuccess, alertHelper.handleError)
+    patientAllergyApi.create(apiEnvironmentHelper.apiEnvironment(userCredentials), changedModel, onSuccess, alertHelper.handleError)
   }
 
   function displayModel(model, changedModel, _fields, inlineStyles, changeValue, _setField) {
@@ -123,7 +121,7 @@ function PatientAllergyModal(props) {
 
   function loadEditModel(onSuccess) {
     const patientAllergy = getModelFrom(props)
-    patientAllergyApi.edit(userCredentials, patientAllergyHelper.id(patientAllergy), onSuccess, alertHelper.handleError)
+    patientAllergyApi.edit(apiEnvironmentHelper.apiEnvironment(userCredentials), patientAllergyHelper.id(patientAllergy), onSuccess, alertHelper.handleError)
   }
 
   function updateModel(changedModel, onSuccess) {
@@ -132,7 +130,7 @@ function PatientAllergyModal(props) {
       return
     }
 
-    patientAllergyApi.update(userCredentials, changedModel, onSuccess, alertHelper.handleError)
+    patientAllergyApi.update(apiEnvironmentHelper.apiEnvironment(userCredentials), changedModel, onSuccess, alertHelper.handleError)
   }
 }
 

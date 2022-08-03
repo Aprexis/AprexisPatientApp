@@ -1,8 +1,8 @@
 import React, { useEffect, useReducer } from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { FontAwesome5Icon, ListView } from '../components'
-import { reminderApi } from '../../api'
-import { valueHelper, alertHelper, currentUserHelper, patientHelper, patientMedicationHelper, reminderHelper } from '../../helpers'
+import { reminderApi, valueHelper, patientHelper, patientMedicationHelper, reminderHelper } from '@aprexis/aprexis-api-utility'
+import { alertHelper, apiEnvironmentHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
 import { ReminderModal } from '../reminders_screens'
 
@@ -73,8 +73,7 @@ function MedicationReminder(props) {
 }
 
 function MedicationRemindersList(props) {
-  const { currentPatient, currentUser, userCredentials } = currentUserHelper.getCurrentProps(props)
-  const { patientMedication } = props
+  const { currentPatient, currentUser, userCredentials, patientMedication } = props
   const [state, dispatch] = useReducer(updateState, initialState())
 
   useEffect(
@@ -123,7 +122,7 @@ function MedicationRemindersList(props) {
 
   function loadPage(number, size, onSuccess) {
     reminderApi.listForPatient(
-      userCredentials,
+      apiEnvironmentHelper.apiEnvironment(userCredentials),
       patientHelper.id(currentPatient),
       { for_active: true, for_medication_label: patientMedicationHelper.medicationLabel(patientMedication), page: { number, size, total: 0 }, sort: 'recur_from,recur_to,action' },
       onSuccess,

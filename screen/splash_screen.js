@@ -5,7 +5,8 @@ import {
   StyleSheet,
   View
 } from 'react-native'
-import { valueHelper, userCredentialsHelper, currentUserHelper } from '../helpers'
+import { valueHelper } from '@aprexis/aprexis-api-utility'
+import { userCredentialsHelper, currentUserHelper } from '../helpers'
 
 function splashTimeOut(setCurrent, setStackScreen) {
   userCredentialsHelper.getUserCredentials(loadCurrentUser)

@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { View } from 'react-native'
 import { DisplayField } from '../components'
-import { patientMedicationApi } from '../../api'
-import { alertHelper, patientMedicationHelper, currentUserHelper } from "../../helpers"
+import { patientMedicationApi, patientMedicationHelper, } from '@aprexis/aprexis-api-utility'
+import { alertHelper, apiEnvironmentHelper } from '../../helpers'
 
 function MedicationInfo(props) {
-  const { userCredentials } = currentUserHelper.getCurrentProps(props)
+  const { userCredentials } = props
   const [patientMedication, setPatientMedication] = useState(props.patientMedication)
   const [needLoad, setNeedLoad] = useState(true)
 
@@ -16,7 +16,7 @@ function MedicationInfo(props) {
       }
 
       patientMedicationApi.profile(
-        userCredentials,
+        apiEnvironmentHelper.apiEnvironment(userCredentials),
         patientMedication.id,
         (patientMedicationProfile) => {
           setNeedLoad(false)

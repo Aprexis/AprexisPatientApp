@@ -2,8 +2,8 @@ import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { PatientMedicationModal } from './patient_medication_modal'
 import { FontAwesome5Icon, ListView } from '../components'
-import { patientMedicationApi } from "../../api"
-import { alertHelper, patientHelper, currentUserHelper, patientMedicationHelper } from '../../helpers'
+import { patientMedicationApi, patientHelper, patientMedicationHelper } from '@aprexis/aprexis-api-utility'
+import { alertHelper, apiEnvironmentHelper, iconHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
 
 function PatientMedication(props) {
@@ -15,7 +15,7 @@ function PatientMedication(props) {
         activeOpacity={0.5}
         style={inlineStyles.listButton}
         onPress={() => { onEdit(patientMedication) }}>
-        <FontAwesome5Icon size={35} style={styles.icon} name={patientMedicationHelper.medicationIcon(patientMedication)} />
+        <FontAwesome5Icon size={35} style={styles.icon} name={iconHelper.patientMedicationIcon(patientMedication)} />
         <FontAwesome5Icon size={18} name='edit' style={[styles.icon, { marginLeft: 2 }]} />
       </TouchableOpacity>
 
@@ -40,8 +40,7 @@ function PatientMedication(props) {
 }
 
 function PatientMedicationsList(props) {
-  const { setPatientMedication } = props
-  const { currentPatient, currentUser, userCredentials } = currentUserHelper.getCurrentProps(props)
+  const { currentPatient, currentUser, userCredentials, setPatientMedication } = props
 
   return (
     <ListView
@@ -70,7 +69,7 @@ function PatientMedicationsList(props) {
 
   function loadPage(number, size, onSuccess) {
     patientMedicationApi.listForPatient(
-      userCredentials,
+      apiEnvironmentHelper.apiEnvironment(userCredentials),
       patientHelper.id(currentPatient),
       { for_active: true, page: { number, size, total: 0 }, sort: 'created_at-,medication.label' },
       onSuccess,

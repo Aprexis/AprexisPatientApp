@@ -1,7 +1,7 @@
 import React, { useEffect, useReducer, useRef } from 'react'
 import { View } from 'react-native'
 import { Button, Menu, Searchbar } from 'react-native-paper'
-import { valueHelper } from '../../helpers'
+import { valueHelper } from '@aprexis/aprexis-api-utility'
 
 function SelectId({ changeId, id, optionId, optionLabel, matchString, search, selectType, selectTypePlural }) {
   const [state, dispatch] = useReducer(updateState, initialState())

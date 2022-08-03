@@ -1,9 +1,8 @@
 import React, { useState } from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { Button, Menu, TextInput } from 'react-native-paper'
-import { contactHelper, valueHelper } from '../../helpers'
 import { NumberInput } from './number_input'
-import { contactMethods } from '../../types'
+import { contactHelper, contactMethods, valueHelper } from '@aprexis/aprexis-api-utility'
 import { styles } from '../../assets/styles'
 
 function PhoneExtension({ allowPhoneExtension, contactable, onChangeValue }) {

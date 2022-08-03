@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { TextInput } from 'react-native-paper'
-import { valueHelper } from "../../helpers"
+import { valueHelper } from '@aprexis/aprexis-api-utility'
 
 function NumberInput(props) {
   const textInputProps = { ...props }
