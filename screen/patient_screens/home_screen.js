@@ -1,15 +1,14 @@
 import React from 'react'
 import { SafeAreaView, StyleSheet, Text, View } from 'react-native'
-import { reminderApi } from '../../api'
 import { FontAwesome5Icon, ListView } from '../components'
-import { valueHelper, alertHelper, patientHelper, userHelper, currentUserHelper, reminderHelper, dateHelper } from '../../helpers'
-import { medicationHelper } from '../../helpers/admin'
+import { reminderApi, valueHelper, medicationHelper, patientHelper, userHelper, reminderHelper, dateHelper } from '@aprexis/aprexis-api-utility'
+import { alertHelper, apiEnvironmentHelper, iconHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
 
 function Medication({ medication }) {
   return (
     <React.Fragment>
-      <FontAwesome5Icon size={20} style={styles.icon} name={medicationHelper.icon(medication)} />
+      <FontAwesome5Icon size={20} style={styles.icon} name={iconHelper.medicationIcon(medication)} />
       <Text style={inlineStyles.text}>{medicationHelper.label(medication)}</Text>
     </React.Fragment>
   )
@@ -58,7 +57,7 @@ function Reminders({ currentPatient, day, userCredentials }) {
 
   function loadPage(number, size, onSuccess) {
     reminderApi.listForPatient(
-      userCredentials,
+      apiEnvironmentHelper.apiEnvironment(userCredentials),
       patientHelper.id(currentPatient),
       { for_date: day, for_kind: 'medication', page: { number, size, total: 0 }, sort: 'action-' },
       onSuccess,
@@ -79,7 +78,7 @@ function Reminders({ currentPatient, day, userCredentials }) {
 }
 
 function HomeScreen(props) {
-  const { currentUser, currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
+  const { currentUser, currentPatient, userCredentials } = props
   let day = new Date()
   let homeScreenText = 'This is the Home Screen'
   if (valueHelper.isValue(currentUser)) {

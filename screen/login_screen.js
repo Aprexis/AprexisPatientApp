@@ -10,9 +10,9 @@ import {
   View
 } from 'react-native'
 import { TextInput } from 'react-native-paper'
-import { authenticationApi } from '../api'
+import { authenticationApi } from '@aprexis/aprexis-api-utility'
 import { Loader } from './components'
-import { alertHelper, userCredentialsHelper, currentUserHelper } from '../helpers'
+import { alertHelper, userCredentialsHelper, currentUserHelper, apiEnvironmentHelper } from '../helpers'
 import { styles } from '../assets/styles'
 
 function LoginScreen({ setStackScreen, setCurrent }) {
@@ -21,7 +21,6 @@ function LoginScreen({ setStackScreen, setCurrent }) {
   const [loading, setLoading] = useState(false)
 
   const passwordInputRef = createRef()
-
   const handleSubmitPress = () => {
     if (!userEmail) {
       alertHelper.warning('Please fill Email')
@@ -34,6 +33,7 @@ function LoginScreen({ setStackScreen, setCurrent }) {
 
     setLoading(true)
     authenticationApi.signIn(
+      apiEnvironmentHelper.apiEnvironment(),
       userEmail,
       userPassword,
       (userCredentials) => {
@@ -59,13 +59,13 @@ function LoginScreen({ setStackScreen, setCurrent }) {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === "ios" ? "padding" : "height"}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
       style={{ flex: 1 }}
     >
       <View style={styles.mainFullScreen}>
         <Loader loading={loading} />
         <ScrollView
-          keyboardShouldPersistTaps="handled"
+          keyboardShouldPersistTaps='handled'
           contentContainerStyle={
             {
               flex: 1,
@@ -79,7 +79,7 @@ function LoginScreen({ setStackScreen, setCurrent }) {
                 <Image
                   source={require('../assets/logo.svg')}
                   style={{
-                    width: "57%",
+                    width: '57%',
                     height: 100,
                     resizeMode: 'contain',
                   }}
@@ -89,8 +89,8 @@ function LoginScreen({ setStackScreen, setCurrent }) {
                 <TextInput
                   style={styles.inputField}
                   onChangeText={(userEmail) => setUserEmail(userEmail)}
-                  placeholder="Enter Username"
-                  placeholderTextColor="#8b9cb5"
+                  placeholder='Enter Username'
+                  placeholderTextColor='#8b9cb5'
                   autoCapitalize='none'
                   keyboardType='email-address'
                   returnKeyType='next'
@@ -98,7 +98,7 @@ function LoginScreen({ setStackScreen, setCurrent }) {
                     passwordInputRef.current &&
                     passwordInputRef.current.focus()
                   }
-                  underlineColorAndroid="#f000"
+                  underlineColorAndroid='#f000'
                   blurOnSubmit={false}
                 />
               </View>
@@ -107,14 +107,14 @@ function LoginScreen({ setStackScreen, setCurrent }) {
                   style={styles.inputField}
                   onChangeText={(userPassword) => setUserPassword(userPassword)}
                   placeholder='Enter Password'
-                  placeholderTextColor="#8b9cb5"
-                  keyboardType="default"
+                  placeholderTextColor='#8b9cb5'
+                  keyboardType='default'
                   ref={passwordInputRef}
                   onSubmitEditing={Keyboard.dismiss}
                   blurOnSubmit={false}
                   secureTextEntry={true}
-                  underlineColorAndroid="#f000"
-                  returnKeyType="next"
+                  underlineColorAndroid='#f000'
+                  returnKeyType='next'
                 />
               </View>
               <TouchableOpacity

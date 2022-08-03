@@ -1,8 +1,8 @@
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { FontAwesome5Icon, ListView } from '../components'
-import { caregiverApi } from "../../api"
-import { alertHelper, patientHelper, currentUserHelper, caregiverHelper } from '../../helpers'
+import { caregiverApi, patientHelper, caregiverHelper } from '@aprexis/aprexis-api-utility'
+import { alertHelper, apiEnvironmentHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
 import { CaregiverModal } from './caregiver_modal'
 
@@ -14,8 +14,8 @@ function Caregiver(props) {
       activeOpacity={0.5}
       style={styles.listButton}
       onPress={() => { onEdit(caregiver) }}>
-      <View style={{ flexDirection: "row", alignItems: 'center', width: '95%' }}>
-        <FontAwesome5Icon size={27} style={styles.icon} name="user" solid />
+      <View style={{ flexDirection: 'row', alignItems: 'center', width: '95%' }}>
+        <FontAwesome5Icon size={27} style={styles.icon} name='user' solid />
         <FontAwesome5Icon size={18} name='edit' style={[styles.icon, { marginLeft: 2 }]} />
         <Text style={inlineStyles.text}>{caregiverHelper.name(caregiver)} ({caregiverHelper.relationship(caregiver)})</Text>
       </View>
@@ -24,7 +24,7 @@ function Caregiver(props) {
 }
 
 function CaregiversList(props) {
-  const { currentUser, currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
+  const { currentUser, currentPatient, userCredentials } = props
 
   return (
     <View style={styles.mainBody}>
@@ -56,7 +56,7 @@ function CaregiversList(props) {
   /* Providing delete handling should be done by the list view with a callback to this component.
   function deleteCaregiver(caregiver) {
     caregiverApi.destroy(
-      userCredentials,
+      apiEnvironmentHelper.apiEnvironment(userCredentials),
       caregiverHelper.id(caregiver),
       () => { dispatch('FORCE_UPDATE') },
       alertHelper.handleError
@@ -66,7 +66,7 @@ function CaregiversList(props) {
 
   function loadPage(number, size, onSuccess) {
     caregiverApi.listForPatient(
-      userCredentials,
+      apiEnvironmentHelper.apiEnvironment(userCredentials),
       patientHelper.id(currentPatient),
       { for_active: true, page: { number, size, total: 0 }, sort: 'created_at-,medication.label' },
       onSuccess,
@@ -92,6 +92,6 @@ export { MemoizedCaregiversList as CaregiversList }
 
 const inlineStyles = StyleSheet.create(
   {
-    text: { color: "#112B37", fontSize: 18, fontWeight: "500", marginLeft: 5 },
+    text: { color: '#112B37', fontSize: 18, fontWeight: '500', marginLeft: 5 },
   }
 )

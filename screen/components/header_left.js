@@ -1,9 +1,9 @@
 import React from 'react'
 import { Text, View, TouchableOpacity } from 'react-native'
-import { currentUserHelper, patientHelper } from "../../helpers"
+import { patientHelper } from "@aprexis/aprexis-api-utility"
 
 function HeaderLeft(props) {
-  const { currentPatient } = currentUserHelper.getCurrentProps(props)
+  const { currentPatient } = props
 
   return (
     <View style={{ flexDirection: "row", justifyContent: 'flex-start', alignItems: 'center', paddingLeft: 10 }}>

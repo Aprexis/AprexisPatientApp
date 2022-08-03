@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { MaterialCommunityIcon } from './material_community_icon'
-import { labTestValueHelper } from '../../helpers'
+import { labTestValueHelper } from '@aprexis/aprexis-api-utility'
 import { styles } from '../../assets/styles'
 
 function Lab(props) {

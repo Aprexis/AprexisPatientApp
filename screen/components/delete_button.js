@@ -1,7 +1,7 @@
 import React from 'react'
 import { Alert, TouchableOpacity } from 'react-native'
 import { MaterialCommunityIcon } from './material_community_icon'
-import { valueHelper } from '../../helpers'
+import { valueHelper } from '@aprexis/aprexis-api-utility'
 
 function DeleteButton({ itemName, iconName, iconProps, onPress, viewProps }) {
   const icon = valueHelper.isStringValue(iconName) ? iconName : 'delete'

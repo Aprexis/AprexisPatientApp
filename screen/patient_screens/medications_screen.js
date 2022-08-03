@@ -3,7 +3,7 @@ import { Dimensions } from 'react-native'
 import { TabBar, TabView } from 'react-native-tab-view'
 import { LazyPlaceholder, StackScreen } from '../components'
 import { Allergies, CheckInteractions, MedicationScreen, PatientMedicationsList } from "../medications_screens"
-import { valueHelper, currentUserHelper } from '../../helpers'
+import { valueHelper } from '@aprexis/aprexis-api-utility'
 import { styles } from '../../assets/styles'
 
 function MedicationsStack(props) {
@@ -40,8 +40,8 @@ const routes = [
 ]
 
 function MedicationsScreen(props) {
+  const { currentUser, currentPatient, userCredentials } = props
   const [state, dispatch] = useReducer(updateState, { index: 0, routes })
-  const { currentUser, currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
 
   return (
     <TabView

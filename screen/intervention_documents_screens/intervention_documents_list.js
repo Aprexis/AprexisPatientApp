@@ -1,8 +1,8 @@
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { FontAwesome5Icon, ListView } from '../components'
-import { interventionDocumentApi } from '../../api'
-import { alertHelper, currentUserHelper, interventionHelper, interventionDocumentHelper } from '../../helpers'
+import { interventionDocumentApi, interventionHelper, interventionDocumentHelper } from '@aprexis/aprexis-api-utility'
+import { alertHelper, apiEnvironmentHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
 
 function InterventionDocument(props) {
@@ -33,8 +33,7 @@ function InterventionDocument(props) {
 }
 
 function InterventionDocumentsList(props) {
-  const { intervention, setInterventionDocument } = props
-  const { userCredentials } = currentUserHelper.getCurrentProps(props)
+  const { intervention, setInterventionDocument, userCredentials } = props
 
   return (
     <ListView
@@ -48,7 +47,7 @@ function InterventionDocumentsList(props) {
 
   function loadPage(number, size, onSuccess) {
     interventionDocumentApi.listForIntervention(
-      userCredentials,
+      apiEnvironmentHelper.apiEnvironment(userCredentials),
       interventionHelper.id(intervention),
       { for_active: true, page: { number, size, total: 0 }, sort: 'updated_at-,title' },
       onSuccess,

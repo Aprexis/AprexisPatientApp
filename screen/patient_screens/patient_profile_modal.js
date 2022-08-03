@@ -3,8 +3,8 @@ import { Text, View } from 'react-native'
 import { Button } from 'react-native-paper'
 import DateTimePicker from '@react-native-community/datetimepicker'
 import { AddressInput, AprexisModal, ContactInput, GenderInput, NameInput } from '../components'
-import { patientApi } from '../../api'
-import { valueHelper, alertHelper, currentUserHelper, patientHelper, dateHelper } from "../../helpers"
+import { patientApi, valueHelper, patientHelper, dateHelper } from '@aprexis/aprexis-api-utility'
+import { alertHelper, apiEnvironmentHelper } from '../../helpers'
 
 function DateOfBirthInput({ model, inlineStyles, onChangeValue }) {
   const [show, setShow] = useState(false)
@@ -67,8 +67,7 @@ function ShowHealthPlan({ inlineStyles, model }) {
 }
 
 function PatientProfileModal(props) {
-  const { onClose, visible } = props
-  const { currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
+  const { currentPatient, onClose, userCredentials, visible } = props
 
   return (
     <AprexisModal
@@ -79,7 +78,7 @@ function PatientProfileModal(props) {
       helper={patientHelper}
       loadEditModel={loadEditModel}
       onClose={() => {
-        patientApi.show(userCredentials, patientHelper.id(currentPatient), onClose, alertHelper.handleError)
+        patientApi.show(apiEnvironmentHelper.apiEnvironment(userCredentials), patientHelper.id(currentPatient), onClose, alertHelper.handleError)
       }}
       updateModel={updateModel}
       visible={visible}
@@ -110,7 +109,7 @@ function PatientProfileModal(props) {
   }
 
   function loadEditModel(onSuccess) {
-    patientApi.edit(userCredentials, patientHelper.id(currentPatient), onSuccess, alertHelper.handleError)
+    patientApi.edit(apiEnvironmentHelper.apiEnvironment(userCredentials), patientHelper.id(currentPatient), onSuccess, alertHelper.handleError)
   }
 
   function updateModel(changedModel, onSuccess) {
@@ -119,7 +118,7 @@ function PatientProfileModal(props) {
       return
     }
 
-    patientApi.update(userCredentials, changedModel, onSuccess, alertHelper.handleError)
+    patientApi.update(apiEnvironmentHelper.apiEnvironment(userCredentials), changedModel, onSuccess, alertHelper.handleError)
   }
 }
 

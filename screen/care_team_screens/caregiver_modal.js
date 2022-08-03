@@ -2,14 +2,12 @@ import React, { useState } from 'react'
 import { Text, View } from 'react-native'
 import { Button, Menu } from 'react-native-paper'
 import { AddressInput, AprexisModal, ContactInput, NameInput } from '../components'
-import { caregiverApi } from '../../api'
-import { valueHelper, alertHelper, caregiverHelper, currentUserHelper, patientHelper } from "../../helpers"
-import { relationships } from "../../types"
+import { caregiverApi, valueHelper, caregiverHelper, patientHelper, relationships } from '@aprexis/aprexis-api-utility'
+import { alertHelper, apiEnvironmentHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
 
 function CaregiverModal(props) {
-  const { action, onClose, visible } = props
-  const { currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
+  const { action, currentPatient, userCredentials, onClose, visible } = props
   const [relationshipVisible, setRelationshipVisible] = useState(false)
 
   return (
@@ -30,7 +28,7 @@ function CaregiverModal(props) {
 
   function buildNewModel(onSuccess) {
     caregiverApi.buildNew(
-      userCredentials,
+      apiEnvironmentHelper.apiEnvironment(userCredentials),
       patientHelper.id(currentPatient),
       (model) => {
         const changedModel = caregiverHelper.buildNewChanged(model)
@@ -41,7 +39,7 @@ function CaregiverModal(props) {
   }
 
   function createModel(changedModel, onSuccess) {
-    caregiverApi.create(changedModel, onSuccess, alertHelper.handleError)
+    caregiverApi.create(apiEnvironmentHelper.apiEnvironment(userCredentials), changedModel, onSuccess, alertHelper.handleError)
   }
 
   function displayModel(model, _changedModel, _fields, inlineStyles, changeValue, _setField) {
@@ -92,7 +90,7 @@ function CaregiverModal(props) {
 
   function loadEditModel(onSuccess) {
     const caregiver = getModelFrom(props)
-    caregiverApi.edit(userCredentials, caregiverHelper.id(caregiver), onSuccess, alertHelper.handleError)
+    caregiverApi.edit(apiEnvironmentHelper.apiEnvironment(userCredentials), caregiverHelper.id(caregiver), onSuccess, alertHelper.handleError)
   }
 
   function updateModel(changedModel, onSuccess) {
@@ -101,7 +99,7 @@ function CaregiverModal(props) {
       return
     }
 
-    caregiverApi.update(userCredentials, changedModel, onSuccess, alertHelper.handleError)
+    caregiverApi.update(apiEnvironmentHelper.apiEnvironment(userCredentials), changedModel, onSuccess, alertHelper.handleError)
   }
 }
 

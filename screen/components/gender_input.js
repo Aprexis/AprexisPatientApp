@@ -1,8 +1,7 @@
 import React, { useState } from 'react'
 import { Text, View } from 'react-native'
 import { Button, Menu } from 'react-native-paper'
-import { valueHelper } from '../../helpers'
-import { genders } from '../../types'
+import { genders, valueHelper } from '@aprexis/aprexis-api-utility'
 import { styles } from '../../assets/styles'
 
 function GenderInput({ gendered, helper, inlineStyles, onChangeValue }) {

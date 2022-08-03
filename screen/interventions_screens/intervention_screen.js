@@ -4,7 +4,7 @@ import { TabView } from 'react-native-tab-view'
 import { FontAwesome5Icon, LazyPlaceholder, MaterialCommunityIcon } from '../components'
 import { InterventionInfo } from './intervention_info'
 import { InterventionDocumentsList } from '../intervention_documents_screens'
-import { valueHelper, currentUserHelper, interventionHelper } from '../../helpers'
+import { valueHelper, interventionHelper } from '@aprexis/aprexis-api-utility'
 
 const screens = {
   info: InterventionInfo,
@@ -28,9 +28,8 @@ function BackButton({ goBack }) {
 }
 
 function InterventionScreen(props) {
-  const { intervention, setIntervention, setStackScreen } = props
+  const { currentUser, currentPatient, userCredentials, intervention, setIntervention, setStackScreen } = props
   const [state, dispatch] = useReducer(updateState, { index: 0, routes })
-  const { currentUser, currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
 
   if (!valueHelper.isValue(intervention)) {
     return null

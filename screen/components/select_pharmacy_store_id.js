@@ -1,11 +1,10 @@
 import React from 'react'
 import { SelectId } from './select_id'
-import { pharmacyStoreApi } from '../../api'
-import { alertHelper, pharmacyStoreHelper, patientHelper, currentUserHelper, valueHelper } from '../../helpers'
+import { pharmacyStoreApi, pharmacyStoreHelper, patientHelper, valueHelper } from '@aprexis/aprexis-api-utility'
+import { alertHelper, apiEnvironmentHelper } from '../../helpers'
 
 function SelectPharmacyStoreId(props) {
-  const { patient, pharmacyStore, updatePharmacyStore } = props
-  const { userCredentials } = currentUserHelper.getCurrentProps(props)
+  const { patient, pharmacyStore, updatePharmacyStore, userCredentials } = props
 
   return (
     <SelectId
@@ -21,7 +20,7 @@ function SelectPharmacyStoreId(props) {
   )
 
   function changeId(id) {
-    pharmacyStoreApi.show(userCredentials, id, (pharmacyStore) => { updatePharmacyStore(id, pharmacyStore) }, alertHelper.handleError)
+    pharmacyStoreApi.show(apiEnvironmentHelper.apiEnvironment(userCredentials), id, (pharmacyStore) => { updatePharmacyStore(id, pharmacyStore) }, alertHelper.handleError)
   }
 
   function label(store) {
@@ -44,9 +43,9 @@ function SelectPharmacyStoreId(props) {
     }
 
     pharmacyStoreApi.search(
-      userCredentials,
+      apiEnvironmentHelper.apiEnvironment(userCredentials),
       params,
-      (physicians, _pageHeaders) => { onSuccess(physicians) },
+      (pharmacyStores, _pageHeaders) => { onSuccess(pharmacyStores) },
       alertHelper.handleError
     )
   }

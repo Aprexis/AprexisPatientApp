@@ -1,13 +1,12 @@
 import React from 'react'
 import { View } from 'react-native'
 import { Lab, ListView } from '../components'
-import { labTestValueApi } from "../../api"
-import { alertHelper, patientHelper, currentUserHelper, labTestValueHelper } from '../../helpers'
-import { labTestVitals } from '../../types'
+import { labTestValueApi, patientHelper, labTestValueHelper, labTestVitals } from '@aprexis/aprexis-api-utility'
+import { alertHelper, apiEnvironmentHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
 
 function VitalsList(props) {
-  const { currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
+  const { currentPatient, userCredentials } = props
 
   return (
     <View style={styles.mainBody}>
@@ -23,7 +22,7 @@ function VitalsList(props) {
 
   function loadPage(number, size, onSuccess) {
     labTestValueApi.listForPatient(
-      userCredentials,
+      apiEnvironmentHelper.apiEnvironment(userCredentials),
       patientHelper.id(currentPatient),
       { for_category: labTestVitals, page: { number, size, total: 0 }, sort: 'created_at-' },
       onSuccess,

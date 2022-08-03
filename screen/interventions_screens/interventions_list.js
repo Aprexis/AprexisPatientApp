@@ -1,8 +1,8 @@
 import React from 'react'
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import { FontAwesome5Icon, MaterialCommunityIcon, ListView } from '../components'
-import { interventionApi } from '../../api'
-import { alertHelper, patientHelper, currentUserHelper, interventionHelper } from '../../helpers'
+import { interventionApi, patientHelper, interventionHelper } from '@aprexis/aprexis-api-utility'
+import { alertHelper, apiEnvironmentHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
 
 function Intervention(props) {
@@ -30,8 +30,7 @@ function Intervention(props) {
 }
 
 function InterventionsList(props) {
-  const { setIntervention } = props
-  const { currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
+  const { currentPatient, userCredentials, setIntervention } = props
 
   return (
     <ListView
@@ -45,7 +44,7 @@ function InterventionsList(props) {
 
   function loadPage(number, size, onSuccess) {
     interventionApi.listForPatient(
-      userCredentials,
+      apiEnvironmentHelper.apiEnvironment(userCredentials),
       patientHelper.id(currentPatient),
       { for_active: true, page: { number, size, total: 0 }, sort: 'created_at-,program.name,state' },
       onSuccess,

@@ -2,7 +2,7 @@ import React from 'react'
 import { TouchableOpacity } from 'react-native'
 import { Button } from 'react-native-paper'
 import { FontAwesome5Icon } from './font_awesome5_icon'
-import { valueHelper } from '../../helpers'
+import { valueHelper } from '@aprexis/aprexis-api-utility'
 
 function AddButton({ buttonProps, buttonTitle, iconName, iconProps, onPress, viewProps }) {
   const button = valueHelper.isStringValue(buttonTitle) ? buttonTitle : 'Add'

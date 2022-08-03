@@ -1,7 +1,7 @@
 import { Platform } from 'react-native'
 import AsyncStorage from '@react-native-async-storage/async-storage'
-import { alertHelper } from "./alert.helper"
-import { valueHelper } from "./value.helper"
+import { alertHelper } from './alert.helper'
+import { valueHelper } from '@aprexis/aprexis-api-utility'
 import * as SecureStore from 'expo-secure-store'
 
 export const userCredentialsHelper = {
@@ -24,7 +24,7 @@ const storeMethods = {
 }
 
 function storage() {
-  if (Platform.OS === "web") {
+  if (Platform.OS === 'web') {
     return storeMethods.unsecure
   }
 
@@ -33,7 +33,7 @@ function storage() {
 
 async function getUserCredentials(handler) {
   try {
-    const stringCredentials = await storage().get("userCredentials")
+    const stringCredentials = await storage().get('userCredentials')
     if (valueHelper.isStringValue(stringCredentials)) {
       const userCredentials = JSON.parse(stringCredentials)
       if (valueHelper.isSet(userCredentials.success)) {
@@ -51,7 +51,7 @@ async function getUserCredentials(handler) {
 
 async function removeUserCredentials(handler) {
   try {
-    await storage().delete("userCredentials")
+    await storage().delete('userCredentials')
   } catch (error) {
     alertHelper.error(error)
   }
@@ -61,7 +61,7 @@ async function removeUserCredentials(handler) {
 
 async function storeUserCredentials(userCredentials, handler) {
   try {
-    await storage().set("userCredentials", JSON.stringify(userCredentials))
+    await storage().set('userCredentials', JSON.stringify(userCredentials))
   } catch (error) {
     alertHelper.error(error)
   }

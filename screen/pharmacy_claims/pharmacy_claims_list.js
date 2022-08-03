@@ -1,8 +1,8 @@
 import React from 'react'
 import { StyleSheet, Text, View } from 'react-native'
 import { FontAwesome5Icon, ListView } from '../components'
-import { pharmacyClaimApi } from "../../api"
-import { alertHelper, patientHelper, patientMedicationHelper, currentUserHelper, pharmacyClaimHelper, valueHelper } from '../../helpers'
+import { pharmacyClaimApi, patientHelper, patientMedicationHelper, pharmacyClaimHelper, valueHelper } from '@aprexis/aprexis-api-utility'
+import { alertHelper, apiEnvironmentHelper, iconHelper } from '../../helpers'
 import { styles } from '../../assets/styles'
 
 function PharmacyClaim(props) {
@@ -16,7 +16,7 @@ function PharmacyClaim(props) {
         <Text style={inlineStyles.text}>{pharmacyClaimHelper.daysSupply(pharmacyClaim)} Days</Text>
       </View>
       <View style={styles.row}>
-        <FontAwesome5Icon size={40} style={styles.icon} name={pharmacyClaimHelper.medicationIcon(pharmacyClaim)} />
+        <FontAwesome5Icon size={40} style={styles.icon} name={iconHelper.pharmacyClaimMedicationIcon(pharmacyClaim)} />
         <Text style={inlineStyles.text}>{pharmacyClaimHelper.medicationLabel(pharmacyClaim)} ({pharmacyClaimHelper.ndc(pharmacyClaim)})</Text>
       </View>
       <View style={styles.row}>
@@ -30,8 +30,7 @@ function PharmacyClaim(props) {
 }
 
 function PharmacyClaimsList(props) {
-  const { patientMedication } = props
-  const { currentPatient, userCredentials } = currentUserHelper.getCurrentProps(props)
+  const { currentPatient, userCredentials, patientMedication } = props
 
   return (
     <View style={styles.mainBody}>
@@ -54,7 +53,7 @@ function PharmacyClaimsList(props) {
     }
 
     pharmacyClaimApi.listForPatient(
-      userCredentials,
+      apiEnvironmentHelper.apiEnvironment(userCredentials),
       patientHelper.id(currentPatient),
       params,
       onSuccess,
@@ -62,7 +61,7 @@ function PharmacyClaimsList(props) {
     )
   }
 
-  function presentItem(pharmacyClaim, pharmacyClaimIdx, editpharmacyClaim) {
+  function presentItem(pharmacyClaim, pharmacyClaimIdx, _editpharmacyClaim) {
     return (
       <PharmacyClaim
         key={`pharmacy-claim-${pharmacyClaimHelper.id(pharmacyClaim)}-${pharmacyClaimIdx}`}
